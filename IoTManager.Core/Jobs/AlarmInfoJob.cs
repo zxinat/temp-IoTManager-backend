@@ -26,17 +26,6 @@ namespace IoTManager.Core.Jobs
         [Invoke(Begin = "2019-6-16 16:20", Interval = 1000 * 10, SkipWhileExecuting = true)]
         public void Run()
         {
-            AlarmInfoModel alarmIn = new AlarmInfoModel();
-            alarmIn.AlarmInfo = "test";
-            alarmIn.DeviceId = "test";
-            alarmIn.IndexId = "test";
-            alarmIn.IndexName = "test";
-            alarmIn.IndexValue = "test";
-            alarmIn.ThresholdValue = "test";
-            alarmIn.Timestamp = DateTime.Now;
-
-            _alarmInfoDao.Create(alarmIn);
-            
             List<DeviceDataModel> dataNotInspected = _deviceDataDao.GetNotInspected();
             Dictionary<String, List<DeviceDataModel>> sortedData = new Dictionary<string, List<DeviceDataModel>>();
             List<String> deviceIds = new List<string>();
