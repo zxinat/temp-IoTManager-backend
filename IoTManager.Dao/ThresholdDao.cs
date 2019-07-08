@@ -30,5 +30,23 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public String Create(ThresholdModel thresholdModel)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute(
+                    "insert into threshold(indexId, deviceId, operator, thresholdValue, ruleName, description) values(@iid, @did, @o, @tv, @rn, @d)", new
+                    {
+                        iid = thresholdModel.IndexId,
+                        did = thresholdModel.DeviceId,
+                        o = thresholdModel.Operator,
+                        tv = thresholdModel.ThresholdValue,
+                        rn = thresholdModel.RuleName,
+                        d = thresholdModel.Description
+                    });
+                return rows == 1 ? "success" : "error";
+            }
+        }
     }
 }

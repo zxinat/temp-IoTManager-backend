@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
+using IoTManager.Model;
+using IoTManager.Utility.Serializers;
 using Microsoft.Extensions.Logging;
 
 namespace IoTManager.Core
@@ -20,6 +22,18 @@ namespace IoTManager.Core
         public Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId)
         {
             return _thresholdDao.GetByDeviceId(deviceId);
+        }
+
+        public String InsertThreshold(ThresholdSerializer thresholdSerializer)
+        {
+            ThresholdModel t = new ThresholdModel();
+            t.IndexId = thresholdSerializer.field;
+            t.DeviceId = thresholdSerializer.deviceGroup;
+            t.Operator = thresholdSerializer.Operator;
+            t.ThresholdValue = int.Parse(thresholdSerializer.value);
+            t.RuleName = thresholdSerializer.name;
+            t.Description = thresholdSerializer.description;
+            return this._thresholdDao.Create(t);
         }
     }
 }
