@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace IoTManager.Model.Contracts
+{
+    public class SingleMonitorDataContract
+    {
+        public DeviceData Data { get; set; }
+        public string GSN { get; set; }
+    }
+
+    public class DeviceData
+    {
+        public string DName { get; set; }
+        public string DId { get; set; }
+        public List<MonitorData> IData { get; set; }
+    }
+
+    public class MonitorData
+    {
+        public string IName { get; set; }
+        public string IId { get; set; }
+        public string IUnit { get; set; }
+        public string IType { get; set; }
+        public string IValue { get; set; }
+        public DateTime ITs { get; set; }
+    }
+
+}
