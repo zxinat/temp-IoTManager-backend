@@ -27,5 +27,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 _thresholdBus.GetByDeviceId(id));
         }
+
+        [HttpPost]
+        public ResponseSerializer Create([FromBody] ThresholdSerializer thresholdSerializer)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.InsertThreshold(thresholdSerializer));
+        }
     }
 }

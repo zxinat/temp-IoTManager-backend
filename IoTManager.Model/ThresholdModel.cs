@@ -11,5 +11,7 @@ namespace IoTManager.Model
         public int ThresholdValue { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
+        public String RuleName { get; set; }
+        public String Description { get; set; }
     }
 }
