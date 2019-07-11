@@ -7,8 +7,10 @@ using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using IoTManager.Utility.Helpers;
+using IoTManager.Utility.Extensions;
 using System.Data;
 using System.Threading.Tasks;
+using IoTManager.Model.Contracts;
 
 namespace IoTManager.MonitorService
 {
@@ -27,6 +29,11 @@ namespace IoTManager.MonitorService
             if (string.IsNullOrEmpty(requestBody))
             {
                 return new StatusCodeResult(404);
+            }
+            var singleMonitorData = requestBody.ConvertToObj<SingleMonitorDataContract>();
+            if (singleMonitorData == null)
+            {
+                var multpleMonitorData = requestBody.ConvertToObj<MultipleMonitorDataContract>();
             }
 
             //TODO:insert monitor data to database

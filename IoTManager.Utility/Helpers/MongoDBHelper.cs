@@ -14,8 +14,6 @@ namespace IoTManager.Utility.Helpers
 {
     /// <summary>
     /// MongoDbCsharpHelper:MongoDb基于C#语言操作帮助类
-    /// Author:Zuowenjun
-    /// Date:2017/11/16
     /// </summary>
     public class MongoDBHelper
     {
