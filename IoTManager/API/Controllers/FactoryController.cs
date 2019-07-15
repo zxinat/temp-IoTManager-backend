@@ -1,3 +1,4 @@
+using System;
 using IoTManager.Core.Infrastructures;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +66,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._factoryBus.DeleteFactory(id));
+        }
+
+        [HttpGet("factoryOptions/{cName}")]
+        public ResponseSerializer GetAffiliateFactory(String cName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._factoryBus.GetAffiliateFactory(cName));
         }
     }
 }

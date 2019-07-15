@@ -12,5 +12,6 @@ namespace IoTManager.IDao
         String Create(FactoryModel factoryModel);
         String Update(int id, FactoryModel factoryModel);
         String Delete(int id);
+        List<FactoryModel> GetAffiliateFactory(String city);
     }
 }

@@ -58,5 +58,17 @@ namespace IoTManager.Core
         {
             return this._cityDao.Delete(id);
         }
+
+        public List<object> GetCityOptions()
+        {
+            List<CityModel> cities = this._cityDao.Get();
+            List<object> result = new List<object>();
+            foreach (CityModel c in cities)
+            {
+                result.Add(new {value=c.CityName, label=c.CityName});
+            }
+
+            return result;
+        }
     }
 }

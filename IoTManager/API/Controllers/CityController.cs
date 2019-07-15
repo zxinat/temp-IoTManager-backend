@@ -84,5 +84,14 @@ namespace IoTManager.API.Controllers
                 this._cityBus.DeleteCity(id)
                 );
         }
+
+        [HttpGet("cityOptions")]
+        public ResponseSerializer GetCityOptions()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetCityOptions());
+        }
     }
 }

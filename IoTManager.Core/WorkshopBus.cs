@@ -64,5 +64,17 @@ namespace IoTManager.Core
         {
             return this._workshopDao.Delete(id);
         }
+
+        public List<object> GetAffiliateWorkshop(String fName)
+        {
+            List<WorkshopModel> workshops = this._workshopDao.GetAffiliateWorkshop(fName);
+            List<object> result = new List<object>();
+            foreach (WorkshopModel w in workshops)
+            {
+                result.Add(new {value=w.WorkshopName, label=w.WorkshopName});
+            }
+
+            return result;
+        }
     }
 }
