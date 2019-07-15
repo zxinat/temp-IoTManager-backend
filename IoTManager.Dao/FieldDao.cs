@@ -5,6 +5,7 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
@@ -12,7 +13,7 @@ namespace IoTManager.Dao
     {
         public List<FieldModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<FieldModel> fields = connection.Query<FieldModel>(
                     "select * from field ").ToList();

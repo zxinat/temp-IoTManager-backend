@@ -6,6 +6,7 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
@@ -13,7 +14,7 @@ namespace IoTManager.Dao
     {
         public Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<ThresholdModel> thresholdModels = connection.Query<ThresholdModel>(
                     "select * from threshold where deviceId=@did", new
@@ -33,7 +34,7 @@ namespace IoTManager.Dao
 
         public String Create(ThresholdModel thresholdModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute(
                     "insert into threshold(indexId, deviceId, operator, thresholdValue, ruleName, description) values(@iid, @did, @o, @tv, @rn, @d)", new
@@ -51,7 +52,7 @@ namespace IoTManager.Dao
 
         public List<ThresholdModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description from threshold inner join field on indexId=fieldId").ToList();
             }

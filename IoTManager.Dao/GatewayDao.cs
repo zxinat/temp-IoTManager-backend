@@ -7,6 +7,7 @@ using System.Text;
 using Dapper;
 using IoTManager.Model;
 using IoTManager.Utility;
+using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
@@ -14,7 +15,7 @@ namespace IoTManager.Dao
     {
         public List<GatewayModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<GatewayModel>("select gateway.id, " +
                                                       "hardwareGatewayID," +
@@ -38,7 +39,7 @@ namespace IoTManager.Dao
 
         public GatewayModel GetById(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<GatewayModel>("select gateway.id, " +
                                                       "hardwareGatewayID," +
@@ -65,7 +66,7 @@ namespace IoTManager.Dao
 
         public String Create(GatewayModel gatewayModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -102,7 +103,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, GatewayModel gatewayModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -140,7 +141,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute("DELETE FROM gateway WHERE id=@gatewayId", new
                 {
@@ -152,7 +153,7 @@ namespace IoTManager.Dao
 
         public List<GatewayModel> GetByWorkshop(String workshop)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<GatewayModel>("select gateway.id, " +
                                                       "hardwareGatewayID," +
