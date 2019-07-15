@@ -48,5 +48,13 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+
+        public List<ThresholdModel> Get()
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description from threshold inner join field on indexId=fieldId").ToList();
+            }
+        }
     }
 }

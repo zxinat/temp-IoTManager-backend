@@ -8,5 +8,6 @@ namespace IoTManager.IDao
     {
         Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId);
         String Create(ThresholdModel thresholdModel);
+        List<ThresholdModel> Get();
     }
 }

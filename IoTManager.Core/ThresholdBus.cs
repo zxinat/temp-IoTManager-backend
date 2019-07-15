@@ -35,5 +35,17 @@ namespace IoTManager.Core
             t.Description = thresholdSerializer.description;
             return this._thresholdDao.Create(t);
         }
+
+        public List<ThresholdSerializerDisplay> GetAllRules()
+        {
+            List<ThresholdModel> thresholds = this._thresholdDao.Get();
+            List<ThresholdSerializerDisplay> result = new List<ThresholdSerializerDisplay>();
+            foreach (ThresholdModel t in thresholds)
+            {
+                result.Add(new ThresholdSerializerDisplay(t));
+            }
+
+            return result;
+        }
     }
 }

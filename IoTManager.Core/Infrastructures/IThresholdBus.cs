@@ -8,5 +8,6 @@ namespace IoTManager.Core.Infrastructures
     {
         Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId);
         String InsertThreshold(ThresholdSerializer thresholdSerializer);
+        List<ThresholdSerializerDisplay> GetAllRules();
     }
 }
