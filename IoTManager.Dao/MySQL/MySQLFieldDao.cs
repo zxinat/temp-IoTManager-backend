@@ -9,11 +9,11 @@ using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
-    public sealed class FieldDao: IFieldDao
+    public sealed class MySQLFieldDao : IFieldDao
     {
         public List<FieldModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<FieldModel> fields = connection.Query<FieldModel>(
                     "select * from field ").ToList();

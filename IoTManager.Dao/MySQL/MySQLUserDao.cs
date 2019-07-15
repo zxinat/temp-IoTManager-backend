@@ -21,11 +21,11 @@ using MySql.Data.MySqlClient;
 //测试数据库用使用user表,请改为account
 namespace IoTManager.Dao
 {
-    public sealed class UserDao:IUserDao
+    public sealed class MySQLUserDao : IUserDao
     {
         public String Create(UserModel userModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute(
                     "INSERT INTO user(userName, displayName, password, email, phoneNumber, remark) VALUES (@un, @dn, @p, @e, @pn, @r)",
@@ -44,7 +44,7 @@ namespace IoTManager.Dao
 
         public List<UserModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<UserModel>("SELECT * FROM user")
@@ -54,7 +54,7 @@ namespace IoTManager.Dao
 
         public UserModel GetById(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<UserModel>("SELECT * FROM user WHERE id=@userId", new
@@ -66,7 +66,7 @@ namespace IoTManager.Dao
 
         public UserModel GetByUserName(String userName)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<UserModel>("SELECT * FROM user WHERE userName=@uName", new
@@ -78,7 +78,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, UserModel userModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection
                     .Execute(
@@ -99,7 +99,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute("DELETE FROM user WHERE id=@userId", new
                 {

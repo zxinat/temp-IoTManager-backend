@@ -9,11 +9,11 @@ using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
-    public sealed class StateTypeDao: IStateTypeDao
+    public sealed class MySQLStateTypeDao : IStateTypeDao
     {
         public List<String> GetDeviceType()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='deviceType'")
@@ -23,7 +23,7 @@ namespace IoTManager.Dao
 
         public List<String> GetDeviceState()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='deviceState'")
@@ -33,7 +33,7 @@ namespace IoTManager.Dao
 
         public List<String> GetGatewayType()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='gatewayType'")
@@ -43,7 +43,7 @@ namespace IoTManager.Dao
 
         public List<String> GetGatewayState()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='gatewayState'")

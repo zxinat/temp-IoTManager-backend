@@ -11,11 +11,11 @@ using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
-    public sealed class DeviceDao:IDeviceDao
+    public sealed class MySQLDeviceDao : IDeviceDao
     {
         public List<DeviceModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -42,7 +42,7 @@ namespace IoTManager.Dao
 
         public DeviceModel GetById(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -72,7 +72,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByDeviceName(String deviceName)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -100,7 +100,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByDeviceId(String deviceId)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -128,7 +128,7 @@ namespace IoTManager.Dao
 
         public String Create(DeviceModel deviceModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -168,7 +168,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, DeviceModel deviceModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -222,7 +222,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute("DELETE FROM device WHERE device.id=@deviceId", new
                 {
@@ -234,7 +234,7 @@ namespace IoTManager.Dao
 
         public int BatchDelete(int[] ids)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = 0;
                 foreach (int i in ids)
@@ -251,7 +251,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByWorkshop(String workshop)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +

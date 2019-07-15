@@ -11,11 +11,11 @@ using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
-    public sealed class FactoryDao: IFactoryDao
+    public sealed class MySQLFactoryDao : IFactoryDao
     {
         public List<FactoryModel> Get()
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<FactoryModel> factoryModels = connection
                     .Query<FactoryModel>("SELECT factory.id, " +
@@ -35,7 +35,7 @@ namespace IoTManager.Dao
 
         public FactoryModel GetById(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection
                     .Query<FactoryModel>("SELECT factory.id, " +
@@ -57,7 +57,7 @@ namespace IoTManager.Dao
 
         public String Create(FactoryModel factoryModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 CityModel city = connection
                     .Query<CityModel>("SELECT * FROM city WHERE cityName=@cn", new
@@ -79,7 +79,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, FactoryModel factoryModel)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 CityModel city = connection
                     .Query<CityModel>("SELECT * FROM city WHERE cityName=@cn", new
@@ -103,7 +103,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute("DELETE FROM factory WHERE id=@factoryId", new
                 {
