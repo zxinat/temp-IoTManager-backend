@@ -10,5 +10,6 @@ namespace IoTManager.Core.Infrastructures
         List<DeviceDataSerializer> GetAllDeviceData();
         DeviceDataSerializer GetDeviceDataById(String Id);
         List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId);
+        Object GetLineChartData(String deviceId, String indexId);
     }
 }

@@ -5,6 +5,7 @@ using IoTManager.Model;
 using IoTManager.Utility;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace IoTManager.Dao
 {
@@ -42,6 +43,29 @@ namespace IoTManager.Dao
             var update = Builders<DeviceDataModel>.Update.Set("Inspected", "Yes");
             var result = _deviceData.UpdateMany(filter, update);
             return deviceDataModels;
+        }
+
+        public Object GetLineChartData(String deviceId, String indexId)
+        {
+            List<int> chartValue = new List<int>();
+            List<String> xAxises = new List<string>();
+
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => (dd.DeviceId == deviceId && dd.IndexId == indexId))
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(7)
+                .ToList();
+
+            foreach (var dd in query)
+            {
+                chartValue.Add(int.Parse(dd.IndexValue));
+                xAxises.Add(dd.Timestamp.ToString(Constant.getLineChartDateFormatString()));
+            }
+
+            xAxises.Reverse();
+            chartValue.Reverse();
+
+            return new {xAxis = xAxises, series = chartValue};
         }
     }
 }

@@ -46,5 +46,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetDeviceDataByDeviceId(DeviceId));
         }
+
+        [HttpGet("{deviceId}/{indexId}")]
+        public ResponseSerializer GetLineChartData(String deviceId, String indexId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetLineChartData(deviceId, indexId));
+        }
     }
 }
