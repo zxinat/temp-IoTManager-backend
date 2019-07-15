@@ -44,6 +44,10 @@ namespace IoTManager.Core.Jobs
             }
             //TODO: Uniquify
             deviceIds = deviceIds.Distinct().ToList();
+            Dictionary<String, String> operatorName = new Dictionary<string, string>();
+            operatorName.Add("equal", "=");
+            operatorName.Add("greater", ">");
+            operatorName.Add("less", "<");
             foreach (String did in deviceIds)
             {
                 Dictionary<String, Tuple<String, int>> thresholdDic = _thresholdDao.GetByDeviceId(did);
@@ -84,7 +88,7 @@ namespace IoTManager.Core.Jobs
                         alarmInfo.IndexId = data.IndexId;
                         alarmInfo.IndexName = data.IndexName;
                         alarmInfo.IndexValue = data.IndexValue;
-                        alarmInfo.ThresholdValue = threshold.ToString();
+                        alarmInfo.ThresholdValue = operatorName[op] + threshold.ToString();
                         alarmInfo.Timestamp = DateTime.Now;
 
                         _alarmInfoDao.Create(alarmInfo);

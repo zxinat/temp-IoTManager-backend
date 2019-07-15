@@ -55,5 +55,11 @@ namespace IoTManager.Dao
                 .ToList();
             return query;
         }
+
+        public int GetAlarmInfoAmount()
+        {
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => true).ToList();
+            return alarmInfos.Count;
+        }
     }
 }

@@ -73,5 +73,11 @@ namespace IoTManager.Dao
 
             return new {xAxis = xAxises, series = chartValue};
         }
+
+        public int GetDeviceDataAmount()
+        {
+            List<DeviceDataModel> deviceData = _deviceData.Find<DeviceDataModel>(dd => true).ToList();
+            return deviceData.Count;
+        }
     }
 }
