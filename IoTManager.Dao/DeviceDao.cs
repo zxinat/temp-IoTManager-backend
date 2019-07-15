@@ -278,5 +278,13 @@ namespace IoTManager.Dao
                     .ToList();
             }
         }
+
+        public int GetDeviceAmount()
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<int>("select count(*) from device").FirstOrDefault();
+            }
+        }
     }
 }

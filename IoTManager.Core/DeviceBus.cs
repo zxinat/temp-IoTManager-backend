@@ -119,5 +119,10 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public int GetDeviceAmount()
+        {
+            return this._deviceDao.GetDeviceAmount();
+        }
     }
 }

@@ -113,5 +113,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetDeviceByWorkshop(workshopName));
         }
+
+        [HttpGet("amount")]
+        public ResponseSerializer GetDeviceAmount()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceAmount());
+        }
     }
 }
