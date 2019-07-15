@@ -4,6 +4,7 @@ using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace IoTManager.Dao
 {
@@ -43,6 +44,16 @@ namespace IoTManager.Dao
         {
             _alarmInfo.InsertOne(alarmInfoModel);
             return "success";
+        }
+
+        public List<AlarmInfoModel> GetFiveInfo()
+        {
+            var query = this._alarmInfo.AsQueryable()
+                .Where(ai => true)
+                .OrderByDescending(ai => ai.Timestamp)
+                .Take(5)
+                .ToList();
+            return query;
         }
     }
 }

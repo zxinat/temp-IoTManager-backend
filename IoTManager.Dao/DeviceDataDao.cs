@@ -23,7 +23,13 @@ namespace IoTManager.Dao
 
         public List<DeviceDataModel> Get()
         {
-            return _deviceData.Find<DeviceDataModel>(d => true).ToList();
+            //return _deviceData.Find<DeviceDataModel>(d => true).ToList();
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => true)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(15)
+                .ToList();
+            return query;
         }
 
         public DeviceDataModel GetById(String Id)
