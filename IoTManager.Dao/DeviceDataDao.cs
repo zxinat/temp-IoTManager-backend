@@ -114,9 +114,20 @@ namespace IoTManager.Dao
 
             var recentAlarmQuery = this._alarmInfo.AsQueryable()
                 .Where(ai => ai.DeviceId == deviceId)
-                .OrderByDescending(dd => dd.Timestamp)
+                .OrderByDescending(ai => ai.Timestamp)
                 .Take(1)
                 .ToList();
+
+            var alarmQuery = this._alarmInfo.AsQueryable()
+                .Where(ai => ai.DeviceId == deviceId)
+                .OrderByDescending(ai => ai.Timestamp)
+                .Take(10)
+                .ToList();
+
+            foreach (var a in alarmQuery)
+            {
+                a.DeviceId = a.Timestamp.ToString(Constant.getDateFormatString());
+            }
 
             DeviceDataModel lastDeviceData = new DeviceDataModel();
             DeviceDataModel firstDeviceData = new DeviceDataModel();
@@ -144,6 +155,7 @@ namespace IoTManager.Dao
                 deviceType = device.DeviceType,
                 deviceState = device.DeviceState,
                 imageUrl = device.ImageUrl,
+                alarmInfo = alarmQuery,
                 startTime = startTime.ToString(Constant.getDateFormatString()),
                 runningTime = lastingTime.ToString("%d") + "天" + 
                               lastingTime.ToString("%h") + "小时" + 
