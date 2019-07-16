@@ -64,5 +64,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetDeviceDataAmount());
         }
+
+        [HttpGet("status/{id}")]
+        public ResponseSerializer GetDeviceStatusById(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDeviceStatusById(id));
+        }
     }
 }
