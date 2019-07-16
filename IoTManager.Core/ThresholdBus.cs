@@ -19,7 +19,7 @@ namespace IoTManager.Core
             this._logger = logger;
         }
         
-        public Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId)
+        public Dictionary<String, Tuple<String, double>> GetByDeviceId(String deviceId)
         {
             return _thresholdDao.GetByDeviceId(deviceId);
         }

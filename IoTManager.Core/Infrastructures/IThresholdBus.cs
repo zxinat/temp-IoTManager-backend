@@ -6,7 +6,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IThresholdBus
     {
-        Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId);
+        Dictionary<String, Tuple<String, double>> GetByDeviceId(String deviceId);
         String InsertThreshold(ThresholdSerializer thresholdSerializer);
         List<ThresholdSerializerDisplay> GetAllRules();
     }

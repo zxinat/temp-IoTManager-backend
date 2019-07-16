@@ -53,7 +53,7 @@ namespace IoTManager.Dao
 
         public Object GetLineChartData(String deviceId, String indexId)
         {
-            List<float> chartValue = new List<float>();
+            List<double> chartValue = new List<double>();
             List<String> xAxises = new List<string>();
 
             var query = this._deviceData.AsQueryable()
@@ -64,7 +64,7 @@ namespace IoTManager.Dao
 
             foreach (var dd in query)
             {
-                chartValue.Add(float.Parse(dd.IndexValue));
+                chartValue.Add(double.Parse(dd.IndexValue));
                 xAxises.Add(dd.Timestamp.ToString(Constant.getLineChartDateFormatString()));
             }
 

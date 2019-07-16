@@ -50,31 +50,31 @@ namespace IoTManager.Core.Jobs
             operatorName.Add("less", "<");
             foreach (String did in deviceIds)
             {
-                Dictionary<String, Tuple<String, int>> thresholdDic = _thresholdDao.GetByDeviceId(did);
+                Dictionary<String, Tuple<String, double>> thresholdDic = _thresholdDao.GetByDeviceId(did);
                 foreach (DeviceDataModel data in sortedData[did])
                 {
                     String op = thresholdDic[data.IndexId].Item1;
-                    int threshold = thresholdDic[data.IndexId].Item2;
+                    double threshold = thresholdDic[data.IndexId].Item2;
 
                     Boolean abnormal = false;
 
                     if (op == "equal")
                     {
-                        if (Int32.Parse(data.IndexValue) != threshold)
+                        if (double.Parse(data.IndexValue) - threshold < 0.0001)
                         {
                             abnormal = true;
                         }
                     }
                     else if (op == "less")
                     {
-                        if (Int32.Parse(data.IndexValue) <= threshold)
+                        if (double.Parse(data.IndexValue) <= threshold)
                         {
                             abnormal = true;
                         }
                     }
                     else if (op == "greater")
                     {
-                        if (Int32.Parse(data.IndexValue) >= threshold)
+                        if (double.Parse(data.IndexValue) >= threshold)
                         {
                             abnormal = true;
                         }

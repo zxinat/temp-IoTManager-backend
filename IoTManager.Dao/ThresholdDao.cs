@@ -11,7 +11,7 @@ namespace IoTManager.Dao
 {
     public sealed class ThresholdDao: IThresholdDao
     {
-        public Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId)
+        public Dictionary<String, Tuple<String, double>> GetByDeviceId(String deviceId)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -21,10 +21,10 @@ namespace IoTManager.Dao
                         did = deviceId
                     }).ToList();
                 
-                Dictionary<String, Tuple<String, int>> result = new Dictionary<string, Tuple<string, int>>();
+                Dictionary<String, Tuple<String, double>> result = new Dictionary<string, Tuple<string, double>>();
                 foreach (ThresholdModel t in thresholdModels)
                 {
-                    result.Add(t.IndexId, new Tuple<string, int>(t.Operator, t.ThresholdValue));
+                    result.Add(t.IndexId, new Tuple<string, double>(t.Operator, t.ThresholdValue));
                 }
 
                 return result;
