@@ -13,5 +13,6 @@ namespace IoTManager.Model
         public DateTime UpdateTime { get; set; }
         public String RuleName { get; set; }
         public String Description { get; set; }
+        public String Severity { get; set; }
     }
 }

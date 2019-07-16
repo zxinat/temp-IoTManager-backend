@@ -19,7 +19,7 @@ namespace IoTManager.Core
             this._logger = logger;
         }
         
-        public Dictionary<String, Tuple<String, double>> GetByDeviceId(String deviceId)
+        public List<ThresholdModel> GetByDeviceId(String deviceId)
         {
             return _thresholdDao.GetByDeviceId(deviceId);
         }
@@ -33,6 +33,7 @@ namespace IoTManager.Core
             t.ThresholdValue = int.Parse(thresholdSerializer.value);
             t.RuleName = thresholdSerializer.name;
             t.Description = thresholdSerializer.description;
+            t.Severity = thresholdSerializer.severity;
             return this._thresholdDao.Create(t);
         }
 

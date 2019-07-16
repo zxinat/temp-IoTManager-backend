@@ -95,9 +95,19 @@ namespace IoTManager.Core
             return result;
         }
 
-        public int GetAlarmInfoAmount()
+        public int GetNoticeAlarmInfoAmount()
         {
-            return this._alarmInfoDao.GetAlarmInfoAmount();
+            return this._alarmInfoDao.GetNoticeAlarmInfoAmount();
+        }
+
+        public int GetSeriousAlarmInfoAmount()
+        {
+            return this._alarmInfoDao.GetSeriousAlarmInfoAmount();
+        }
+
+        public int GetVerySeriousAlarmInfoAmount()
+        {
+            return this._alarmInfoDao.GetVerySeriousAlarmInfoAmount();
         }
     }
 }

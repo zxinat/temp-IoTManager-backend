@@ -22,7 +22,12 @@ namespace IoTManager.Dao
 
         public List<AlarmInfoModel> Get()
         {
-            return _alarmInfo.Find<AlarmInfoModel>(a => true).ToList();
+            var query = this._alarmInfo.AsQueryable()
+                .Where(ai => true)
+                .OrderByDescending(ai => ai.Timestamp)
+                .Take(20)
+                .ToList();
+            return query;
         }
 
         public AlarmInfoModel GetById(String Id)
@@ -56,9 +61,21 @@ namespace IoTManager.Dao
             return query;
         }
 
-        public int GetAlarmInfoAmount()
+        public int GetNoticeAlarmInfoAmount()
         {
-            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => true).ToList();
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="通知").ToList();
+            return alarmInfos.Count;
+        }
+
+        public int GetSeriousAlarmInfoAmount()
+        {
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="严重").ToList();
+            return alarmInfos.Count;
+        }
+
+        public int GetVerySeriousAlarmInfoAmount()
+        {
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="非常严重").ToList();
             return alarmInfos.Count;
         }
     }

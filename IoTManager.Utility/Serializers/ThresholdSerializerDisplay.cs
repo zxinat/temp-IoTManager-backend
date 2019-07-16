@@ -16,6 +16,7 @@ namespace IoTManager.Utility.Serializers
             this.updateTime = null;
             this.name = null;
             this.description = null;
+            this.severity = null;
         }
 
         public ThresholdSerializerDisplay(ThresholdModel thresholdModel)
@@ -33,6 +34,7 @@ namespace IoTManager.Utility.Serializers
                 .ToString(Constant.getDateFormatString());
             this.name = thresholdModel.RuleName;
             this.description = thresholdModel.Description;
+            this.severity = thresholdModel.Severity;
         }
         
         public int id { get; set; }
@@ -43,5 +45,6 @@ namespace IoTManager.Utility.Serializers
         public String updateTime { get; set; }
         public String name { get; set; }
         public String description { get; set; }
+        public String severity { get; set; }
     }
 }
