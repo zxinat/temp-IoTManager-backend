@@ -18,5 +18,6 @@ namespace IoTManager.IDao
         int BatchDelete(int[] id);
         List<DeviceModel> GetByWorkshop(String workshop);
         int GetDeviceAmount();
+        List<object> GetDeviceTree(String city, String factory);
     }
 }

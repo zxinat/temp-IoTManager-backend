@@ -122,5 +122,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetDeviceAmount());
         }
+
+        [HttpGet("tree/{city}/{factory}")]
+        public ResponseSerializer GetDeviceTree(String city, String factory)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceTree(city, factory));
+        }
     }
 }
