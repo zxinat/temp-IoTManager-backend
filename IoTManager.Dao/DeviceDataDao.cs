@@ -182,5 +182,10 @@ namespace IoTManager.Dao
                 recentAlarmTime = recentAlarm.ToString(Constant.getDateFormatString())
             };
         }
+
+        public object GetDeviceStatistic(StatisticDurationModel statisticDurationModel)
+        {
+            return null;
+        }
     }
 }

@@ -44,7 +44,6 @@ namespace IoTManager.Core.Jobs
                 }
                 deviceIds.Add(d.DeviceId);
             }
-            //TODO: Uniquify
             deviceIds = deviceIds.Distinct().ToList();
             Dictionary<String, String> operatorName = new Dictionary<string, string>();
             operatorName.Add("equal", "=");
@@ -57,48 +56,51 @@ namespace IoTManager.Core.Jobs
                 {
                     var query = thresholdDic.AsQueryable()
                         .Where(t => t.IndexId == data.IndexId)
-                        .FirstOrDefault();
-                    String op = query.Operator;
-                    double threshold = query.ThresholdValue;
-                    String svty = this._severityDao.GetById(int.Parse(query.Severity)).SeverityName;
-
-                    Boolean abnormal = false;
-
-                    if (op == "equal")
+                        .ToList();
+                    foreach (var th in query)
                     {
-                        if (double.Parse(data.IndexValue) - threshold < 0.0001)
+                        String op = th.Operator;
+                        double threshold = th.ThresholdValue;
+                        String svty = this._severityDao.GetById(int.Parse(th.Severity)).SeverityName;
+
+                        Boolean abnormal = false;
+
+                        if (op == "equal")
                         {
-                            abnormal = true;
+                            if (double.Parse(data.IndexValue) - threshold < 0.0001)
+                            {
+                                abnormal = true;
+                            }
                         }
-                    }
-                    else if (op == "less")
-                    {
-                        if (double.Parse(data.IndexValue) <= threshold)
+                        else if (op == "less")
                         {
-                            abnormal = true;
+                            if (double.Parse(data.IndexValue) <= threshold)
+                            {
+                                abnormal = true;
+                            }
                         }
-                    }
-                    else if (op == "greater")
-                    {
-                        if (double.Parse(data.IndexValue) >= threshold)
+                        else if (op == "greater")
                         {
-                            abnormal = true;
+                            if (double.Parse(data.IndexValue) >= threshold)
+                            {
+                                abnormal = true;
+                            }
                         }
-                    }
 
-                    if (abnormal == true)
-                    {
-                        AlarmInfoModel alarmInfo = new AlarmInfoModel();
-                        alarmInfo.AlarmInfo = query.Description;
-                        alarmInfo.DeviceId = data.DeviceId;
-                        alarmInfo.IndexId = data.IndexId;
-                        alarmInfo.IndexName = data.IndexName;
-                        alarmInfo.IndexValue = data.IndexValue;
-                        alarmInfo.ThresholdValue = operatorName[op] + threshold.ToString();
-                        alarmInfo.Timestamp = DateTime.Now;
-                        alarmInfo.Severity = svty;
+                        if (abnormal == true)
+                        {
+                            AlarmInfoModel alarmInfo = new AlarmInfoModel();
+                            alarmInfo.AlarmInfo = th.Description;
+                            alarmInfo.DeviceId = data.DeviceId;
+                            alarmInfo.IndexId = data.IndexId;
+                            alarmInfo.IndexName = data.IndexName;
+                            alarmInfo.IndexValue = data.IndexValue;
+                            alarmInfo.ThresholdValue = operatorName[op] + threshold.ToString();
+                            alarmInfo.Timestamp = DateTime.Now;
+                            alarmInfo.Severity = svty;
 
-                        _alarmInfoDao.Create(alarmInfo);
+                            _alarmInfoDao.Create(alarmInfo);
+                        }
                     }
                 }
             }
