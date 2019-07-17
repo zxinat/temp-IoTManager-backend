@@ -320,5 +320,18 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public String CreateDeviceType(String deviceType)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("insert into config(configTag, configValue) values ('deviceType', @dt)",
+                    new
+                    {
+                        dt = deviceType
+                    });
+                return rows == 1 ? "success" : "error";
+            }
+        }
     }
 }

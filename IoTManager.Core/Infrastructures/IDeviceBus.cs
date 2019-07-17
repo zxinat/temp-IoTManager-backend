@@ -19,5 +19,6 @@ namespace IoTManager.Core.Infrastructures
         List<DeviceSerializer> GetDeviceByWorkshop(String city, String factory, String workshop);
         int GetDeviceAmount();
         List<object> GetDeviceTree(String city, String factory);
+        String CreateDeviceType(String deviceType);
     }
 }

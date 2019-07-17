@@ -131,5 +131,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetDeviceTree(city, factory));
         }
+
+        [HttpPost("type/{deviceType}")]
+        public ResponseSerializer CreateDeviceType(String deviceType)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.CreateDeviceType(deviceType));
+        }
     }
 }

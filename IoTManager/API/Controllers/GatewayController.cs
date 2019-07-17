@@ -95,5 +95,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._gatewayBus.BatchDeleteGateway(batchNumber.number));
         }
+
+        [HttpPost("type/{gatewayType}")]
+        public ResponseSerializer CreateGatewayType(String gatewayType)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._gatewayBus.CreateGatewayType(gatewayType));
+        }
     }
 }

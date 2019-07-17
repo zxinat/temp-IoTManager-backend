@@ -129,5 +129,10 @@ namespace IoTManager.Core
         {
             return this._deviceDao.GetDeviceTree(city, factory);
         }
+
+        public String CreateDeviceType(String deviceType)
+        {
+            return this._deviceDao.CreateDeviceType(deviceType);
+        }
     }
 }

@@ -196,5 +196,18 @@ namespace IoTManager.Dao
                 return rows;
             }
         }
+
+        public String CreateGatewayType(String gatewayType)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("insert into config(configTag, configValue)  values ('gatewayType', @gt)",
+                    new
+                    {
+                        gt = gatewayType
+                    });
+                return rows == 1 ? "success" : "error";
+            }
+        }
     }
 }

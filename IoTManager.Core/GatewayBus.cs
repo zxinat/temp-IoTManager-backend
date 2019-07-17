@@ -89,5 +89,10 @@ namespace IoTManager.Core
         {
             return this._gatewayDao.BatchDelete(id);
         }
+
+        public String CreateGatewayType(String gatewayType)
+        {
+            return this._gatewayDao.CreateGatewayType(gatewayType);
+        }
     }
 }
