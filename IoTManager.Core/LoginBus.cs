@@ -25,7 +25,7 @@ namespace IoTManager.Core
             {
                 return new {status="Failed", user=loginModel.Name};
             } 
-            else if (user != null && loginModel.Password != loginModel.Password)
+            else if (user != null && loginModel.Password != user.Password)
             {
                 return new {status="Failed", user=loginModel.Name};
             }
