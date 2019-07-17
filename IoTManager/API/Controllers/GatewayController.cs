@@ -86,5 +86,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._gatewayBus.GetGatewayByWorkshop(cityName, factoryName, workshopName));
         }
+
+        [HttpPost("batch/gateways")]
+        public ResponseSerializer BatchDelete([FromBody] BatchNumber batchNumber)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._gatewayBus.BatchDeleteGateway(batchNumber.number));
+        }
     }
 }

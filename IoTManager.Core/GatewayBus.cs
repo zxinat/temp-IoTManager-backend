@@ -84,5 +84,10 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public int BatchDeleteGateway(int[] id)
+        {
+            return this._gatewayDao.BatchDelete(id);
+        }
     }
 }

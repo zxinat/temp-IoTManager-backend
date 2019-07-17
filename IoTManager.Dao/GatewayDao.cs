@@ -181,5 +181,20 @@ namespace IoTManager.Dao
                     .ToList();
             }
         }
+
+        public int BatchDelete(int[] ids)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = 0;
+                foreach (int i in ids)
+                {
+                    connection.Execute("delete from gateway where gateway.id=@gid", new {gid = i});
+                    rows = rows + 1;
+                }
+
+                return rows;
+            }
+        }
     }
 }
