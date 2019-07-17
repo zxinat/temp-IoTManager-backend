@@ -279,5 +279,34 @@ namespace IoTManager.Dao
                     .ToList();
             }
         }
+        public List<object> GetDeviceTree(String city, String factory)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                CityModel c = connection.Query<CityModel>("select * from city where cityName=@cn", new { cn = city })
+                    .FirstOrDefault();
+                FactoryModel fac = connection
+                    .Query<FactoryModel>("select * from factory where factoryName=@fn and city=@cid", new { fn = factory, cid = c.Id })
+                    .FirstOrDefault();
+                List<WorkshopModel> workshops =
+                    connection.Query<WorkshopModel>("select * from workshop where factory=@fid", new { fid = fac.Id })
+                        .ToList();
+                List<object> result = new List<object>();
+                foreach (WorkshopModel w in workshops)
+                {
+                    List<DeviceModel> devices = connection
+                        .Query<DeviceModel>("select * from device where workshop=@wid", new { wid = w.Id })
+                        .ToList();
+                    List<object> deviceResult = new List<object>();
+                    foreach (DeviceModel d in devices)
+                    {
+                        deviceResult.Add(new { label = d.DeviceName, id = d.Id });
+                    }
+                    result.Add(new { label = w.WorkshopName, children = deviceResult });
+                }
+
+                return result;
+            }
+        }
     }
 }

@@ -114,5 +114,18 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+        public List<WorkshopModel> GetAffiliateWorkshop(String fName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                FactoryModel factory = connection
+                    .Query<FactoryModel>("select * from factory where factoryName=@fn", new { fn = fName })
+                    .FirstOrDefault();
+                int factoryId = factory.Id;
+                List<WorkshopModel> workshops = connection
+                    .Query<WorkshopModel>("select * from workshop where factory=@fid", new { fid = factoryId }).ToList();
+                return workshops;
+            }
+        }
     }
 }

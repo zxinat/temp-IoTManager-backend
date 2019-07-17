@@ -8,9 +8,9 @@ namespace IoTManager.Utility
         {
             //return "Data Source=iotmanagerdbserver.database.chinacloudapi.cn;" +
             //       "User ID=azureuser;" +
-             //      "Initial Catalog=iotmanagerdb;" +
-             //      "Pwd=123qwe!@#QWE;";
-            return "Data Source=localhost;Database=iotmanager;User ID=toolman;Password=caoxuejian;";
+            //      "Initial Catalog=iotmanagerdb;" +
+            //      "Pwd=123qwe!@#QWE;";
+            return "Data Source=localhost;Database=iotmanager;User ID=toolman;Password=caoxuejian;";          
         }
 
         public static String getMongoDBConnectionString()

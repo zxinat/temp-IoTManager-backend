@@ -108,5 +108,23 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+        public List<UserModel> GetByName(String userName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<UserModel>("select * from account where userName like '%" + userName + "%'")
+                    .ToList();
+            }
+        }
+
+        public String UpdatePassword(String userName, String password)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("update account set password=@pw where userName=@un",
+                    new { pw = password, un = userName });
+                return rows == 1 ? "success" : "error";
+            }
+        }
     }
 }

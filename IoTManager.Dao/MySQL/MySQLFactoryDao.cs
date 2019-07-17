@@ -112,5 +112,17 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+        public List<FactoryModel> GetAffiliateFactory(String cName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                CityModel city = connection.Query<CityModel>("select * from city where cityName=@cName", new { cName = cName })
+                    .FirstOrDefault();
+                int cityId = city.Id;
+                List<FactoryModel> factories = connection
+                    .Query<FactoryModel>("select * from factory where city=@cid", new { cid = cityId }).ToList();
+                return factories;
+            }
+        }
     }
 }
