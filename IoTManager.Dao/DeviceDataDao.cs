@@ -132,7 +132,7 @@ namespace IoTManager.Dao
             var deviceDataQuery = this._deviceData.AsQueryable()
                 .Where(dd => dd.DeviceId == deviceId)
                 .OrderByDescending(dd => dd.Timestamp)
-                .Take(20)
+                .Take(10)
                 .ToList();
 
             foreach (var a in alarmQuery)
