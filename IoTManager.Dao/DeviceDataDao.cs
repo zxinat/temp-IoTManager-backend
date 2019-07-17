@@ -44,7 +44,12 @@ namespace IoTManager.Dao
 
         public List<DeviceDataModel> GetByDeviceId(String DeviceId)
         {
-            return _deviceData.Find<DeviceDataModel>(dd => dd.DeviceId == DeviceId).ToList();
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == DeviceId)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(20)
+                .ToList();
+            return query;
         }
 
         public List<DeviceDataModel> GetNotInspected()
@@ -124,9 +129,20 @@ namespace IoTManager.Dao
                 .Take(10)
                 .ToList();
 
+            var deviceDataQuery = this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(20)
+                .ToList();
+
             foreach (var a in alarmQuery)
             {
                 a.DeviceId = a.Timestamp.ToString(Constant.getDateFormatString());
+            }
+
+            foreach (var d in deviceDataQuery)
+            {
+                d.DeviceId = d.Timestamp.ToString(Constant.getDateFormatString());
             }
 
             DeviceDataModel lastDeviceData = new DeviceDataModel();
@@ -156,6 +172,7 @@ namespace IoTManager.Dao
                 deviceState = device.DeviceState,
                 imageUrl = device.ImageUrl,
                 alarmInfo = alarmQuery,
+                deviceData = deviceDataQuery,
                 startTime = startTime.ToString(Constant.getDateFormatString()),
                 runningTime = lastingTime.ToString("%d") + "天" + 
                               lastingTime.ToString("%h") + "小时" + 
