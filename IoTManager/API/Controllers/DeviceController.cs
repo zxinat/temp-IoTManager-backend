@@ -105,13 +105,40 @@ namespace IoTManager.API.Controllers
                 this._deviceBus.BatchDeleteDevice(batchNumber.number));
         }
 
-        [HttpGet("workshop/{workshopName}")]
-        public ResponseSerializer GetByDeviceWorkshop(String workshopName)
+        [HttpGet("workshop/{cityName}/{factoryName}/{workshopName}")]
+        public ResponseSerializer GetByDeviceWorkshop(String cityName, String factoryName, String workshopName)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetDeviceByWorkshop(workshopName));
+                this._deviceBus.GetDeviceByWorkshop(cityName, factoryName, workshopName));
+        }
+
+        [HttpGet("amount")]
+        public ResponseSerializer GetDeviceAmount()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceAmount());
+        }
+
+        [HttpGet("tree/{city}/{factory}")]
+        public ResponseSerializer GetDeviceTree(String city, String factory)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceTree(city, factory));
+        }
+
+        [HttpPost("type/{deviceType}")]
+        public ResponseSerializer CreateDeviceType(String deviceType)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.CreateDeviceType(deviceType));
         }
     }
 }

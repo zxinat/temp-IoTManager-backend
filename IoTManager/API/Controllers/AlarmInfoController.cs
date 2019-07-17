@@ -64,5 +64,41 @@ namespace IoTManager.API.Controllers
                 "success",
                 _alarmInfoBus.InspectAlarmInfo());
         }
+
+        [HttpGet("dashboard")]
+        public ResponseSerializer GetDashboardAlarmInfo()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.GetFiveInfo());
+        }
+
+        [HttpGet("noticeAmount")]
+        public ResponseSerializer GetNoticeAlarmInfoAmount()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.GetNoticeAlarmInfoAmount());
+        }
+        
+        [HttpGet("seriousAmount")]
+        public ResponseSerializer GetSeriousAlarmInfoAmount()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.GetSeriousAlarmInfoAmount());
+        }
+        
+        [HttpGet("verySeriousAmount")]
+        public ResponseSerializer GetVerySeriousAlarmInfoAmount()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.GetVerySeriousAlarmInfoAmount());
+        }
     }
 }
