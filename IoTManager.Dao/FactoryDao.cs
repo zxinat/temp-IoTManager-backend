@@ -7,7 +7,6 @@ using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
 using IoTManager.Utility.Serializers;
-using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
@@ -110,6 +109,19 @@ namespace IoTManager.Dao
                     factoryId = id
                 });
                 return rows == 1 ? "success" : "error";
+            }
+        }
+
+        public List<FactoryModel> GetAffiliateFactory(String cName)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                CityModel city = connection.Query<CityModel>("select * from city where cityName=@cName", new {cName = cName})
+                    .FirstOrDefault();
+                int cityId = city.Id;
+                List<FactoryModel> factories = connection
+                    .Query<FactoryModel>("select * from factory where city=@cid", new {cid = cityId}).ToList();
+                return factories;
             }
         }
     }

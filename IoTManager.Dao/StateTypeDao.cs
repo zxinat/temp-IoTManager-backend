@@ -5,7 +5,6 @@ using System.Linq;
 using Dapper;
 using IoTManager.IDao;
 using IoTManager.Utility;
-using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {

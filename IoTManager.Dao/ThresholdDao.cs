@@ -6,13 +6,12 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
-using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
     public sealed class ThresholdDao: IThresholdDao
     {
-        public Dictionary<String, Tuple<String, int>> GetByDeviceId(String deviceId)
+        public List<ThresholdModel> GetByDeviceId(String deviceId)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -22,13 +21,13 @@ namespace IoTManager.Dao
                         did = deviceId
                     }).ToList();
                 
-                Dictionary<String, Tuple<String, int>> result = new Dictionary<string, Tuple<string, int>>();
-                foreach (ThresholdModel t in thresholdModels)
-                {
-                    result.Add(t.IndexId, new Tuple<string, int>(t.Operator, t.ThresholdValue));
-                }
+                //Dictionary<String, Tuple<String, double>> result = new Dictionary<string, Tuple<string, double>>();
+                //foreach (ThresholdModel t in thresholdModels)
+                //{
+                //    result.Add(t.IndexId, new Tuple<string, double>(t.Operator, t.ThresholdValue));
+                //}
 
-                return result;
+                return thresholdModels;
             }
         }
 
@@ -36,15 +35,19 @@ namespace IoTManager.Dao
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
+                SeverityModel severity = connection
+                    .Query<SeverityModel>("select * from severity where severityName=@sn",
+                        new {sn = thresholdModel.Severity}).FirstOrDefault();
                 int rows = connection.Execute(
-                    "insert into threshold(indexId, deviceId, operator, thresholdValue, ruleName, description) values(@iid, @did, @o, @tv, @rn, @d)", new
+                    "insert into threshold(indexId, deviceId, operator, thresholdValue, ruleName, description, severity) values(@iid, @did, @o, @tv, @rn, @d, @sid)", new
                     {
                         iid = thresholdModel.IndexId,
                         did = thresholdModel.DeviceId,
                         o = thresholdModel.Operator,
                         tv = thresholdModel.ThresholdValue,
                         rn = thresholdModel.RuleName,
-                        d = thresholdModel.Description
+                        d = thresholdModel.Description,
+                        sid = severity.Id
                     });
                 return rows == 1 ? "success" : "error";
             }
@@ -54,7 +57,7 @@ namespace IoTManager.Dao
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description from threshold inner join field on indexId=fieldId").ToList();
+                return connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
             }
         }
     }

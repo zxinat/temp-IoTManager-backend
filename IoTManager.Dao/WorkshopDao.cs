@@ -6,7 +6,6 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
-using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
@@ -112,6 +111,20 @@ namespace IoTManager.Dao
                     workshopId = id
                 });
                 return rows == 1 ? "success" : "error";
+            }
+        }
+
+        public List<WorkshopModel> GetAffiliateWorkshop(String fName)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                FactoryModel factory = connection
+                    .Query<FactoryModel>("select * from factory where factoryName=@fn", new {fn = fName})
+                    .FirstOrDefault();
+                int factoryId = factory.Id;
+                List<WorkshopModel> workshops = connection
+                    .Query<WorkshopModel>("select * from workshop where factory=@fid", new {fid = factoryId}).ToList();
+                return workshops;
             }
         }
     }
