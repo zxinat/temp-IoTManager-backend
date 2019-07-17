@@ -43,6 +43,7 @@ namespace IoTManager.DI
             //builder.RegisterType<AlarmInfoDao>().As<IAlarmInfoDao>();
             //builder.RegisterType<ThresholdDao>().As<IThresholdDao>();
             //builder.RegisterType<FieldDao>().As<IFieldDao>();
+            //builder.RegisterType<SeverityDao>().As<ISeverityDao>();
             //IoTManager.Dao-MySQL
             builder.RegisterType<MySQLCityDao>().As<ICityDao>();
             builder.RegisterType<MySQLDepartmentDao>().As<IDepartmentDao>();
@@ -56,6 +57,7 @@ namespace IoTManager.DI
             builder.RegisterType<AlarmInfoDao>().As<IAlarmInfoDao>();
             builder.RegisterType<MySQLThresholdDao>().As<IThresholdDao>();
             builder.RegisterType<MySQLFieldDao>().As<IFieldDao>();
+            builder.RegisterType<MySQLSeverityDao>().As<ISeverityDao>();
             //IoTManager.AzureIoTHub
             builder.RegisterType<AzureIoTHub.AzureIoTHub>().As<IoTHub>();
             //base.Load(builder);
