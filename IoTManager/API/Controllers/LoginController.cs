@@ -24,7 +24,7 @@ namespace IoTManager.API.Controllers
         {
             return new ResponseSerializer(
                 200,
-                this._loginBus.Login(loginModel),
+                "success",
                 this._loginBus.Login(loginModel));
         }
     }

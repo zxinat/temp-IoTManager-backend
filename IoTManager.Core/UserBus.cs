@@ -85,5 +85,10 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public String UpdatePassword(String userName, String password)
+        {
+            return this._userDao.UpdatePassword(userName, password);
+        }
     }
 }

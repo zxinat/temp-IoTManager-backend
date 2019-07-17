@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using IoTManager.DAL.Models;
 using IoTManager.DAL.DbContext;
 using IoTManager.DAL.ReturnType;
+using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -102,6 +103,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.GetUsersByUserName(userName));
+        }
+
+        [HttpPost("password/{userName}")]
+        public ResponseSerializer UpdatePassword(String userName, [FromBody] UserModel user)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._userBus.UpdatePassword(userName, user.Password));
         }
     }
 }

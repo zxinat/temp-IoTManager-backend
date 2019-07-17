@@ -106,5 +106,15 @@ namespace IoTManager.Dao
                     .ToList();
             }
         }
+
+        public String UpdatePassword(String userName, String password)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("update account set password=@pw where userName=@un",
+                    new {pw = password, un = userName});
+                return rows == 1 ? "success" : "error";
+            }
+        }
     }
 }
