@@ -14,5 +14,7 @@ namespace IoTManager.Core.Infrastructures
         String CreateNewUser(UserSerializer userSerializer);
         String UpdateUser(int id, UserSerializer userSerializer);
         String DeleteUser(int id);
+        List<UserSerializer> GetUsersByUserName(String userName);
+        String UpdatePassword(String userName, String password);
     }
 }

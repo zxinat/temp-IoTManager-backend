@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
@@ -29,6 +30,14 @@ namespace IoTManager.Core
             }
 
             return result;
+        }
+
+        public String CreateNewField(FieldSerializer fieldSerializer)
+        {
+            FieldModel fieldModel = new FieldModel();
+            fieldModel.FieldName = fieldSerializer.fieldName;
+            fieldModel.FieldId = fieldSerializer.fieldId;
+            return this._fieldDao.Create(fieldModel);
         }
     }
 }

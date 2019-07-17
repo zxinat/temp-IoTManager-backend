@@ -18,20 +18,20 @@ namespace IoTManager.Core
             this._logger = logger;
         }
         
-        public String Login(LoginModel loginModel)
+        public object Login(LoginModel loginModel)
         {
             UserModel user = this._userDao.GetByUserName(loginModel.Name);
             if (user == null)
             {
-                return "Failed";
+                return new {status="Failed", user=loginModel.Name};
             } 
-            else if (user != null && loginModel.Password != loginModel.Password)
+            else if (user != null && loginModel.Password != user.Password)
             {
-                return "Failed";
+                return new {status="Failed", user=loginModel.Name};
             }
             else
             {
-                return "success";
+                return new {status="success", user=loginModel.Name};
             }
         }
     }

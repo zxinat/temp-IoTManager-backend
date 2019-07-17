@@ -108,9 +108,9 @@ namespace IoTManager.Core
             return this._deviceDao.BatchDelete(id);
         }
 
-        public List<DeviceSerializer> GetDeviceByWorkshop(String workshop)
+        public List<DeviceSerializer> GetDeviceByWorkshop(String city, String factory, String workshop)
         {
-            List<DeviceModel> devices = _deviceDao.GetByWorkshop(workshop);
+            List<DeviceModel> devices = _deviceDao.GetByWorkshop(city, factory, workshop);
             List<DeviceSerializer> result = new List<DeviceSerializer>();
             foreach (DeviceModel d in devices)
             {
@@ -118,6 +118,21 @@ namespace IoTManager.Core
             }
 
             return result;
+        }
+
+        public int GetDeviceAmount()
+        {
+            return this._deviceDao.GetDeviceAmount();
+        }
+
+        public List<object> GetDeviceTree(String city, String factory)
+        {
+            return this._deviceDao.GetDeviceTree(city, factory);
+        }
+
+        public String CreateDeviceType(String deviceType)
+        {
+            return this._deviceDao.CreateDeviceType(deviceType);
         }
     }
 }

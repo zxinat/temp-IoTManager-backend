@@ -53,5 +53,15 @@ namespace IoTManager.Core
         {
             return this._deviceDataDao.GetLineChartData(deviceId, indexId);
         }
+
+        public int GetDeviceDataAmount()
+        {
+            return this._deviceDataDao.GetDeviceDataAmount();
+        }
+
+        public object GetDeviceStatusById(int id)
+        {
+            return this._deviceDataDao.GetDeviceStatusById(id);
+        }
     }
 }

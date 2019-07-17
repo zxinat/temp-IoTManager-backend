@@ -82,5 +82,32 @@ namespace IoTManager.Core
             }
             return "success";
         }
+
+        public List<AlarmInfoSerializer> GetFiveInfo()
+        {
+            List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.GetFiveInfo();
+            List<AlarmInfoSerializer> result = new List<AlarmInfoSerializer>();
+            foreach (AlarmInfoModel alarmInfo in alarmInfos)
+            {
+                result.Add(new AlarmInfoSerializer(alarmInfo));
+            }
+
+            return result;
+        }
+
+        public int GetNoticeAlarmInfoAmount()
+        {
+            return this._alarmInfoDao.GetNoticeAlarmInfoAmount();
+        }
+
+        public int GetSeriousAlarmInfoAmount()
+        {
+            return this._alarmInfoDao.GetSeriousAlarmInfoAmount();
+        }
+
+        public int GetVerySeriousAlarmInfoAmount()
+        {
+            return this._alarmInfoDao.GetVerySeriousAlarmInfoAmount();
+        }
     }
 }

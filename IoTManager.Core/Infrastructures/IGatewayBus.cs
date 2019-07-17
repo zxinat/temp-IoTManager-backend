@@ -13,6 +13,8 @@ namespace IoTManager.Core.Infrastructures
         String CreateNewGateway(GatewaySerializer gatewaySerializer);
         String UpdateGateway(int id, GatewaySerializer gatewaySerializer);
         String DeleteGateway(int id);
-        List<GatewaySerializer> GetGatewayByWorkshop(String workshop);
+        List<GatewaySerializer> GetGatewayByWorkshop(String city, String factory, String workshop);
+        int BatchDeleteGateway(int[] ids);
+        String CreateGatewayType(String gatewayType);
     }
 }

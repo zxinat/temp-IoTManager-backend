@@ -13,5 +13,6 @@ namespace IoTManager.Core.Infrastructures
         String CreateNewCity(CitySerializer citySerializer);
         String UpdateCity(int id, CitySerializer citySerializer);
         String DeleteCity(int id);
+        List<object> GetCityOptions();
     }
 }
