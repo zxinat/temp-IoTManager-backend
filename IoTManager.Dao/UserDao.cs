@@ -97,5 +97,14 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+
+        public List<UserModel> GetByName(String userName)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<UserModel>("select * from account where userName like '%" + userName + "%'")
+                    .ToList();
+            }
+        }
     }
 }

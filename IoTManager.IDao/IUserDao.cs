@@ -13,5 +13,6 @@ namespace IoTManager.IDao
         UserModel GetByUserName(String userName);
         String Update(int id, UserModel userModel);
         String Delete(int id);
+        List<UserModel> GetByName(String userName);
     }
 }

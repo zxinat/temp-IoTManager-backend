@@ -94,5 +94,14 @@ namespace IoTManager.API.Controllers
                 this._userBus.DeleteUser(id)
                 );
         }
+
+        [HttpGet("name/{userName}")]
+        public ResponseSerializer GetByName(String userName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._userBus.GetUsersByUserName(userName));
+        }
     }
 }

@@ -73,5 +73,17 @@ namespace IoTManager.Core
         {
             return this._userDao.Delete(id);
         }
+
+        public List<UserSerializer> GetUsersByUserName(String userName)
+        {
+            List<UserModel> users = this._userDao.GetByName(userName);
+            List<UserSerializer> result = new List<UserSerializer>();
+            foreach (UserModel u in users)
+            {
+                result.Add(new UserSerializer(u));
+            }
+
+            return result;
+        }
     }
 }
