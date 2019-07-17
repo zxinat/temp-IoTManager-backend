@@ -11,5 +11,9 @@ namespace IoTManager.IDao
         List<AlarmInfoModel> GetByDeviceId(String DeviceId);
         List<AlarmInfoModel> GetByIndexId(String IndexId);
         String Create(AlarmInfoModel alarmInfoModel);
+        List<AlarmInfoModel> GetFiveInfo();
+        int GetNoticeAlarmInfoAmount();
+        int GetSeriousAlarmInfoAmount();
+        int GetVerySeriousAlarmInfoAmount();
     }
 }
