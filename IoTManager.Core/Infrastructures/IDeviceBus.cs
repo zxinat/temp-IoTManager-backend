@@ -16,7 +16,7 @@ namespace IoTManager.Core.Infrastructures
         String UpdateDevice(int id, DeviceSerializer deviceSerializer);
         String DeleteDevice(int id);
         int BatchDeleteDevice(int[] id);
-        List<DeviceSerializer> GetDeviceByWorkshop(String workshop);
+        List<DeviceSerializer> GetDeviceByWorkshop(String city, String factory, String workshop);
         int GetDeviceAmount();
         List<object> GetDeviceTree(String city, String factory);
     }

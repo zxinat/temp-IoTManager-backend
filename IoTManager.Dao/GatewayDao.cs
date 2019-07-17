@@ -150,7 +150,7 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<GatewayModel> GetByWorkshop(String workshop)
+        public List<GatewayModel> GetByWorkshop(String city, String factory, String workshop)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -170,8 +170,12 @@ namespace IoTManager.Dao
                                                       "join city on city.id=gateway.city " +
                                                       "join factory on factory.id=gateway.factory " +
                                                       "join workshop on workshop.id=gateway.workshop " +
-                                                      "where gateway.workshop in (select id from workshop where workshopName=@wn)", new
+                                                      "where gateway.workshop in (select id from workshop where workshopName=@wn) " +
+                                                      "and gateway.factory in (select id from factory where factoryName=@fn) " +
+                                                      "and gateway.city in (select id from city where cityName=@cn)", new
                     {
+                        cn = city,
+                        fn = factory,
                         wn = workshop
                     })
                     .ToList();

@@ -78,13 +78,13 @@ namespace IoTManager.API.Controllers
                 this._gatewayBus.DeleteGateway(id));
         }
 
-        [HttpGet("workshop/{workshopName}")]
-        public ResponseSerializer GetGatewayByWorkshop(String workshopName)
+        [HttpGet("workshop/{cityName}/{factoryName}/{workshopName}")]
+        public ResponseSerializer GetGatewayByWorkshop(String cityName, String factoryName, String workshopName)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._gatewayBus.GetGatewayByWorkshop(workshopName));
+                this._gatewayBus.GetGatewayByWorkshop(cityName, factoryName, workshopName));
         }
     }
 }

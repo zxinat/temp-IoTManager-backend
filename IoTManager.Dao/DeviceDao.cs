@@ -248,7 +248,7 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<DeviceModel> GetByWorkshop(String workshop)
+        public List<DeviceModel> GetByWorkshop(String city, String factory, String workshop)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -271,8 +271,12 @@ namespace IoTManager.Dao
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
                                                      "join workshop on workshop.id=device.workshop " +
-                                                     "where workshop in (select id from workshop where workshopName=@wn)", new
+                                                     "where device.workshop in (select id from workshop where workshopName=@wn) " +
+                                                     "and device.factory in (select id from factory where factoryName=@fn) " +
+                                                     "and device.city in (select id from city where cityName=@cn)", new
                     {
+                        cn = city,
+                        fn = factory,
                         wn = workshop
                     })
                     .ToList();
