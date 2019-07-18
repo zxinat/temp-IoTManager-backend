@@ -30,6 +30,7 @@ namespace IoTManager.DI
             builder.RegisterType<ThresholdBus>().As<IThresholdBus>();
             builder.RegisterType<LoginBus>().As<ILoginBus>();
             builder.RegisterType<FieldBus>().As<IFieldBus>();
+            builder.RegisterType<SeverityBus>().As<ISeverityBus>();
             //IoTManager.Dao
             //builder.RegisterType<CityDao>().As<ICityDao>();
             //builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();

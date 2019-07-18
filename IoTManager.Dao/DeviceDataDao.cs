@@ -9,6 +9,7 @@ using IoTManager.Utility;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
@@ -94,7 +95,7 @@ namespace IoTManager.Dao
         {
             String deviceId = "";
             DeviceModel device = new DeviceModel();
-            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 device = connection.Query<DeviceModel>("select * from device where id=@did", new {did = id})
                     .FirstOrDefault();
