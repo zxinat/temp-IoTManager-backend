@@ -30,21 +30,34 @@ namespace IoTManager.DI
             builder.RegisterType<ThresholdBus>().As<IThresholdBus>();
             builder.RegisterType<LoginBus>().As<ILoginBus>();
             builder.RegisterType<FieldBus>().As<IFieldBus>();
-            builder.RegisterType<SeverityBus>().As<ISeverityBus>();
             //IoTManager.Dao
-            builder.RegisterType<CityDao>().As<ICityDao>();
-            builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();
-            builder.RegisterType<DeviceDao>().As<IDeviceDao>();
-            builder.RegisterType<GatewayDao>().As<IGatewayDao>();
-            builder.RegisterType<UserDao>().As<IUserDao>();
-            builder.RegisterType<FactoryDao>().As<IFactoryDao>();
-            builder.RegisterType<WorkshopDao>().As<IWorkshopDao>();
-            builder.RegisterType<StateTypeDao>().As<IStateTypeDao>();
+            //builder.RegisterType<CityDao>().As<ICityDao>();
+            //builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();
+            //builder.RegisterType<DeviceDao>().As<IDeviceDao>();
+            //builder.RegisterType<GatewayDao>().As<IGatewayDao>();
+            //builder.RegisterType<UserDao>().As<IUserDao>();
+            //builder.RegisterType<FactoryDao>().As<IFactoryDao>();
+            //builder.RegisterType<WorkshopDao>().As<IWorkshopDao>();
+            //builder.RegisterType<StateTypeDao>().As<IStateTypeDao>();
+            //builder.RegisterType<DeviceDataDao>().As<IDeviceDataDao>();
+            //builder.RegisterType<AlarmInfoDao>().As<IAlarmInfoDao>();
+            //builder.RegisterType<ThresholdDao>().As<IThresholdDao>();
+            //builder.RegisterType<FieldDao>().As<IFieldDao>();
+            //builder.RegisterType<SeverityDao>().As<ISeverityDao>();
+            //IoTManager.Dao-MySQL
+            builder.RegisterType<MySQLCityDao>().As<ICityDao>();
+            builder.RegisterType<MySQLDepartmentDao>().As<IDepartmentDao>();
+            builder.RegisterType<MySQLDeviceDao>().As<IDeviceDao>();
+            builder.RegisterType<MySQLGatewayDao>().As<IGatewayDao>();
+            builder.RegisterType<MySQLUserDao>().As<IUserDao>();
+            builder.RegisterType<MySQLFactoryDao>().As<IFactoryDao>();
+            builder.RegisterType<MySQLWorkshopDao>().As<IWorkshopDao>();
+            builder.RegisterType<MySQLStateTypeDao>().As<IStateTypeDao>();
             builder.RegisterType<DeviceDataDao>().As<IDeviceDataDao>();
             builder.RegisterType<AlarmInfoDao>().As<IAlarmInfoDao>();
-            builder.RegisterType<ThresholdDao>().As<IThresholdDao>();
-            builder.RegisterType<FieldDao>().As<IFieldDao>();
-            builder.RegisterType<SeverityDao>().As<ISeverityDao>();
+            builder.RegisterType<MySQLThresholdDao>().As<IThresholdDao>();
+            builder.RegisterType<MySQLFieldDao>().As<IFieldDao>();
+            builder.RegisterType<MySQLSeverityDao>().As<ISeverityDao>();
             //IoTManager.AzureIoTHub
             builder.RegisterType<AzureIoTHub.AzureIoTHub>().As<IoTHub>();
             //base.Load(builder);
