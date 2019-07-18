@@ -16,7 +16,7 @@ namespace IoTManager.Utility.Serializers
             this.deviceState = null;
             this.lastConnectiontime = null;
             this.imageUrl = null;
-            this.gatewayId = 0;
+            this.gatewayId = null;
             this.mac = null;
             this.deviceType = null;
             this.createTime = null;
@@ -55,7 +55,7 @@ namespace IoTManager.Utility.Serializers
         public String deviceState { get; set; }
         public String lastConnectiontime { get; set; }
         public String imageUrl { get; set; }
-        public int gatewayId { get; set; }
+        public String gatewayId { get; set; }
         public String mac { get; set; }
         public String deviceType { get; set; }
         public String createTime { get; set; }

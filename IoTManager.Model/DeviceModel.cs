@@ -15,7 +15,7 @@ namespace IoTManager.Model
         public String DeviceState { get; set; }
         public DateTime LastConnectionTime { get; set; }
         public String ImageUrl { get; set; }
-        public int GatewayId { get; set; }
+        public String GatewayId { get; set; }
         public String Mac { get; set; }
         public String DeviceType { get; set; }
         public DateTime CreateTime { get; set; }
