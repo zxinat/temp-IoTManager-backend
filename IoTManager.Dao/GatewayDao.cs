@@ -150,7 +150,7 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<GatewayModel> GetByWorkshop(String workshop)
+        public List<GatewayModel> GetByWorkshop(String city, String factory, String workshop)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -170,11 +170,43 @@ namespace IoTManager.Dao
                                                       "join city on city.id=gateway.city " +
                                                       "join factory on factory.id=gateway.factory " +
                                                       "join workshop on workshop.id=gateway.workshop " +
-                                                      "where gateway.workshop in (select id from workshop where workshopName=@wn)", new
+                                                      "where gateway.workshop in (select id from workshop where workshopName=@wn) " +
+                                                      "and gateway.factory in (select id from factory where factoryName=@fn) " +
+                                                      "and gateway.city in (select id from city where cityName=@cn)", new
                     {
+                        cn = city,
+                        fn = factory,
                         wn = workshop
                     })
                     .ToList();
+            }
+        }
+
+        public int BatchDelete(int[] ids)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = 0;
+                foreach (int i in ids)
+                {
+                    connection.Execute("delete from gateway where gateway.id=@gid", new {gid = i});
+                    rows = rows + 1;
+                }
+
+                return rows;
+            }
+        }
+
+        public String CreateGatewayType(String gatewayType)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("insert into config(configTag, configValue)  values ('gatewayType', @gt)",
+                    new
+                    {
+                        gt = gatewayType
+                    });
+                return rows == 1 ? "success" : "error";
             }
         }
     }

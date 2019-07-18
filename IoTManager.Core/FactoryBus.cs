@@ -64,5 +64,17 @@ namespace IoTManager.Core
         {
             return this._factoryDao.Delete(id);
         }
+
+        public List<object> GetAffiliateFactory(String cName)
+        {
+            List<FactoryModel> factories = this._factoryDao.GetAffiliateFactory(cName);
+            List<object> result = new List<object>();
+            foreach (FactoryModel f in factories)
+            {
+                result.Add(new {value=f.FactoryName, label=f.FactoryName});
+            }
+
+            return result;
+        }
     }
 }

@@ -248,7 +248,7 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<DeviceModel> GetByWorkshop(String workshop)
+        public List<DeviceModel> GetByWorkshop(String city, String factory, String workshop)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -271,11 +271,66 @@ namespace IoTManager.Dao
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
                                                      "join workshop on workshop.id=device.workshop " +
-                                                     "where workshop in (select id from workshop where workshopName=@wn)", new
+                                                     "where device.workshop in (select id from workshop where workshopName=@wn) " +
+                                                     "and device.factory in (select id from factory where factoryName=@fn) " +
+                                                     "and device.city in (select id from city where cityName=@cn)", new
                     {
+                        cn = city,
+                        fn = factory,
                         wn = workshop
                     })
                     .ToList();
+            }
+        }
+
+        public int GetDeviceAmount()
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<int>("select count(*) from device").FirstOrDefault();
+            }
+        }
+
+        public List<object> GetDeviceTree(String city, String factory)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                CityModel c = connection.Query<CityModel>("select * from city where cityName=@cn", new {cn = city})
+                    .FirstOrDefault();
+                FactoryModel fac = connection
+                    .Query<FactoryModel>("select * from factory where factoryName=@fn and city=@cid", new {fn = factory, cid=c.Id})
+                    .FirstOrDefault();
+                List<WorkshopModel> workshops =
+                    connection.Query<WorkshopModel>("select * from workshop where factory=@fid", new{fid = fac.Id})
+                        .ToList();
+                List<object> result = new List<object>();
+                foreach (WorkshopModel w in workshops)
+                {
+                    List<DeviceModel> devices = connection
+                        .Query<DeviceModel>("select * from device where workshop=@wid", new {wid = w.Id})
+                        .ToList();
+                    List<object> deviceResult = new List<object>();
+                    foreach (DeviceModel d in devices)
+                    {
+                        deviceResult.Add(new {label=d.DeviceName, id=d.Id});
+                    }
+                    result.Add(new {label=w.WorkshopName, children=deviceResult});
+                }
+
+                return result;
+            }
+        }
+
+        public String CreateDeviceType(String deviceType)
+        {
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("insert into config(configTag, configValue) values ('deviceType', @dt)",
+                    new
+                    {
+                        dt = deviceType
+                    });
+                return rows == 1 ? "success" : "error";
             }
         }
     }

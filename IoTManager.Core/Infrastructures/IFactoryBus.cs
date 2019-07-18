@@ -11,5 +11,6 @@ namespace IoTManager.Core.Infrastructures
         String CreateNewFactory(FactorySerializer factorySerializer);
         String UpdateFactory(int id, FactorySerializer factorySerializer);
         String DeleteFactory(int id);
+        List<object> GetAffiliateFactory(String cName);
     }
 }

@@ -12,5 +12,6 @@ namespace IoTManager.Core.Infrastructures
         String CreateNewWorkshop(WorkshopSerializer workshopSerializer);
         String UpdateWorkshop(int id, WorkshopSerializer workshopSerializer);
         String DeleteWorkshop(int id);
+        List<object> GetAffiliateWorkshop(String fName);
     }
 }

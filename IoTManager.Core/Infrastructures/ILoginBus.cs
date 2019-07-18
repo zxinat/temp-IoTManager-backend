@@ -5,6 +5,6 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface ILoginBus
     {
-        String Login(LoginModel loginModel);
+        object Login(LoginModel loginModel);
     }
 }

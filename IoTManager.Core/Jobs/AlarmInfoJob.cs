@@ -13,13 +13,15 @@ namespace IoTManager.Core.Jobs
         private readonly IDeviceDataDao _deviceDataDao;
         private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly IThresholdDao _thresholdDao;
+        private readonly ISeverityDao _severityDao;
         private readonly ILogger _logger;
 
-        public AlarmInfoJob(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, IThresholdDao thresholdDao, ILogger<AlarmInfoJob> logger)
+        public AlarmInfoJob(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, IThresholdDao thresholdDao, ISeverityDao severityDao, ILogger<AlarmInfoJob> logger)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
             this._thresholdDao = thresholdDao;
+            this._severityDao = severityDao;
             this._logger = logger;
         }
 
@@ -42,52 +44,63 @@ namespace IoTManager.Core.Jobs
                 }
                 deviceIds.Add(d.DeviceId);
             }
-            //TODO: Uniquify
             deviceIds = deviceIds.Distinct().ToList();
+            Dictionary<String, String> operatorName = new Dictionary<string, string>();
+            operatorName.Add("equal", "=");
+            operatorName.Add("greater", ">");
+            operatorName.Add("less", "<");
             foreach (String did in deviceIds)
             {
-                Dictionary<String, Tuple<String, int>> thresholdDic = _thresholdDao.GetByDeviceId(did);
+                List<ThresholdModel> thresholdDic = _thresholdDao.GetByDeviceId(did);
                 foreach (DeviceDataModel data in sortedData[did])
                 {
-                    String op = thresholdDic[data.IndexId].Item1;
-                    int threshold = thresholdDic[data.IndexId].Item2;
-
-                    Boolean abnormal = false;
-
-                    if (op == "equal")
+                    var query = thresholdDic.AsQueryable()
+                        .Where(t => t.IndexId == data.IndexId)
+                        .ToList();
+                    foreach (var th in query)
                     {
-                        if (Int32.Parse(data.IndexValue) != threshold)
+                        String op = th.Operator;
+                        double threshold = th.ThresholdValue;
+                        String svty = this._severityDao.GetById(int.Parse(th.Severity)).SeverityName;
+
+                        Boolean abnormal = false;
+
+                        if (op == "equal")
                         {
-                            abnormal = true;
+                            if (double.Parse(data.IndexValue) - threshold < 0.0001)
+                            {
+                                abnormal = true;
+                            }
                         }
-                    }
-                    else if (op == "less")
-                    {
-                        if (Int32.Parse(data.IndexValue) <= threshold)
+                        else if (op == "less")
                         {
-                            abnormal = true;
+                            if (double.Parse(data.IndexValue) <= threshold)
+                            {
+                                abnormal = true;
+                            }
                         }
-                    }
-                    else if (op == "greater")
-                    {
-                        if (Int32.Parse(data.IndexValue) >= threshold)
+                        else if (op == "greater")
                         {
-                            abnormal = true;
+                            if (double.Parse(data.IndexValue) >= threshold)
+                            {
+                                abnormal = true;
+                            }
                         }
-                    }
 
-                    if (abnormal == true)
-                    {
-                        AlarmInfoModel alarmInfo = new AlarmInfoModel();
-                        alarmInfo.AlarmInfo = data.Id;
-                        alarmInfo.DeviceId = data.DeviceId;
-                        alarmInfo.IndexId = data.IndexId;
-                        alarmInfo.IndexName = data.IndexName;
-                        alarmInfo.IndexValue = data.IndexValue;
-                        alarmInfo.ThresholdValue = threshold.ToString();
-                        alarmInfo.Timestamp = DateTime.Now;
+                        if (abnormal == true)
+                        {
+                            AlarmInfoModel alarmInfo = new AlarmInfoModel();
+                            alarmInfo.AlarmInfo = th.Description;
+                            alarmInfo.DeviceId = data.DeviceId;
+                            alarmInfo.IndexId = data.IndexId;
+                            alarmInfo.IndexName = data.IndexName;
+                            alarmInfo.IndexValue = data.IndexValue;
+                            alarmInfo.ThresholdValue = operatorName[op] + threshold.ToString();
+                            alarmInfo.Timestamp = DateTime.Now;
+                            alarmInfo.Severity = svty;
 
-                        _alarmInfoDao.Create(alarmInfo);
+                            _alarmInfoDao.Create(alarmInfo);
+                        }
                     }
                 }
             }

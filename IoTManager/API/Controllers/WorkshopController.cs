@@ -75,5 +75,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._workshopBus.DeleteWorkshop(id));
         }
+
+        [HttpGet("workshopOptions/{fName}")]
+        public ResponseSerializer GetAffiliateWorkshop(String fName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._workshopBus.GetAffiliateWorkshop(fName));
+        }
     }
 }

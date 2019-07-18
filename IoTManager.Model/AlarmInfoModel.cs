@@ -30,5 +30,7 @@ namespace IoTManager.Model
         
         [BsonElement("Timestamp")]
         public DateTime Timestamp { get; set; }
+        [BsonElement("Severity")]
+        public String Severity { get; set; }
     }
 }

@@ -36,5 +36,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._thresholdBus.InsertThreshold(thresholdSerializer));
         }
+
+        [HttpGet]
+        public ResponseSerializer Get()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.GetAllRules());
+        }
     }
 }

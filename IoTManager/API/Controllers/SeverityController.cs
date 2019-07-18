@@ -1,6 +1,4 @@
-using System;
 using IoTManager.Core.Infrastructures;
-using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,25 +6,25 @@ using Microsoft.Extensions.Logging;
 namespace IoTManager.API.Controllers
 {
     [Route("api/[controller]")]
-    public class LoginController: ControllerBase
+    [ApiController]
+    public class SeverityController
     {
-        private readonly ILoginBus _loginBus;
+        private readonly ISeverityBus _severityBus;
         private readonly ILogger _logger;
 
-        public LoginController(ILoginBus loginBus, ILogger<LoginController> logger)
+        public SeverityController(ISeverityBus severityBus, ILogger<SeverityController> logger)
         {
-            this._loginBus = loginBus;
+            this._severityBus = severityBus;
             this._logger = logger;
         }
-        
-        [HttpPost]
-        public ResponseSerializer Login([FromBody] LoginModel loginModel)
+
+        [HttpGet]
+        public ResponseSerializer Get()
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._loginBus.Login(loginModel)
-                );
+                this._severityBus.GetAllSeverity());
         }
     }
 }

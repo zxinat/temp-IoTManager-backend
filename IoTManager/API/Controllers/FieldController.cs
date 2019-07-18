@@ -25,5 +25,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._fieldBus.GetAllFields());
         }
+
+        [HttpPost]
+        public ResponseSerializer CreateNewField([FromBody] FieldSerializer fieldSerializer)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._fieldBus.CreateNewField(fieldSerializer));
+        }
     }
 }

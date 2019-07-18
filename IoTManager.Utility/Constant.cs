@@ -24,5 +24,10 @@ namespace IoTManager.Utility
         {
             return "yyyy年MM月dd日 hh:mm:ss";
         }
+
+        public static String getLineChartDateFormatString()
+        {
+            return "yy-MM-dd\nhh:mm:ss";
+        }
     }
 }
