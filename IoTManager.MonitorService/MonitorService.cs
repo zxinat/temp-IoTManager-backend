@@ -11,6 +11,7 @@ using IoTManager.Utility.Extensions;
 using System.Data;
 using System.Threading.Tasks;
 using IoTManager.Model.Contracts;
+using Microsoft.Extensions.Configuration;
 
 namespace IoTManager.MonitorService
 {
@@ -22,6 +23,12 @@ namespace IoTManager.MonitorService
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequest req, ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
+
+            IConfigurationRoot configurationRoot = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
 
             string name = "iot hub";
 
