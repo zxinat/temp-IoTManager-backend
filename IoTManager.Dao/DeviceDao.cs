@@ -23,18 +23,19 @@ namespace IoTManager.Dao
                                                      "factory.factoryName as factory, " +
                                                      "workshop.workshopName as workshop, " +
                                                      "deviceState, " +
-                                                     "imageUrl, " +
-                                                     "gatewayID, " +
+                                                     "device.imageUrl, " +
+                                                     "gateway.gatewayName gatewayId, " +
                                                      "mac, " +
                                                      "deviceType, " +
                                                      "device.remark, " +
-                                                     "lastConnectionTime, " +
+                                                     "device.lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
-                                                     "join workshop on workshop.id=device.workshop")
+                                                     "join workshop on workshop.id=device.workshop " +
+                                                     "join gateway on gateway.id=device.gatewayId")
                     .ToList();
             }
         }
