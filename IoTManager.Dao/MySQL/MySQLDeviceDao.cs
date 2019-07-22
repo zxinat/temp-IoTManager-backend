@@ -146,6 +146,8 @@ namespace IoTManager.Dao
                     {
                         wn = deviceModel.Workshop
                     }).FirstOrDefault();
+                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
+                    new {gn = deviceModel.GatewayId}).FirstOrDefault();
                 int rows = connection.Execute(
                     "INSERT INTO "+ 
                     "device(hardwareDeviceID, deviceName, city, factory, workshop, deviceState, imageUrl, gatewayId, mac, deviceType, remark)" +
@@ -158,7 +160,7 @@ namespace IoTManager.Dao
                         w = workshop.Id,
                         ds = deviceModel.DeviceState,
                         iu = deviceModel.ImageUrl,
-                        gid = deviceModel.GatewayId,
+                        gid = gateway.Id,
                         m = deviceModel.Mac,
                         dt = deviceModel.DeviceType,
                         r = deviceModel.Remark
@@ -186,6 +188,8 @@ namespace IoTManager.Dao
                     {
                         wn = deviceModel.Workshop
                     }).FirstOrDefault();
+                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
+                    new {gn = deviceModel.GatewayId}).FirstOrDefault();
                 int rows = connection
                     .Execute(
                         "UPDATE device "+
@@ -212,7 +216,7 @@ namespace IoTManager.Dao
                             w = workshop.Id,
                             ds = deviceModel.DeviceState,
                             iu = deviceModel.ImageUrl,
-                            gid = deviceModel.GatewayId,
+                            gid = gateway.Id,
                             m = deviceModel.Mac,
                             dt = deviceModel.DeviceType,
                             r = deviceModel.Remark
