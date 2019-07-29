@@ -14,18 +14,17 @@ using IoTManager.Utility.Extensions;
 namespace IoTManager.Test.Controllers
 {
     [ExcludeFromCodeCoverage]
-    public sealed class TestCityController: TestController
+    public sealed class TestFactoryController : TestController
     {
-        public TestCityController(TestServerFixture testServer) : base(testServer)
+        public TestFactoryController(TestServerFixture testServer) : base(testServer)
         {
         }
 
         [Fact]
         public async Task GetSuccess()
         {
-            var response = await this._httpClient.GetAsync("api/city");
+            var response = await this._httpClient.GetAsync("api/factory");
             var result = response.Content.ReadAsStringAsync().Result;
-            Console.Write(result);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\"", result);
         }
@@ -34,80 +33,92 @@ namespace IoTManager.Test.Controllers
         [InlineData(1)]
         public async Task GetByIdSuccess(int id)
         {
-            var response = await this._httpClient.GetAsync("api/city/" + id);
+            var response = await this._httpClient.GetAsync("api/factory/" + id);
             var result = response.Content.ReadAsStringAsync().Result;
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\"", result);
         }
 
         [Theory]
-        [InlineData("Suzhou", "Post test data")]
-        public async Task PostSuccess(String cityName, String remark)
+        [InlineData("Shanghai University 5", "12345", "12345","hjk", "SH")]
+        public async Task PostSuccess(string factoryName,string factoryPhoneNumber,string factoryAddress,string remark,string city)
         {
-            var data = new CityModel
+            var data = new FactoryModel
             {
-                CityName = cityName,
-                Remark = remark
+                FactoryName = factoryName,
+                FactoryPhoneNumber = factoryPhoneNumber,
+                FactoryAddress = factoryAddress,
+                Remark = remark,
+                City = city
             };
             var content = new StringContent(data.ToJson(), Encoding.UTF8, "text/json");
-            var response = await this._httpClient.PostAsync("api/city",content);
+            var response = await this._httpClient.PostAsync("api/factory", content);
             var result = response.Content.ReadAsStringAsync().Result;
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\",\"d\":\"success\"", result);
         }
 
         [Theory]
-        [InlineData(33, "Shanghai II", "Put test data")]
-        public async Task PutSuccess(int id, String cityName, String remark)
+        [InlineData(1, "Shanghai University", "12345", "12345", "hjk", "SH")]
+        public async Task PutSuccess(int id,string factoryName,string factoryPhoneNumber,string factoryAddress,string remark,string city)
         {
-            var data = new CityModel
+            var data = new FactoryModel
             {
                 Id = id,
-                CityName = cityName,
-                Remark = remark
+                FactoryName = factoryName,
+                FactoryPhoneNumber = factoryPhoneNumber,
+                FactoryAddress = factoryAddress,
+                Remark = remark,
+                City = city
             };
             var content = new StringContent(data.ToJson(), Encoding.UTF8, "text/json");
-            var response = await this._httpClient.PutAsync("api/city/" + id, content); //TODO
+            var response = await this._httpClient.PutAsync("api/factory/" + id, content); //TODO
             var result = response.Content.ReadAsStringAsync().Result;
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\",\"d\":\"success\"", result);
         }
 
         [Theory]
-        [InlineData(29, "Shanghai II", "Put test data")]
-        public async Task PutError(int id, String cityName, String remark)
+        [InlineData(120, "TestFactory", "12345", "12345", "hjk", "SH")]  // 不存在的id
+        public async Task PutError(int id, string factoryName, string factoryPhoneNumber, string factoryAddress, string remark, string city)
         {
-            var data = new CityModel
+            var data = new FactoryModel
             {
                 Id = id,
-                CityName = cityName,
-                Remark = remark
+                FactoryName = factoryName,
+                FactoryPhoneNumber = factoryPhoneNumber,
+                FactoryAddress = factoryAddress,
+                Remark = remark,
+                City = city
             };
             var content = new StringContent(data.ToJson(), Encoding.UTF8, "text/json");
-            var response = await this._httpClient.PutAsync("api/city/" + id, content); //TODO
+            var response = await this._httpClient.PutAsync("api/factory/" + id, content); //TODO
             var result = response.Content.ReadAsStringAsync().Result;
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\",\"d\":\"error\"", result);
         }
 
         [Theory]
-        [InlineData(29)]
+        [InlineData(3)]
         public async Task DeleteSuccess(int id)
         {
-            var response = await this._httpClient.DeleteAsync("api/city/" + id);
+            var response = await this._httpClient.DeleteAsync("api/factory/" + id);
             var result = response.Content.ReadAsStringAsync().Result;
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\",\"d\":\"success\"", result);
         }
 
         [Theory]
-        [InlineData(3)]
+        [InlineData(13)]
         public async Task DeleteError(int id)
         {
-            var response = await this._httpClient.DeleteAsync("api/city/" + id);
+            var response = await this._httpClient.DeleteAsync("api/factory/" + id);
             var result = response.Content.ReadAsStringAsync().Result;
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.Contains("\"c\":200,\"m\":\"success\",\"d\":\"error\"", result);
         }
     }
-}
+
+
+
+ }
