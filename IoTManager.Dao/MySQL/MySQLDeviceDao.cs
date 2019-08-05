@@ -13,7 +13,7 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLDeviceDao : IDeviceDao
     {
-        public List<DeviceModel> Get()
+        public List<DeviceModel> Get(int offset, int limit)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -36,7 +36,8 @@ namespace IoTManager.Dao
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
                                                      "join workshop on workshop.id=device.workshop " +
-                                                     "join gateway on gateway.id=device.gatewayId")
+                                                     "join gateway on gateway.id=device.gatewayId " + 
+                                                     "limit " + offset.ToString() + "," + limit.ToString())
                     .ToList();
             }
         }

@@ -12,7 +12,7 @@ namespace IoTManager.Dao
 {
     public sealed class DeviceDao:IDeviceDao
     {
-        public List<DeviceModel> Get()
+        public List<DeviceModel> Get(int offset, int limit)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
