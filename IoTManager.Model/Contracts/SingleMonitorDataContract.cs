@@ -23,8 +23,7 @@ namespace IoTManager.Model.Contracts
         public string IId { get; set; }
         public string IUnit { get; set; }
         public string IType { get; set; }
-        public string IValue { get; set; }
-        public DateTime ITs { get; set; }
+        public double IValue { get; set; }
+        public string ITs { get; set; }
     }
-
 }

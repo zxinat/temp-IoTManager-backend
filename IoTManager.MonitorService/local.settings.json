@@ -1,0 +1,7 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=iotmanager;AccountKey=JB+P3hDtO4uiiMc3txDfFbXgPrKySM+7OK8VjK+lxONkAKfvDPvjUk2AljN7RBdOCL8OW85xi0moxoxNCIkJFA==;EndpointSuffix=core.chinacloudapi.cn",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  }
+}
