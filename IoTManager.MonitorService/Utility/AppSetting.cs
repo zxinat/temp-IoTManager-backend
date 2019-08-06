@@ -12,6 +12,8 @@ namespace IoTManager.MonitorService.Utility
         string MongoDBConnectionString { get; }
         string MongoDBName { get; }
         string MongoCollectionName { get; }
+        string StorageConnectionString { get; }
+        string LogTableName { get; }
     }
 
     public sealed class AppSetting : IAppSetting
@@ -33,5 +35,9 @@ namespace IoTManager.MonitorService.Utility
         public string MongoDBName => this._configuration.GetValue<string>("MongoDBName");
 
         public string MongoCollectionName => this._configuration.GetValue<string>("MongoCollectionName");
+
+        public string StorageConnectionString => this._configuration.GetValue<string>("StorageConnectionString");
+
+        public string LogTableName => this._configuration.GetValue<string>("LogTableName");
     }
 }
