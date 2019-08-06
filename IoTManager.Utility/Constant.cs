@@ -6,11 +6,11 @@ namespace IoTManager.Utility
     {
         public static String getDatabaseConnectionString()
         {
-            //return "Data Source=iotmanagerdbserver.database.chinacloudapi.cn;" +
-            //       "User ID=azureuser;" +
-            //      "Initial Catalog=iotmanagerdb;" +
-            //      "Pwd=123qwe!@#QWE;";
-            return "Data Source=localhost;Database=iotmanager;User ID=jackjack59;Password=jackjack123;";          
+            // return "Data Source=iotmanagerdbserver.database.chinacloudapi.cn;" +
+                //   "User ID=azureuser;" +
+                //  "Initial Catalog=iotmanagerdb;" +
+                //  "Pwd=123qwe!@#QWE;";
+            return "Data Source=localhost;Database=iotmanager;User ID=root;Password=ab15214368710;";          
         }
 
         public static String getMongoDBConnectionString()

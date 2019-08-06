@@ -13,26 +13,51 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLGatewayDao : IGatewayDao
     {
-        public List<GatewayModel> Get()
+        public List<GatewayModel> Get(int offset, int limit, int id, int createTime, int updateTime)
         {
+            string s =  "select gateway.id, " +
+                        "hardwareGatewayID, " +
+                        "gatewayName, " +
+                        "gatewayType, " +
+                        "city.cityName as city, " +
+                        "factory.factoryName as factory, " +
+                        "workshop.workshopName as workshop, " +
+                        "gatewayState, " +
+                        "imageUrl, " +
+                        "gateway.remark, " +
+                        "gateway.lastConnectionTime, " +
+                        "gateway.createTime, " +
+                        "gateway.updateTime from gateway " +
+                        "join city on city.id=gateway.city " +
+                        "join factory on factory.id=gateway.factory " +
+                        "join workshop on workshop.id=gateway.workshop " +
+                        "limit " + offset.ToString() + "," + limit.ToString();
+            if(id == 1){
+                s = s.Insert(397, "order by id ");
+            }
+            else if(id == -1){
+                s = s.Insert(397, "order by id desc ");
+            }
+            else if(createTime == 1)
+            {
+                s = s.Insert(397, "order by createTime ");
+            }
+            else if(createTime == -1)
+            {
+                s = s.Insert(397, "order by createTime desc ");
+            }
+            else if(updateTime == 1)
+            {
+                s = s.Insert(397, "order by updateTime ");
+            }
+            else if(updateTime == -1)
+            {
+                s = s.Insert(397, "order by updateTime desc ");
+            }
+            //Console.WriteLine(s);
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<GatewayModel>("select gateway.id, " +
-                                                      "hardwareGatewayID," +
-                                                      " gatewayName," +
-                                                      " gatewayType, " +
-                                                      "city.cityName as city, " +
-                                                      "factory.factoryName as factory, " +
-                                                      "workshop.workshopName as workshop, " +
-                                                      "gatewayState, " +
-                                                      "imageUrl, " +
-                                                      "gateway.remark, " +
-                                                      "gateway.lastConnectionTime, " +
-                                                      "gateway.createTime, " +
-                                                      "gateway.updateTime from gateway " +
-                                                      "join city on city.id=gateway.city " +
-                                                      "join factory on factory.id=gateway.factory " +
-                                                      "join workshop on workshop.id=gateway.workshop")
+                return connection.Query<GatewayModel>(s)
                     .ToList();
             }
         }

@@ -13,31 +13,54 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLDeviceDao : IDeviceDao
     {
-        public List<DeviceModel> Get(int offset, int limit)
+        public List<DeviceModel> Get(int offset, int limit,int id, int createTime,int updateTime)
         {
+            string s =  "select device.id, " +
+                        "hardwareDeviceID, " +
+                        "deviceName, " +
+                        "city.cityName as city, " +
+                        "factory.factoryName as factory, " +
+                        "workshop.workshopName as workshop, " +
+                        "deviceState, " +
+                        "device.imageUrl, " +
+                        "gateway.gatewayName gatewayId, " +
+                        "mac, " +
+                        "deviceType, " +
+                        "device.remark, " +
+                        "device.lastConnectionTime, " +
+                        "device.createTime, " +
+                        "device.updateTime " +
+                        "from device " +
+                        "join city on city.id=device.city " +
+                        "join factory on factory.id=device.factory " +
+                        "join workshop on workshop.id=device.workshop " +
+                        "join gateway on gateway.id=device.gatewayId " + 
+                        "limit " + offset.ToString() + "," + limit.ToString();
+            if(id == 1){
+                s = s.Insert(471, "order by id ");
+            }
+            else if(id == -1){
+                s = s.Insert(471, "order by id desc ");
+            }
+            else if(createTime == 1)
+            {
+                s = s.Insert(471, "order by createTime ");
+            }
+            else if(createTime == -1)
+            {
+                s = s.Insert(471, "order by createTime desc ");
+            }
+            else if(updateTime == 1)
+            {
+                s = s.Insert(471, "order by updateTime ");
+            }
+            else if(updateTime == -1)
+            {
+                s = s.Insert(471, "order by updateTime desc ");
+            }
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<DeviceModel>("select device.id, " +
-                                                     "hardwareDeviceID, " +
-                                                     "deviceName, " +
-                                                     "city.cityName as city, " +
-                                                     "factory.factoryName as factory, " +
-                                                     "workshop.workshopName as workshop, " +
-                                                     "deviceState, " +
-                                                     "device.imageUrl, " +
-                                                     "gateway.gatewayName gatewayId, " +
-                                                     "mac, " +
-                                                     "deviceType, " +
-                                                     "device.remark, " +
-                                                     "device.lastConnectionTime, " +
-                                                     "device.createTime, " +
-                                                     "device.updateTime " +
-                                                     "from device " +
-                                                     "join city on city.id=device.city " +
-                                                     "join factory on factory.id=device.factory " +
-                                                     "join workshop on workshop.id=device.workshop " +
-                                                     "join gateway on gateway.id=device.gatewayId " + 
-                                                     "limit " + offset.ToString() + "," + limit.ToString())
+                return connection.Query<DeviceModel>(s)
                     .ToList();
             }
         }

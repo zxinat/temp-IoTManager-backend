@@ -7,7 +7,7 @@ namespace IoTManager.IDao
 {
     public interface IGatewayDao
     {
-        List<GatewayModel> Get();
+        List<GatewayModel> Get(int offset, int limit, int id, int createTime, int updateTime);
         GatewayModel GetById(int id);
         String Create(GatewayModel gatewayModel);
         String Update(int id, GatewayModel gatewayModel);

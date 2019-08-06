@@ -8,7 +8,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IGatewayBus
     {
-        List<GatewaySerializer> GetAllGateways();
+        List<GatewaySerializer> GetAllGateways(int page, int id, int createTime, int updateTime);
         GatewaySerializer GetGatewayById(int id);
         String CreateNewGateway(GatewaySerializer gatewaySerializer);
         String UpdateGateway(int id, GatewaySerializer gatewaySerializer);

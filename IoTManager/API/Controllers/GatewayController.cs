@@ -30,17 +30,17 @@ namespace IoTManager.API.Controllers
         
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(int page, int id, int createTime, int updateTime)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._gatewayBus.GetAllGateways());
+                this._gatewayBus.GetAllGateways(page, id, createTime, updateTime));
         }
 
         // GET api/values/{id}
         [HttpGet("{id}")]
-        public ResponseSerializer Get(int id)
+        public ResponseSerializer GetById(int id)
         {
             return new ResponseSerializer(
                 200,

@@ -28,12 +28,12 @@ namespace IoTManager.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get(int page)
+        public ResponseSerializer Get(int page, int id, int createTime, int updateTime)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetAllDevices(page));
+                this._deviceBus.GetAllDevices(page, id, createTime, updateTime));
         }
 
         // GET api/values/{id}

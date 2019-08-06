@@ -19,9 +19,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
 
-        public List<GatewaySerializer> GetAllGateways()
+        public List<GatewaySerializer> GetAllGateways(int page, int id, int createTime, int updateTime)
         {
-            List<GatewayModel> gateways = this._gatewayDao.Get();
+            int offset = (page - 1) * 12;
+            int limit = 12;
+            List<GatewayModel> gateways = this._gatewayDao.Get(offset, limit, id,createTime, updateTime);
             List<GatewaySerializer> result = new List<GatewaySerializer>();
             foreach (GatewayModel gateway in gateways)
             {

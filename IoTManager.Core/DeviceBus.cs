@@ -23,11 +23,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
 
-        public List<DeviceSerializer> GetAllDevices(int page)
+        public List<DeviceSerializer> GetAllDevices(int page, int id, int CreateTime, int UpdateTime)
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<DeviceModel> devices = this._deviceDao.Get(offset, limit);
+            List<DeviceModel> devices = this._deviceDao.Get(offset, limit, id, CreateTime, UpdateTime);
             List<DeviceSerializer> result = new List<DeviceSerializer>();
             foreach (DeviceModel device in devices)
             {
