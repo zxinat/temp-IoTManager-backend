@@ -10,7 +10,7 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class GatewayDao:IGatewayDao
+    public sealed class GatewayDao
     {
         public List<GatewayModel> Get(int offset, int limit, int id, int createTime, int updateTime)
         {

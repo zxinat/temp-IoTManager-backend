@@ -13,51 +13,40 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLGatewayDao : IGatewayDao
     {
-        public List<GatewayModel> Get(int offset, int limit, int id, int createTime, int updateTime)
+        public List<GatewayModel> Get(int offset, int limit, String sortColumn, String order, String city, String factory, String workshop)
         {
-            string s =  "select gateway.id, " +
-                        "hardwareGatewayID, " +
-                        "gatewayName, " +
-                        "gatewayType, " +
-                        "city.cityName as city, " +
-                        "factory.factoryName as factory, " +
-                        "workshop.workshopName as workshop, " +
-                        "gatewayState, " +
-                        "imageUrl, " +
-                        "gateway.remark, " +
-                        "gateway.lastConnectionTime, " +
-                        "gateway.createTime, " +
-                        "gateway.updateTime from gateway " +
-                        "join city on city.id=gateway.city " +
-                        "join factory on factory.id=gateway.factory " +
-                        "join workshop on workshop.id=gateway.workshop " +
-                        "limit " + offset.ToString() + "," + limit.ToString();
-            if(id == 1){
-                s = s.Insert(397, "order by id ");
-            }
-            else if(id == -1){
-                s = s.Insert(397, "order by id desc ");
-            }
-            else if(createTime == 1)
+            string s = "select gateway.id, " +
+                       "hardwareGatewayID, " +
+                       "gatewayName, " +
+                       "gatewayType, " +
+                       "city.cityName as city, " +
+                       "factory.factoryName as factory, " +
+                       "workshop.workshopName as workshop, " +
+                       "gatewayState, " +
+                       "imageUrl, " +
+                       "gateway.remark, " +
+                       "gateway.lastConnectionTime, " +
+                       "gateway.createTime, " +
+                       "gateway.updateTime from gateway " +
+                       "join city on city.id=gateway.city " +
+                       "join factory on factory.id=gateway.factory " +
+                       "join workshop on workshop.id=gateway.workshop ";
+            if (city != "all" && factory != "all" && workshop != "all")
             {
-                s = s.Insert(397, "order by createTime ");
+                s += "where gateway.workshop in (select id from workshop where workshopName=@wn) ";
+                s += "and gateway.factory in (select id from factory where factoryName=@fn) ";
+                s += "and gateway.city in (select id from city where cityName=@cn)";
             }
-            else if(createTime == -1)
+            if (sortColumn != "no" && order != "no")
             {
-                s = s.Insert(397, "order by createTime desc ");
+                String orderBySubsentence = "order by " + sortColumn + " " + order;
+                s += orderBySubsentence;
             }
-            else if(updateTime == 1)
-            {
-                s = s.Insert(397, "order by updateTime ");
-            }
-            else if(updateTime == -1)
-            {
-                s = s.Insert(397, "order by updateTime desc ");
-            }
-            //Console.WriteLine(s);
+            String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+            s += limitSubsentence;
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<GatewayModel>(s)
+                return connection.Query<GatewayModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
             }
         }

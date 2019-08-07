@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using IoTManager.Core.Infrastructures;
+using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 
 namespace IoTManager.API.Controllers
@@ -28,12 +29,12 @@ namespace IoTManager.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get(int page, int id, int createTime, int updateTime)
+        public ResponseSerializer Get(int page, String sortColumn, String order, String city, String factory, String workshop)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetAllDevices(page, id, createTime, updateTime));
+                this._deviceBus.GetAllDevices(page, sortColumn, order, city, factory, workshop));
         }
 
         // GET api/values/{id}

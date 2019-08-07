@@ -10,7 +10,7 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class DeviceDao:IDeviceDao
+    public sealed class DeviceDao
     {
         public List<DeviceModel> Get(int offset, int limit, int id, int createTime,int updateTime)
         {

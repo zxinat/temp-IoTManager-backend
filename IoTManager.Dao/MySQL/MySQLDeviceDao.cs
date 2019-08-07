@@ -13,54 +13,44 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLDeviceDao : IDeviceDao
     {
-        public List<DeviceModel> Get(int offset, int limit,int id, int createTime,int updateTime)
+        public List<DeviceModel> Get(int offset, int limit, String sortColumn, String order, String city, String factory, String workshop)
         {
-            string s =  "select device.id, " +
-                        "hardwareDeviceID, " +
-                        "deviceName, " +
-                        "city.cityName as city, " +
-                        "factory.factoryName as factory, " +
-                        "workshop.workshopName as workshop, " +
-                        "deviceState, " +
-                        "device.imageUrl, " +
-                        "gateway.gatewayName gatewayId, " +
-                        "mac, " +
-                        "deviceType, " +
-                        "device.remark, " +
-                        "device.lastConnectionTime, " +
-                        "device.createTime, " +
-                        "device.updateTime " +
-                        "from device " +
-                        "join city on city.id=device.city " +
-                        "join factory on factory.id=device.factory " +
-                        "join workshop on workshop.id=device.workshop " +
-                        "join gateway on gateway.id=device.gatewayId " + 
-                        "limit " + offset.ToString() + "," + limit.ToString();
-            if(id == 1){
-                s = s.Insert(471, "order by id ");
-            }
-            else if(id == -1){
-                s = s.Insert(471, "order by id desc ");
-            }
-            else if(createTime == 1)
+            string s = "select device.id, " +
+                       "hardwareDeviceID, " +
+                       "deviceName, " +
+                       "city.cityName as city, " +
+                       "factory.factoryName as factory, " +
+                       "workshop.workshopName as workshop, " +
+                       "deviceState, " +
+                       "device.imageUrl, " +
+                       "gateway.gatewayName gatewayId, " +
+                       "mac, " +
+                       "deviceType, " +
+                       "device.remark, " +
+                       "device.lastConnectionTime, " +
+                       "device.createTime, " +
+                       "device.updateTime " +
+                       "from device " +
+                       "join city on city.id=device.city " +
+                       "join factory on factory.id=device.factory " +
+                       "join workshop on workshop.id=device.workshop " +
+                       "join gateway on gateway.id=device.gatewayId ";
+            if (city != "all" && factory != "all" && workshop != "all")
             {
-                s = s.Insert(471, "order by createTime ");
+                s += "where device.workshop in (select id from workshop where workshopName=@wn) ";
+                s += "and device.factory in (select id from factory where factoryName=@fn) ";
+                s += "and device.city in (select id from city where cityName=@cn) ";
             }
-            else if(createTime == -1)
+            if (order != "no" && sortColumn != "no")
             {
-                s = s.Insert(471, "order by createTime desc ");
+                String orderBySubsentence = "order by " + sortColumn + " " + order;
+                s += orderBySubsentence;
             }
-            else if(updateTime == 1)
-            {
-                s = s.Insert(471, "order by updateTime ");
-            }
-            else if(updateTime == -1)
-            {
-                s = s.Insert(471, "order by updateTime desc ");
-            }
+            String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+            s += limitSubsentence;
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<DeviceModel>(s)
+                return connection.Query<DeviceModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
             }
         }

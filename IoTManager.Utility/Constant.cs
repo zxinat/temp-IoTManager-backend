@@ -10,7 +10,7 @@ namespace IoTManager.Utility
                 //   "User ID=azureuser;" +
                 //  "Initial Catalog=iotmanagerdb;" +
                 //  "Pwd=123qwe!@#QWE;";
-            return "Data Source=localhost;Database=iotmanager;User ID=root;Password=ab15214368710;";          
+            return "Data Source=localhost;Database=iotmanager;User ID=jackjack59;Password=jackjack123;";          
         }
 
         public static String getMongoDBConnectionString()
