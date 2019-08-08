@@ -18,7 +18,7 @@ namespace IoTManager.Model
         public string MonitorType { get; set; }
         public string Unit { get; set; }
         public double Value { get; set; }
-        public bool IsScam { get; set; }
+        public bool IsScan { get; set; }
         public DateTime Timestamp { get; set; }
     }
 }
