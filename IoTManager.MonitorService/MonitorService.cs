@@ -55,7 +55,7 @@ namespace IoTManager.MonitorService
                             MonitorType = data.IType,
                             Unit = data.IUnit,
                             Value = data.IValue,
-                            IsScam = false,
+                            IsScan = false,
                             Timestamp = DateTime.Now
                         };
                         monitorDatas.Add(model);
@@ -84,7 +84,7 @@ namespace IoTManager.MonitorService
                                 MonitorType = data.IType,
                                 Unit = data.IUnit,
                                 Value = data.IValue,
-                                IsScam = false,
+                                IsScan = false,
                                 Timestamp = DateTime.Now
                             };
                             monitorDatas.Add(model);
