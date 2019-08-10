@@ -46,6 +46,8 @@ namespace IoTManager.Core
             CityModel cityModel = new CityModel();
             cityModel.CityName = citySerializer.cityName;
             cityModel.Remark = citySerializer.remark;
+            cityModel.longitude = citySerializer.longitude;
+            cityModel.latitude = citySerializer.latitude;
             return this._cityDao.Create(cityModel); 
         }
 
@@ -55,6 +57,8 @@ namespace IoTManager.Core
             cityModel.Id = id;
             cityModel.CityName = citySerializer.cityName;
             cityModel.Remark = citySerializer.remark;
+            cityModel.latitude = citySerializer.latitude;
+            cityModel.longitude = citySerializer.longitude;
             return this._cityDao.Update(id, cityModel);
         }
 
