@@ -11,12 +11,16 @@ namespace IoTManager.Core
 {
     public sealed class CityBus:ICityBus
     {
+        private readonly IFactoryDao _factoryDao;
+        private readonly IWorkshopDao _workshopDao;
         private readonly ICityDao _cityDao;
         private readonly ILogger _logger;
-        public CityBus(ICityDao cityDao,ILogger<CityBus> logger)
+        public CityBus(ICityDao cityDao,ILogger<CityBus> logger, IFactoryDao factoryDao, IWorkshopDao workshopDao)
         {
             this._cityDao = cityDao;
-            this._logger = logger;
+            this._logger = logger; 
+            this._factoryDao = factoryDao;
+            this._workshopDao = workshopDao;
         }
 
         public List<CitySerializer> GetAllCities()
@@ -65,7 +69,19 @@ namespace IoTManager.Core
             List<object> result = new List<object>();
             foreach (CityModel c in cities)
             {
-                result.Add(new {value=c.CityName, label=c.CityName});
+                List<object> children = new List<object>();
+                List<FactoryModel> factories = this._factoryDao.Get();
+                foreach (FactoryModel f in factories)
+                {
+                    List<object> subchildren = new List<object>();
+                    List<WorkshopModel> workshops = this._workshopDao.Get();
+                    foreach(WorkshopModel w in workshops)
+                    {
+                        subchildren.Add(new{value=w.WorkshopName, label=w.WorkshopName});
+                    }
+                    children.Add(new{value=f.FactoryName, label=f.FactoryName, subchildren=subchildren});
+                }
+                result.Add(new {value=c.CityName, label=c.CityName, children=children});
             }
 
             return result;
