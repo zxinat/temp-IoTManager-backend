@@ -20,5 +20,6 @@ namespace IoTManager.IDao
         int GetDeviceAmount();
         List<object> GetDeviceTree(String city, String factory);
         String CreateDeviceType(String deviceType);
+        long GetDeviceNumber();
     }
 }

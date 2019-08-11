@@ -74,16 +74,16 @@ namespace IoTManager.Core
             foreach (CityModel c in cities)
             {
                 List<object> children = new List<object>();
-                List<FactoryModel> factories = this._factoryDao.Get();
+                List<FactoryModel> factories = this._factoryDao.GetAffiliateFactory(c.CityName);
                 foreach (FactoryModel f in factories)
                 {
                     List<object> subchildren = new List<object>();
-                    List<WorkshopModel> workshops = this._workshopDao.Get();
+                    List<WorkshopModel> workshops = this._workshopDao.GetAffiliateWorkshop(f.FactoryName);
                     foreach(WorkshopModel w in workshops)
                     {
                         subchildren.Add(new{value=w.WorkshopName, label=w.WorkshopName});
                     }
-                    children.Add(new{value=f.FactoryName, label=f.FactoryName, subchildren=subchildren});
+                    children.Add(new{value=f.FactoryName, label=f.FactoryName, children=subchildren});
                 }
                 result.Add(new {value=c.CityName, label=c.CityName, children=children});
             }

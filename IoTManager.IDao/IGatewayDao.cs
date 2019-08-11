@@ -15,5 +15,6 @@ namespace IoTManager.IDao
         List<GatewayModel> GetByWorkshop(String city, String factory, String workshop);
         int BatchDelete(int[] ids);
         String CreateGatewayType(String gatewayType);
+        long GetGatewayNumber();
     }
 }

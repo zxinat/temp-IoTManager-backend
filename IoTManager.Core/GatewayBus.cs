@@ -96,5 +96,10 @@ namespace IoTManager.Core
         {
             return this._gatewayDao.CreateGatewayType(gatewayType);
         }
+
+        public long GetGatewayNumber()
+        {
+            return this._gatewayDao.GetGatewayNumber();
+        }
     }
 }

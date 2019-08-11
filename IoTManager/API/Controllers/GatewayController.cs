@@ -10,6 +10,7 @@ using IoTManager.DAL.Models;
 using IoTManager.DAL.DbContext;
 using IoTManager.DAL.ReturnType;
 using IoTManager.Utility.Serializers;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -103,6 +104,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._gatewayBus.CreateGatewayType(gatewayType));
+        }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetGatewayNumber()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._gatewayBus.GetGatewayNumber());
         }
     }
 }

@@ -137,5 +137,10 @@ namespace IoTManager.Core
         {
             return this._deviceDao.CreateDeviceType(deviceType);
         }
+
+        public long GetDeviceNumber()
+        {
+            return this._deviceDao.GetDeviceNumber();
+        }
     }
 }

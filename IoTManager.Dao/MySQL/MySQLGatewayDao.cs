@@ -249,5 +249,14 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+
+        public long GetGatewayNumber()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection.Query("select count(*) number from gateway").FirstOrDefault();
+                return result.number;
+            }
+        }
     }
 }
