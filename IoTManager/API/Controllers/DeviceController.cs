@@ -143,12 +143,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet("number")]
-        public ResponseSerializer GetDeviceNumber()
+        public ResponseSerializer GetDeviceNumber(String searchType, String city, String factory, String workshop)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetDeviceNumber());
+                this._deviceBus.GetDeviceNumber(searchType, city, factory, workshop));
         }
     }
 }

@@ -107,12 +107,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet("number")]
-        public ResponseSerializer GetGatewayNumber()
+        public ResponseSerializer GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._gatewayBus.GetGatewayNumber());
+                this._gatewayBus.GetGatewayNumber(searchType, city, factory, workshop));
         }
     }
 }

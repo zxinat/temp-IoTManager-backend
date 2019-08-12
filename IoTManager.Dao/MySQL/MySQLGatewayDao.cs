@@ -261,11 +261,27 @@ namespace IoTManager.Dao
             }
         }
 
-        public long GetGatewayNumber()
+        public long GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                var result = connection.Query("select count(*) number from gateway").FirstOrDefault();
+                String s = "select count(*) number from gateway";
+                if (searchType == "search")
+                {
+                    if (city != "all")
+                    {
+                        s += " where gateway.city in (select id from city where cityName=@cn) ";
+                        if (factory != "all")
+                        {
+                            s += "and gateway.factory in (select id from factory where factoryName=@fn) ";
+                            if (workshop != "all")
+                            {
+                                s += "and gateway.workshop in (select id from workshop where workshopName=@wn) ";
+                            }
+                        }
+                    }
+                }
+                var result = connection.Query(s, new {cn=city, fn=factory, wn=workshop}).FirstOrDefault();
                 return result.number;
             }
         }

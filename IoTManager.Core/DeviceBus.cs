@@ -137,9 +137,9 @@ namespace IoTManager.Core
             return this._deviceDao.CreateDeviceType(deviceType);
         }
 
-        public long GetDeviceNumber()
+        public long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
-            return this._deviceDao.GetDeviceNumber();
+            return this._deviceDao.GetDeviceNumber(searchType, city, factory, workshop);
         }
     }
 }

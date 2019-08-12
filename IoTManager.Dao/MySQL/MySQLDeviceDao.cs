@@ -365,11 +365,28 @@ namespace IoTManager.Dao
             }
         }
 
-        public long GetDeviceNumber()
+        public long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                var result = connection.Query("select count(*) number from device").FirstOrDefault();
+                String s = "select count(*) number from device";
+                if (searchType == "search")
+                {
+                    if (city != "all")
+                    {
+                        s += " where device.city in (select id from city where cityName=@cn) ";
+                        if (factory != "all")
+                        {
+                            s += "and device.factory in (select id from factory where factoryName=@fn) ";
+                            if (workshop != "all")
+                            {
+                                s += "and device.workshop in (select id from workshop where workshopName=@wn) ";
+                            }
+                        }
+                    }
+                }
+
+                var result = connection.Query(s, new {cn=city, fn=factory, wn=workshop}).FirstOrDefault();
                 return result.number;
             }
         }
