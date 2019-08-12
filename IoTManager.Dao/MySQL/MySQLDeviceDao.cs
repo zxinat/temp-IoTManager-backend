@@ -37,11 +37,17 @@ namespace IoTManager.Dao
                        "join gateway on gateway.id=device.gatewayId ";
             if (searchType == "search")
             {
-                if (city != "all" && factory != "all" && workshop != "all")
+                if (city != "all")
                 {
-                    s += "where device.workshop in (select id from workshop where workshopName=@wn) ";
-                    s += "and device.factory in (select id from factory where factoryName=@fn) ";
-                    s += "and device.city in (select id from city where cityName=@cn) ";
+                    s += "where device.city in (select id from city where cityName=@cn) ";
+                    if (factory != "all")
+                    {
+                        s += "and device.factory in (select id from factory where factoryName=@fn) ";
+                        if (workshop != "all")
+                        {
+                            s += "and device.workshop in (select id from workshop where workshopName=@wn) ";
+                        }
+                    }
                 }
 
                 if (order != "no" && sortColumn != "no")
