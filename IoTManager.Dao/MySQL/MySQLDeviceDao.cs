@@ -13,7 +13,7 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLDeviceDao : IDeviceDao
     {
-        public List<DeviceModel> Get(int offset, int limit, String sortColumn, String order, String city, String factory, String workshop)
+        public List<DeviceModel> Get(String searchType, int offset, int limit, String sortColumn, String order, String city, String factory, String workshop)
         {
             string s = "select device.id, " +
                        "hardwareDeviceID, " +
@@ -35,24 +35,31 @@ namespace IoTManager.Dao
                        "join factory on factory.id=device.factory " +
                        "join workshop on workshop.id=device.workshop " +
                        "join gateway on gateway.id=device.gatewayId ";
-            if (city != "all" && factory != "all" && workshop != "all")
+            if (searchType == "search")
             {
-                s += "where device.workshop in (select id from workshop where workshopName=@wn) ";
-                s += "and device.factory in (select id from factory where factoryName=@fn) ";
-                s += "and device.city in (select id from city where cityName=@cn) ";
+                if (city != "all" && factory != "all" && workshop != "all")
+                {
+                    s += "where device.workshop in (select id from workshop where workshopName=@wn) ";
+                    s += "and device.factory in (select id from factory where factoryName=@fn) ";
+                    s += "and device.city in (select id from city where cityName=@cn) ";
+                }
+
+                if (order != "no" && sortColumn != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
             }
-            if (order != "no" && sortColumn != "no")
-            {
-                String orderBySubsentence = "order by " + sortColumn + " " + order;
-                s += orderBySubsentence;
-            }
-            String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
-            s += limitSubsentence;
+
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
             }
+            
         }
 
         public DeviceModel GetById(int id)

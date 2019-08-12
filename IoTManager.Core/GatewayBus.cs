@@ -19,11 +19,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
 
-        public List<GatewaySerializer> GetAllGateways(int page, String sortColumn, String order, String city, String factory, String workshop)
+        public List<GatewaySerializer> GetAllGateways(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<GatewayModel> gateways = this._gatewayDao.Get(offset, limit, sortColumn, order, city, factory, workshop);
+            List<GatewayModel> gateways = this._gatewayDao.Get(searchType, offset, limit, sortColumn, order, city, factory, workshop);
             List<GatewaySerializer> result = new List<GatewaySerializer>();
             foreach (GatewayModel gateway in gateways)
             {

@@ -31,12 +31,12 @@ namespace IoTManager.API.Controllers
         
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get(int page, String sortColumn, String order, String city, String factory, String workshop)
+        public ResponseSerializer Get(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._gatewayBus.GetAllGateways(page, sortColumn, order, city, factory, workshop));
+                this._gatewayBus.GetAllGateways(searchType, page, sortColumn, order, city, factory, workshop));
         }
 
         // GET api/values/{id}

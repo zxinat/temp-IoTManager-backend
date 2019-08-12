@@ -8,7 +8,7 @@ namespace IoTManager.IDao
 {
     public interface IDeviceDao
     {
-        List<DeviceModel> Get(int offset, int limit, String sortColumn, String order, String city, String factory, String workshop);
+        List<DeviceModel> Get(String searchType, int offset, int limit, String sortColumn, String order, String city, String factory, String workshop);
         DeviceModel GetById(int id);
         List<DeviceModel> GetByDeviceName(String deviceName);
         List<DeviceModel> GetByDeviceId(String deviceId);

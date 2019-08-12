@@ -8,7 +8,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IDeviceBus
     {
-        List<DeviceSerializer> GetAllDevices(int page, String sortColumn, String order, String city, String factory, String workshop);
+        List<DeviceSerializer> GetAllDevices(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop);
         DeviceSerializer GetDeviceById(int id);
         List<DeviceSerializer> GetDevicesByDeviceName(String deviceName);
         List<DeviceSerializer> GetDevicesByDeviceId(String deviceId);

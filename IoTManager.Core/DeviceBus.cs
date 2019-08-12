@@ -23,12 +23,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
 
-        public List<DeviceSerializer> GetAllDevices(int page, String sortColumn, String order, String city, String factory, String workshop)
+        public List<DeviceSerializer> GetAllDevices(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            System.Console.WriteLine(this._deviceDao.Get(offset, limit, sortColumn, order, city, factory, workshop));
-            List<DeviceModel> devices = this._deviceDao.Get(offset, limit, sortColumn, order, city, factory, workshop);
+            List<DeviceModel> devices = this._deviceDao.Get(searchType, offset, limit, sortColumn, order, city, factory, workshop);
             List<DeviceSerializer> result = new List<DeviceSerializer>();
             foreach (DeviceModel device in devices)
             {
