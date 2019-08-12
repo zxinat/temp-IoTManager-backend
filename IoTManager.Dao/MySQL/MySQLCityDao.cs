@@ -19,10 +19,12 @@ namespace IoTManager.Dao
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                int rows = connection.Execute("INSERT INTO city(cityName, remark) VALUES (@cn, @r)", new
+                int rows = connection.Execute("INSERT INTO city(cityName, remark, longitude, latitude) VALUES (@cn, @r, @lo, @la)", new
                 {
                     cn = cityModel.CityName,
-                    r = cityModel.Remark
+                    r = cityModel.Remark,
+                    lo = cityModel.longitude,
+                    la = cityModel.latitude
                 });
                 return rows == 1 ? "success" : "error";
             }

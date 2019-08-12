@@ -34,7 +34,7 @@ namespace IoTManager.Utility.Serializers
         public String remark { get; set; }
         public String createTime { get; set; }
         public String updateTime { get; set; }
-        public int longitude { get; set; }
-        public int latitude{ get; set; }
+        public double longitude { get; set; }
+        public double latitude{ get; set; }
     }
 }

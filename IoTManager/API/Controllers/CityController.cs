@@ -93,5 +93,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._cityBus.GetCityOptions());
         }
+
+        [HttpGet("mapInfo")]
+        public ResponseSerializer GetMapInfo()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetMapInfo());
+        }
     }
 }
