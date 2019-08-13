@@ -17,7 +17,7 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<FieldModel> fields = connection.Query<FieldModel>(
-                    "select * from field ").ToList();
+                    "select fieldName, fieldId, deviceName device from field join device on field.device=device.id").ToList();
                 return fields;
             }
         }
@@ -25,10 +25,33 @@ namespace IoTManager.Dao
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                int rows = connection.Execute("insert into field(fieldName, fieldId) values (@fn, @fi)", new
+                DeviceModel device = connection.Query<DeviceModel>("select device.id, " +
+                                                                   "hardwareDeviceID, " +
+                                                                   "deviceName, " +
+                                                                   "city.cityName as city, " +
+                                                                   "factory.factoryName as factory, " +
+                                                                   "workshop.workshopName as workshop, " +
+                                                                   "deviceState, " +
+                                                                   "device.imageUrl, " +
+                                                                   "gateway.gatewayName gatewayId, " +
+                                                                   "mac, " +
+                                                                   "deviceType, " +
+                                                                   "device.remark, " +
+                                                                   "device.lastConnectionTime, " +
+                                                                   "device.createTime, " +
+                                                                   "device.updateTime " +
+                                                                   "from device " +
+                                                                   "join city on city.id=device.city " +
+                                                                   "join factory on factory.id=device.factory " +
+                                                                   "join workshop on workshop.id=device.workshop " +
+                                                                   "join gateway on gateway.id=device.gatewayId " + 
+                                                                   "where deviceName=@dn", new {dn=field.Device})
+                    .FirstOrDefault();
+                int rows = connection.Execute("insert into field(fieldName, fieldId, device) values (@fn, @fi, @d)", new
                 {
                     fn = field.FieldName,
-                    fi = field.FieldId
+                    fi = field.FieldId,
+                    d = device.Id
                 });
                 return rows == 1 ? "success" : "error";
             }

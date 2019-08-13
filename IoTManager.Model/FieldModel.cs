@@ -9,5 +9,6 @@ namespace IoTManager.Model
         public String FieldId { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
+        public String Device { get; set; }
     }
 }

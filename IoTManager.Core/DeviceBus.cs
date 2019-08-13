@@ -4,6 +4,7 @@ using IoTManager.IHub;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
@@ -14,11 +15,13 @@ namespace IoTManager.Core
     public sealed class DeviceBus:IDeviceBus
     {
         private readonly IDeviceDao _deviceDao;
+        private readonly IFieldDao _fieldDao;
         private readonly IoTHub _iotHub;
         private readonly ILogger _logger;
-        public DeviceBus(IDeviceDao deviceDao,IoTHub iotHub,ILogger<DeviceBus> logger)
+        public DeviceBus(IDeviceDao deviceDao, IFieldDao fieldDao, IoTHub iotHub,ILogger<DeviceBus> logger)
         {
             this._deviceDao = deviceDao;
+            this._fieldDao = fieldDao;
             this._iotHub = iotHub;
             this._logger = logger;
         }
@@ -140,6 +143,27 @@ namespace IoTManager.Core
         public long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
             return this._deviceDao.GetDeviceNumber(searchType, city, factory, workshop);
+        }
+
+        public List<object> GetFieldOptions()
+        {
+            List<DeviceModel> devices = this._deviceDao.Get("all");
+            List<FieldModel> fields = this._fieldDao.Get();
+            List<object> result = new List<object>();
+            foreach (DeviceModel d in devices)
+            {
+                var affiliateFields = fields.AsQueryable()
+                    .Where(f => f.Device == d.DeviceName)
+                    .ToList();
+                List<object> children = new List<object>();
+                foreach (var f in affiliateFields)
+                {
+                    children.Add(new {value=f.FieldId, label=f.FieldName});
+                }
+                result.Add(new {value=d.HardwareDeviceId, label=d.DeviceName, children=children});
+            }
+
+            return result;
         }
     }
 }

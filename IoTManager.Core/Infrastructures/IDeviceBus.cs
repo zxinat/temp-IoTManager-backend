@@ -21,5 +21,6 @@ namespace IoTManager.Core.Infrastructures
         List<object> GetDeviceTree(String city, String factory);
         String CreateDeviceType(String deviceType);
         long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all");
+        List<object> GetFieldOptions();
     }
 }

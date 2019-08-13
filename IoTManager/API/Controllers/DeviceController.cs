@@ -150,5 +150,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetDeviceNumber(searchType, city, factory, workshop));
         }
+
+        [HttpGet("fieldOptions")]
+        public ResponseSerializer GetFieldOptions()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetFieldOptions());
+        }
     }
 }

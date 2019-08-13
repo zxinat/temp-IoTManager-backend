@@ -12,6 +12,7 @@ namespace IoTManager.Utility.Serializers
             this.fieldId = null;
             this.createTime = null;
             this.updateTime = null;
+            this.device = null;
         }
 
         public FieldSerializer(FieldModel fieldModel)
@@ -23,6 +24,7 @@ namespace IoTManager.Utility.Serializers
                 .ToString(Constant.getDateFormatString());
             this.updateTime = fieldModel.UpdateTime
                 .ToString(Constant.getDateFormatString());
+            this.device = fieldModel.Device;
         }
         
         public int id { get; set; }
@@ -30,5 +32,6 @@ namespace IoTManager.Utility.Serializers
         public String fieldId { get; set; }
         public String createTime { get; set; }
         public String updateTime { get; set; }
+        public String device { get; set; }
     }
 }
