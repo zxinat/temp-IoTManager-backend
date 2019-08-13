@@ -36,7 +36,7 @@ namespace IoTManager
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
-                    builder => { builder.WithOrigins("http://localhost:1024")
+                    builder => { builder.WithOrigins(this.Configuration.GetSection("CorsIp")["IpAddress"])
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials(); });

@@ -8,7 +8,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IDeviceBus
     {
-        List<DeviceSerializer> GetAllDevices();
+        List<DeviceSerializer> GetAllDevices(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop);
         DeviceSerializer GetDeviceById(int id);
         List<DeviceSerializer> GetDevicesByDeviceName(String deviceName);
         List<DeviceSerializer> GetDevicesByDeviceId(String deviceId);
@@ -20,5 +20,7 @@ namespace IoTManager.Core.Infrastructures
         int GetDeviceAmount();
         List<object> GetDeviceTree(String city, String factory);
         String CreateDeviceType(String deviceType);
+        long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all");
+        List<object> GetFieldOptions();
     }
 }

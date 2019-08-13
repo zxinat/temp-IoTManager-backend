@@ -10,13 +10,14 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class DeviceDao:IDeviceDao
+    public sealed class DeviceDao
     {
-        public List<DeviceModel> Get()
+        public List<DeviceModel> Get(int offset, int limit, int id, int createTime,int updateTime)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<DeviceModel>("select device.id, " +
+                return connection.Query<DeviceModel>(
+                                                     "select top "+ limit.ToString() +" device.id, " +
                                                      "hardwareDeviceID, " +
                                                      "deviceName, " +
                                                      "city.cityName as city, " +
@@ -35,7 +36,41 @@ namespace IoTManager.Dao
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
                                                      "join workshop on workshop.id=device.workshop " +
-                                                     "join gateway on gateway.id=device.gatewayId")
+                                                     "join gateway on gateway.id=device.gatewayId " +
+                                                     "where device.id not in (" + 
+                                                     "select top "+ offset.ToString() +" device.id " +
+                                                     "from device)" +
+                                                     "and hardwareDeviceID not in(" + 
+                                                     "select top "+ offset.ToString() +" hardwareDeviceID " +
+                                                     "from device)" +
+                                                     "and deviceName not in(" + 
+                                                     "select top "+ offset.ToString() +" deviceName " +
+                                                     "from device)" +
+                                                     "and city.cityName not in(" + 
+                                                     "select top "+ offset.ToString() +" city.cityName " +
+                                                     "from device)" +
+                                                     "and factory.factoryName not in(" + 
+                                                     "select top "+ offset.ToString() +" factory.factoryName " +
+                                                     "from device)" +
+                                                     "and workshop.workshopName not in(" + 
+                                                     "select top "+ offset.ToString() +" workshop.workshopName " +
+                                                     "from device)" +
+                                                     "and deviceState not in(" + 
+                                                     "select top "+ offset.ToString() +" deviceState " +
+                                                     "from device)" +
+                                                     "and device.imageUrl not in(" + 
+                                                     "select top "+ offset.ToString() +" device.imageUrl " +
+                                                     "from device)" +
+                                                     "and mac not in(" + 
+                                                     "select top "+ offset.ToString() +" mac " +
+                                                     "from device)" +
+                                                     "and deviceType not in(" + 
+                                                     "select top "+ offset.ToString() +" deviceType " +
+                                                     "from device)" +
+                                                     "and device.remark not in(" + 
+                                                     "select top "+ offset.ToString() +" device.remark " +
+                                                     "from device)" )
+
                     .ToList();
             }
         }

@@ -13,32 +13,59 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLDeviceDao : IDeviceDao
     {
-        public List<DeviceModel> Get()
+        public List<DeviceModel> Get(String searchType, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc", String city = "all", String factory = "all", String workshop = "all")
         {
+            string s = "select device.id, " +
+                       "hardwareDeviceID, " +
+                       "deviceName, " +
+                       "city.cityName as city, " +
+                       "factory.factoryName as factory, " +
+                       "workshop.workshopName as workshop, " +
+                       "deviceState, " +
+                       "device.imageUrl, " +
+                       "gateway.gatewayName gatewayId, " +
+                       "mac, " +
+                       "deviceType, " +
+                       "device.remark, " +
+                       "device.lastConnectionTime, " +
+                       "device.createTime, " +
+                       "device.updateTime " +
+                       "from device " +
+                       "join city on city.id=device.city " +
+                       "join factory on factory.id=device.factory " +
+                       "join workshop on workshop.id=device.workshop " +
+                       "join gateway on gateway.id=device.gatewayId ";
+            if (searchType == "search")
+            {
+                if (city != "all")
+                {
+                    s += "where device.city in (select id from city where cityName=@cn) ";
+                    if (factory != "all")
+                    {
+                        s += "and device.factory in (select id from factory where factoryName=@fn) ";
+                        if (workshop != "all")
+                        {
+                            s += "and device.workshop in (select id from workshop where workshopName=@wn) ";
+                        }
+                    }
+                }
+
+                if (order != "no" && sortColumn != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
+            }
+
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<DeviceModel>("select device.id, " +
-                                                     "hardwareDeviceID, " +
-                                                     "deviceName, " +
-                                                     "city.cityName as city, " +
-                                                     "factory.factoryName as factory, " +
-                                                     "workshop.workshopName as workshop, " +
-                                                     "deviceState, " +
-                                                     "device.imageUrl, " +
-                                                     "gateway.gatewayName gatewayId, " +
-                                                     "mac, " +
-                                                     "deviceType, " +
-                                                     "device.remark, " +
-                                                     "device.lastConnectionTime, " +
-                                                     "device.createTime, " +
-                                                     "device.updateTime " +
-                                                     "from device " +
-                                                     "join city on city.id=device.city " +
-                                                     "join factory on factory.id=device.factory " +
-                                                     "join workshop on workshop.id=device.workshop " +
-                                                     "join gateway on gateway.id=device.gatewayId")
+                return connection.Query<DeviceModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
             }
+            
         }
 
         public DeviceModel GetById(int id)
@@ -146,6 +173,8 @@ namespace IoTManager.Dao
                     {
                         wn = deviceModel.Workshop
                     }).FirstOrDefault();
+                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
+                    new {gn = deviceModel.GatewayId}).FirstOrDefault();
                 int rows = connection.Execute(
                     "INSERT INTO "+ 
                     "device(hardwareDeviceID, deviceName, city, factory, workshop, deviceState, imageUrl, gatewayId, mac, deviceType, remark)" +
@@ -158,7 +187,7 @@ namespace IoTManager.Dao
                         w = workshop.Id,
                         ds = deviceModel.DeviceState,
                         iu = deviceModel.ImageUrl,
-                        gid = deviceModel.GatewayId,
+                        gid = gateway.Id,
                         m = deviceModel.Mac,
                         dt = deviceModel.DeviceType,
                         r = deviceModel.Remark
@@ -186,6 +215,8 @@ namespace IoTManager.Dao
                     {
                         wn = deviceModel.Workshop
                     }).FirstOrDefault();
+                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
+                    new {gn = deviceModel.GatewayId}).FirstOrDefault();
                 int rows = connection
                     .Execute(
                         "UPDATE device "+
@@ -212,7 +243,7 @@ namespace IoTManager.Dao
                             w = workshop.Id,
                             ds = deviceModel.DeviceState,
                             iu = deviceModel.ImageUrl,
-                            gid = deviceModel.GatewayId,
+                            gid = gateway.Id,
                             m = deviceModel.Mac,
                             dt = deviceModel.DeviceType,
                             r = deviceModel.Remark
@@ -331,6 +362,32 @@ namespace IoTManager.Dao
                         dt = deviceType
                     });
                 return rows == 1 ? "success" : "error";
+            }
+        }
+
+        public long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all")
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                String s = "select count(*) number from device";
+                if (searchType == "search")
+                {
+                    if (city != "all")
+                    {
+                        s += " where device.city in (select id from city where cityName=@cn) ";
+                        if (factory != "all")
+                        {
+                            s += "and device.factory in (select id from factory where factoryName=@fn) ";
+                            if (workshop != "all")
+                            {
+                                s += "and device.workshop in (select id from workshop where workshopName=@wn) ";
+                            }
+                        }
+                    }
+                }
+
+                var result = connection.Query(s, new {cn=city, fn=factory, wn=workshop}).FirstOrDefault();
+                return result.number;
             }
         }
     }

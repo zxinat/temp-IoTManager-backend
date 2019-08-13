@@ -10,13 +10,14 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class GatewayDao:IGatewayDao
+    public sealed class GatewayDao
     {
-        public List<GatewayModel> Get()
+        public List<GatewayModel> Get(int offset, int limit, int id, int createTime, int updateTime)
         {
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<GatewayModel>("select gateway.id, " +
+                return connection.Query<GatewayModel>(
+                                                      "select top " + limit.ToString() + " gateway.id, " +
                                                       "hardwareGatewayID," +
                                                       " gatewayName," +
                                                       " gatewayType, " +
@@ -31,7 +32,34 @@ namespace IoTManager.Dao
                                                       "gateway.updateTime from gateway " +
                                                       "join city on city.id=gateway.city " +
                                                       "join factory on factory.id=gateway.factory " +
-                                                      "join workshop on workshop.id=gateway.workshop")
+                                                      "join workshop on workshop.id=gateway.workshop "+
+                                                      "where gateway.id not in(" + 
+                                                      "select top " + offset.ToString() + " gateway.id from gateway)" +
+                                                      "and hardwareGatewayID not in(" + 
+                                                      "select top " + offset.ToString() + " hardwareGatewayID from gateway)" +
+                                                      "and gatewayName not in(" + 
+                                                      "select top " + offset.ToString() + " gatewayName from gateway)" +
+                                                      "and gatewayType not in(" + 
+                                                      "select top " + offset.ToString() + " gatewayType from gateway)" +
+                                                      "and city.cityName not in(" + 
+                                                      "select top " + offset.ToString() + " city.cityName from gateway)" +
+                                                      "and factory.factoryName not in(" + 
+                                                      "select top " + offset.ToString() + " factory.factoryName from gateway)" +
+                                                      "and workshop.workshopName not in(" + 
+                                                      "select top " + offset.ToString() + " workshop.workshopName from gateway)" +
+                                                      "and gatewayState not in(" + 
+                                                      "select top " + offset.ToString() + " gatewayState from gateway)" +
+                                                      "and imageUrl not in(" + 
+                                                      "select top " + offset.ToString() + " imageUrl from gateway)" +
+                                                      "and gateway.remark not in(" + 
+                                                      "select top " + offset.ToString() + " gateway.remark from gateway)" +
+                                                      "and gateway.lastConnectionTime not in(" + 
+                                                      "select top " + offset.ToString() + " gateway.lastConnectionTime from gateway)" +
+                                                      "and gateway.createTime not in(" + 
+                                                      "select top " + offset.ToString() + " gateway.createTime from gateway)" +
+                                                      "and gateway.updateTime not in(" + 
+                                                      "select top " + offset.ToString() + " gateway.updateTime from gateway)" )
+                                                      
                     .ToList();
             }
         }

@@ -68,19 +68,19 @@ namespace IoTManager.Dao
 
         public int GetNoticeAlarmInfoAmount()
         {
-            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="通知").ToList();
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="Info").ToList();
             return alarmInfos.Count;
         }
 
         public int GetSeriousAlarmInfoAmount()
         {
-            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="严重").ToList();
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="Warning").ToList();
             return alarmInfos.Count;
         }
 
         public int GetVerySeriousAlarmInfoAmount()
         {
-            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="非常严重").ToList();
+            List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="Critical").ToList();
             return alarmInfos.Count;
         }
     }

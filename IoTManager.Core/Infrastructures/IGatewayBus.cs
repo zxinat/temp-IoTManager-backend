@@ -8,7 +8,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IGatewayBus
     {
-        List<GatewaySerializer> GetAllGateways();
+        List<GatewaySerializer> GetAllGateways(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop);
         GatewaySerializer GetGatewayById(int id);
         String CreateNewGateway(GatewaySerializer gatewaySerializer);
         String UpdateGateway(int id, GatewaySerializer gatewaySerializer);
@@ -16,5 +16,6 @@ namespace IoTManager.Core.Infrastructures
         List<GatewaySerializer> GetGatewayByWorkshop(String city, String factory, String workshop);
         int BatchDeleteGateway(int[] ids);
         String CreateGatewayType(String gatewayType);
+        long GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all");
     }
 }

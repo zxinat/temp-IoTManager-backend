@@ -11,5 +11,8 @@ namespace IoTManager.Model
         public String Remark { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
+        public double longitude{ get; set; }
+        public double latitude{ get; set; }
+
     }
 }

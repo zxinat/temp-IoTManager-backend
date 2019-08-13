@@ -13,26 +13,51 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLGatewayDao : IGatewayDao
     {
-        public List<GatewayModel> Get()
+        public List<GatewayModel> Get(String searchType, int offset, int limit, String sortColumn, String order, String city, String factory, String workshop)
         {
+            string s = "select gateway.id, " +
+                       "hardwareGatewayID, " +
+                       "gatewayName, " +
+                       "gatewayType, " +
+                       "city.cityName as city, " +
+                       "factory.factoryName as factory, " +
+                       "workshop.workshopName as workshop, " +
+                       "gatewayState, " +
+                       "imageUrl, " +
+                       "gateway.remark, " +
+                       "gateway.lastConnectionTime, " +
+                       "gateway.createTime, " +
+                       "gateway.updateTime from gateway " +
+                       "join city on city.id=gateway.city " +
+                       "join factory on factory.id=gateway.factory " +
+                       "join workshop on workshop.id=gateway.workshop ";
+            if (searchType == "search")
+            {
+                if (city != "all")
+                {
+                    s += "where gateway.city in (select id from city where cityName=@cn) ";
+                    if (factory != "all")
+                    {
+                        s += "and gateway.factory in (select id from factory where factoryName=@fn) ";
+                        if (workshop != "all")
+                        {
+                            s += "and gateway.workshop in (select id from workshop where workshopName=@wn) ";
+                        }
+                    }
+                }
+
+                if (sortColumn != "no" && order != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
+            }
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<GatewayModel>("select gateway.id, " +
-                                                      "hardwareGatewayID," +
-                                                      " gatewayName," +
-                                                      " gatewayType, " +
-                                                      "city.cityName as city, " +
-                                                      "factory.factoryName as factory, " +
-                                                      "workshop.workshopName as workshop, " +
-                                                      "gatewayState, " +
-                                                      "imageUrl, " +
-                                                      "gateway.remark, " +
-                                                      "gateway.lastConnectionTime, " +
-                                                      "gateway.createTime, " +
-                                                      "gateway.updateTime from gateway " +
-                                                      "join city on city.id=gateway.city " +
-                                                      "join factory on factory.id=gateway.factory " +
-                                                      "join workshop on workshop.id=gateway.workshop")
+                return connection.Query<GatewayModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
             }
         }
@@ -233,6 +258,31 @@ namespace IoTManager.Dao
                         gt = gatewayType
                     });
                 return rows == 1 ? "success" : "error";
+            }
+        }
+
+        public long GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all")
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                String s = "select count(*) number from gateway";
+                if (searchType == "search")
+                {
+                    if (city != "all")
+                    {
+                        s += " where gateway.city in (select id from city where cityName=@cn) ";
+                        if (factory != "all")
+                        {
+                            s += "and gateway.factory in (select id from factory where factoryName=@fn) ";
+                            if (workshop != "all")
+                            {
+                                s += "and gateway.workshop in (select id from workshop where workshopName=@wn) ";
+                            }
+                        }
+                    }
+                }
+                var result = connection.Query(s, new {cn=city, fn=factory, wn=workshop}).FirstOrDefault();
+                return result.number;
             }
         }
     }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using IoTManager.Core.Infrastructures;
+using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 
 namespace IoTManager.API.Controllers
@@ -28,17 +29,17 @@ namespace IoTManager.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetAllDevices());
+                this._deviceBus.GetAllDevices(searchType, page, sortColumn, order, city, factory, workshop));
         }
 
         // GET api/values/{id}
         [HttpGet("{id}")]
-        public ResponseSerializer Get(int id)
+        public ResponseSerializer GetById(int id)
         {
             return new ResponseSerializer(
                 200,
@@ -139,6 +140,24 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._deviceBus.CreateDeviceType(deviceType));
+        }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetDeviceNumber(String searchType, String city, String factory, String workshop)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceNumber(searchType, city, factory, workshop));
+        }
+
+        [HttpGet("fieldOptions")]
+        public ResponseSerializer GetFieldOptions()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetFieldOptions());
         }
     }
 }

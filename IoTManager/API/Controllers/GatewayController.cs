@@ -10,6 +10,7 @@ using IoTManager.DAL.Models;
 using IoTManager.DAL.DbContext;
 using IoTManager.DAL.ReturnType;
 using IoTManager.Utility.Serializers;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -30,17 +31,17 @@ namespace IoTManager.API.Controllers
         
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._gatewayBus.GetAllGateways());
+                this._gatewayBus.GetAllGateways(searchType, page, sortColumn, order, city, factory, workshop));
         }
 
         // GET api/values/{id}
         [HttpGet("{id}")]
-        public ResponseSerializer Get(int id)
+        public ResponseSerializer GetById(int id)
         {
             return new ResponseSerializer(
                 200,
@@ -103,6 +104,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._gatewayBus.CreateGatewayType(gatewayType));
+        }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all")
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._gatewayBus.GetGatewayNumber(searchType, city, factory, workshop));
         }
     }
 }
