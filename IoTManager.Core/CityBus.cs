@@ -82,7 +82,7 @@ namespace IoTManager.Core
             return this._cityDao.Delete(id);
         }
 
-        public List<object> GetCityOptions()
+        public List<object> GetCityCascaderOptions()
         {
             List<CityModel> cities = this._cityDao.Get();
             List<object> result = new List<object>();
@@ -108,7 +108,16 @@ namespace IoTManager.Core
 
             return result;
         }
-
+        public List<object> GetCityOptions()
+        {
+            List<CityModel> cities = this._cityDao.Get();
+            List<object> result = new List<object>();
+            foreach(CityModel c in cities)
+            {
+                result.Add(new{ValueTuple=c.CityName, label=c.CityName});
+            }
+            return result;
+        }
         public List<Object> GetMapInfo()
         {
             List<CityModel> cities = this._cityDao.Get();
