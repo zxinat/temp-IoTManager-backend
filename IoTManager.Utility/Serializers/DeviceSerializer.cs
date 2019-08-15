@@ -22,6 +22,7 @@ namespace IoTManager.Utility.Serializers
             this.createTime = null;
             this.updateTime = null;
             this.remark = null;
+            this.pictureRoute = null;
         }
 
         public DeviceSerializer(DeviceModel deviceModel)
@@ -44,6 +45,7 @@ namespace IoTManager.Utility.Serializers
             this.updateTime = deviceModel.UpdateTime
                 .ToString(Constant.getDateFormatString());
             this.remark = deviceModel.Remark;
+            this.pictureRoute = deviceModel.PictureRoute;
         }
         
         public int id { get; set; }
@@ -61,6 +63,7 @@ namespace IoTManager.Utility.Serializers
         public String createTime { get; set; }
         public String updateTime { get; set; }
         public String remark { get; set; }
+        public String pictureRoute{ get; set; }
     }
 
     public class BatchNumber

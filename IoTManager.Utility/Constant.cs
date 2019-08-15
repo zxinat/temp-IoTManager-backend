@@ -10,6 +10,7 @@ namespace IoTManager.Utility
                 //   "User ID=azureuser;" +
                 //  "Initial Catalog=iotmanagerdb;" +
                 //  "Pwd=123qwe!@#QWE;";
+        //    return "Data Source=localhost;Database=iotmanager;User ID=root;Password=ab15214368710;";
             return "Data Source=iotmanager.mysql.database.chinacloudapi.cn;Database=iotmanager;User ID=SHUIoTDev@iotmanager;Password=Password01!!;";          
         }
 

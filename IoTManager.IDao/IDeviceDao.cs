@@ -11,7 +11,8 @@ namespace IoTManager.IDao
         List<DeviceModel> Get(String searchType, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc", String city = "all", String factory = "all", String workshop = "all");
         DeviceModel GetById(int id);
         List<DeviceModel> GetByDeviceName(String deviceName);
-        List<DeviceModel> GetByDeviceId(String deviceId);
+        List<DeviceModel> GetByFuzzyDeviceId(String deviceId);
+        DeviceModel GetByDeviceId(String deviceId);
         String Create(DeviceModel deviceModel);
         String Update(int id, DeviceModel deviceModel);
         String Delete(int id);

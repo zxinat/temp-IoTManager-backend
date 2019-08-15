@@ -9,6 +9,8 @@ using System.Text;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.Azure.Devices;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace IoTManager.Core
 {
@@ -57,15 +59,21 @@ namespace IoTManager.Core
             return result;
         }
 
-        public List<DeviceSerializer> GetDevicesByDeviceId(String deviceId)
+        public List<DeviceSerializer> GetDevicesByFuzzyDeviceId(String deviceId)
         {
-            List<DeviceModel> devices = this._deviceDao.GetByDeviceId(deviceId);
+            List<DeviceModel> devices = this._deviceDao.GetByFuzzyDeviceId(deviceId);
             List<DeviceSerializer> result = new List<DeviceSerializer>();
             foreach (DeviceModel device in devices)
             {
                 result.Add(new DeviceSerializer(device));
             }
             return result;
+        }
+
+        public DeviceSerializer GetDeviceByDeviceId(String deviceId)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceId(deviceId);
+            return new DeviceSerializer(device);
         }
 
         public String CreateNewDevice(DeviceSerializer deviceSerializer)
@@ -100,6 +108,7 @@ namespace IoTManager.Core
             deviceModel.Mac = deviceSerializer.mac;
             deviceModel.DeviceType = deviceSerializer.deviceType;
             deviceModel.Remark = deviceSerializer.remark;
+            deviceModel.PictureRoute = deviceSerializer.pictureRoute;
             return this._deviceDao.Update(id, deviceModel);
         }
 
@@ -164,6 +173,26 @@ namespace IoTManager.Core
             }
 
             return result;
+        }
+
+        public String UploadPicture(IFormCollection data)
+        {
+            try{
+                IFormFileCollection files = data.Files;
+                IFormFile picture = files.GetFile("picture");
+                String today = DateTime.Now.ToString("yyyyMMdd");
+                var filePath = "D:/IoTManager/" + today + "-" + System.Guid.NewGuid().ToString() + picture.FileName;
+                var stream = new FileStream(filePath, FileMode.Create);
+                picture.CopyToAsync(stream);
+                DeviceSerializer device = this.GetDeviceByDeviceId(data["deviceId"]);
+                device.pictureRoute = filePath;
+                this.UpdateDevice(device.id, device);
+                return "图片上传成功";
+            }
+            catch(Exception ex){
+                return ex.Message;
+            }
+
         }
     }
 }

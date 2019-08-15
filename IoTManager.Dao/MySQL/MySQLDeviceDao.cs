@@ -126,7 +126,7 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<DeviceModel> GetByDeviceId(String deviceId)
+        public List<DeviceModel> GetByFuzzyDeviceId(String deviceId)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -154,6 +154,36 @@ namespace IoTManager.Dao
             }
         }
 
+
+        public DeviceModel GetByDeviceId(String deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<DeviceModel>("select device.id, " +
+                                                     "hardwareDeviceID, " +
+                                                     "deviceName, " +
+                                                     "city.cityName as city, " +
+                                                     "factory.factoryName as factory, " +
+                                                     "workshop.workshopName as workshop, " +
+                                                     "deviceState, " +
+                                                     "imageUrl, " +
+                                                     "gatewayID, " +
+                                                     "mac, " +
+                                                     "deviceType, " +
+                                                     "device.remark, " +
+                                                     "lastConnectionTime, " +
+                                                     "device.createTime, " +
+                                                     "device.updateTime " +
+                                                     "from device " +
+                                                     "join city on city.id=device.city " +
+                                                     "join factory on factory.id=device.factory " +
+                                                     "join workshop on workshop.id=device.workshop " +
+                                                     "where device.hardwareDeviceID = @hardwareDeviceID", new
+                {
+                    hardwareDeviceID=deviceId
+                }).FirstOrDefault();
+            }
+        }
         public String Create(DeviceModel deviceModel)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
@@ -215,7 +245,7 @@ namespace IoTManager.Dao
                     {
                         wn = deviceModel.Workshop
                     }).FirstOrDefault();
-                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
+                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where Id=@gn",
                     new {gn = deviceModel.GatewayId}).FirstOrDefault();
                 int rows = connection
                     .Execute(
@@ -231,7 +261,8 @@ namespace IoTManager.Dao
                         "mac=@m, " +
                         "deviceType=@dt, " +
                         "remark=@r, " +
-                        "updateTime=CURRENT_TIMESTAMP " +
+                        "updateTime=CURRENT_TIMESTAMP, " +
+                        "pictureRoute=@pr " +
                         "WHERE device.id=@deviceId",
                         new
                         {
@@ -246,7 +277,8 @@ namespace IoTManager.Dao
                             gid = gateway.Id,
                             m = deviceModel.Mac,
                             dt = deviceModel.DeviceType,
-                            r = deviceModel.Remark
+                            r = deviceModel.Remark,
+                            pr = deviceModel.PictureRoute
                         });
                 return rows == 1 ? "success" : "error";
             }
