@@ -3,6 +3,7 @@ using IoTManager.IDao;
 using IoTManager.IHub;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,11 @@ using IoTManager.Utility.Serializers;
 using Microsoft.Azure.Devices;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using DotNetty.Common.Utilities;
+using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Primitives;
+using MongoDB.Driver;
 
 namespace IoTManager.Core
 {
@@ -180,10 +186,12 @@ namespace IoTManager.Core
             try{
                 IFormFileCollection files = data.Files;
                 IFormFile picture = files.GetFile("picture");
+                Console.WriteLine(picture.Length);
                 String today = DateTime.Now.ToString("yyyyMMdd");
                 var filePath = "D:/IoTManager/" + today + "-" + System.Guid.NewGuid().ToString() + picture.FileName;
                 var stream = new FileStream(filePath, FileMode.Create);
                 picture.CopyToAsync(stream);
+                stream.Close();
                 DeviceSerializer device = this.GetDeviceByDeviceId(data["deviceId"]);
                 device.pictureRoute = filePath;
                 this.UpdateDevice(device.id, device);
@@ -193,6 +201,25 @@ namespace IoTManager.Core
                 return ex.Message;
             }
 
+        }
+
+        public String GetPicture(String deviceId)
+        {
+            try
+            {
+                DeviceSerializer device = this.GetDeviceByDeviceId(deviceId);
+                FileInfo file = new FileInfo(device.pictureRoute);
+                var stream = file.OpenRead();
+                byte[] buffer = new byte[file.Length];
+                stream.Read(buffer, 0, Convert.ToInt32(file.Length));
+                stream.Close();
+                return Convert.ToBase64String(buffer);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

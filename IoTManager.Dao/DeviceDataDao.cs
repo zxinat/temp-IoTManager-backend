@@ -27,7 +27,7 @@ namespace IoTManager.Dao
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
         }
 
-        public List<DeviceDataModel> Get()
+        public List<DeviceDataModel> Get(String searchType, List<DeviceModel> devices, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             //return _deviceData.Find<DeviceDataModel>(d => true).ToList();
             var query = this._deviceData.AsQueryable()

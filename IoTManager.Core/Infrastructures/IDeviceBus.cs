@@ -24,5 +24,6 @@ namespace IoTManager.Core.Infrastructures
         long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all");
         List<object> GetFieldOptions();
         String UploadPicture(IFormCollection data);
+        String GetPicture(String deviceId);
     }
 }

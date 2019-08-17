@@ -29,7 +29,8 @@ namespace IoTManager.Dao
                        "device.remark, " +
                        "device.lastConnectionTime, " +
                        "device.createTime, " +
-                       "device.updateTime " +
+                       "device.updateTime, " +
+                       "device.pictureRoute " +
                        "from device " +
                        "join city on city.id=device.city " +
                        "join factory on factory.id=device.factory " +
@@ -86,7 +87,8 @@ namespace IoTManager.Dao
                                                      "device.remark, " +
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
-                                                     "device.updateTime " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -116,7 +118,8 @@ namespace IoTManager.Dao
                                                      "device.remark, " +
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
-                                                     "device.updateTime " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -144,7 +147,8 @@ namespace IoTManager.Dao
                                                      "device.remark, " +
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
-                                                     "device.updateTime " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -173,7 +177,8 @@ namespace IoTManager.Dao
                                                      "device.remark, " +
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
-                                                     "device.updateTime " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -331,7 +336,8 @@ namespace IoTManager.Dao
                                                      "device.remark, " +
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
-                                                     "device.updateTime " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
