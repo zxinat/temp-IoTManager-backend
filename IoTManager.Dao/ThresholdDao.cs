@@ -9,7 +9,7 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class ThresholdDao: IThresholdDao
+    public sealed class ThresholdDao
     {
         public List<ThresholdModel> GetByDeviceId(String deviceId)
         {

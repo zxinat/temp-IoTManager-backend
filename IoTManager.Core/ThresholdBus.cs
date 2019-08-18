@@ -39,16 +39,11 @@ namespace IoTManager.Core
             return this._thresholdDao.Create(t);
         }
 
-        public List<ThresholdSerializerDisplay> GetAllRules(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
+        public List<ThresholdSerializerDisplay> GetAllRules(String searchType, String deviceName = "all", int page = 1, String sortColumn = "Id", String order = "asc")
         {
-            List<DeviceModel> devices = new List<DeviceModel>();
-            if (searchType == "search")
-            {
-                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
-            }
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<ThresholdModel> thresholds = this._thresholdDao.Get(searchType, devices, offset, limit, sortColumn, order);
+            List<ThresholdModel> thresholds = this._thresholdDao.Get(searchType, deviceName, offset, limit, sortColumn, order);
             List<ThresholdSerializerDisplay> result = new List<ThresholdSerializerDisplay>();
             foreach (ThresholdModel t in thresholds)
             {
@@ -58,15 +53,9 @@ namespace IoTManager.Core
             return result;
         }
 
-        public long GetThresholdNumber(String searchType, String city, String factory, String workshop)
+        public long GetThresholdNumber(String searchType, String deviceName = "all")
         {
-            List<DeviceModel> devices = new List<DeviceModel>();
-            if (searchType == "search")
-            {
-                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
-            }
-
-            return this._thresholdDao.GetThresholdNumber(searchType, devices);
+            return this._thresholdDao.GetThresholdNumber(searchType, deviceName);
         }
     }
 }

@@ -7,6 +7,7 @@ using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 
 namespace IoTManager.Dao
 {
@@ -50,199 +51,51 @@ namespace IoTManager.Dao
             }
         }
 
-        public long GetThresholdNumber(String searchType, List<DeviceModel> devices)
+        public long GetThresholdNumber(String searchType, String deviceName = "all")
         {
-            long number = 0;
-            List<ThresholdModel> allThreshold = new List<ThresholdModel>();
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                allThreshold = connection.Query<ThresholdModel>(
-                    "select * from threshold").ToList();
-//                allThreshold = connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
-            }
-            if (searchType == "search")
-            {
-                foreach (var device in devices )
+                String s = "select count(*) number from threshold ";
+                if (searchType == "search")
                 {
-                    var query = allThreshold.AsQueryable()
-                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
-                        .ToList();
-                    number += query.Count;
+                    if (deviceName != "all")
+                    {
+                        s += "where deviceId=@dn";
+                    }
+                    var result = connection.Query(s, new {dn = deviceName}).FirstOrDefault();
+                    return result.number;
+                }
+                else
+                {
+                    var result = connection.Query(s).FirstOrDefault();
+                    return result.number;
                 }
             }
-            else
-            {
-                number = allThreshold.Count;
-            }
-
-            return number;
         }
-        public List<ThresholdModel> Get(String searchType, List<DeviceModel>devices, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
+        public List<ThresholdModel> Get(String searchType, String deviceName = "all", int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
-            List<ThresholdModel> allThreshold = new List<ThresholdModel>();
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
-            {
-                allThreshold = connection.Query<ThresholdModel>(
-                    "select threshold.id, indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join severity on threshold.severity=severity.id").ToList();
-//                allThreshold = connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
-            }
-            List<ThresholdModel> selected = new List<ThresholdModel>();
+            String s =
+                "select threshold.id, indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join severity on threshold.severity=severity.id ";
             if (searchType == "search")
             {
-                foreach (var device in devices )
+                if (deviceName != "all")
                 {
-                    var query = allThreshold.AsQueryable()
-                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
-                        .ToList();
-                    foreach (var q in query)
-                    {
-                        selected.Add(q);
-                    }
+                    s += "where threshold.deviceId=@dn ";
                 }
-            }
-            else
-            {
-                selected = allThreshold;
-            }
-            List<ThresholdModel> result = new List<ThresholdModel>();
-            if (order != "no" && sortColumn != "no")
-            {
-                if (sortColumn == "DeviceId")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.DeviceId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.DeviceId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "IndexId")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.IndexId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.IndexId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "CreateTime")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.CreateTime)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.CreateTime)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "UpdateTime")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.UpdateTime)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.UpdateTime)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "Id")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.Id)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.Id)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "RuleName")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.RuleName)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.RuleName)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "Severity")
-                {
-                    if (order == "asc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderBy(dd => dd.Severity)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = selected.AsQueryable()
-                            .OrderByDescending(dd => dd.Severity)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-            }
 
-            return result;
+                if (order != "no" && sortColumn != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+                
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
+            }
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<ThresholdModel>(s, new {dn=deviceName}).ToList();
+            }
         }
     }
 }
