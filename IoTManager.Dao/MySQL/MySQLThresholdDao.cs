@@ -51,6 +51,30 @@ namespace IoTManager.Dao
             }
         }
 
+        public String Update(int id, ThresholdModel thresholdModel)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                SeverityModel severity = connection
+                    .Query<SeverityModel>("select * from severity where severityName=@sn",
+                        new { sn = thresholdModel.Severity }).FirstOrDefault();
+                int rows = connection.Execute(
+                    "update threshold set indexId=@iid, deviceId=@did, operator=@o, thresholdValue=@tv, ruleName=@rn, description=@d, severity=@sid where id=@i",
+                    new
+                    {
+                        i = id,
+                        iid = thresholdModel.IndexId,
+                        did = thresholdModel.DeviceId,
+                        o = thresholdModel.Operator,
+                        tv = thresholdModel.ThresholdValue,
+                        rn = thresholdModel.RuleName,
+                        d = thresholdModel.Description,
+                        sid = severity.Id
+                    });
+                return rows == 1 ? "success" : "error";
+            }
+        }
+
         public long GetThresholdNumber(String searchType, String deviceName = "all")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
@@ -95,6 +119,33 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<ThresholdModel>(s, new {dn=deviceName}).ToList();
+            }
+        }
+
+        public String Delete(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("delete from threshold where id=@i", new {i = id});
+                return rows == 1 ? "success" : "error";
+            }
+        }
+
+        public int BatchDelete(int[] ids)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = 0;
+                foreach (int i in ids)
+                {
+                    connection.Execute("delete from threshold where threshold.id=@tid", new
+                    {
+                        tid = i
+                    });
+                    rows = rows + 1;
+                }
+
+                return rows;
             }
         }
     }

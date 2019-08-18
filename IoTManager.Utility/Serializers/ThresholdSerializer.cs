@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using IoTManager.Model;
 using MongoDB.Driver.Core.Servers;
 
@@ -22,6 +23,10 @@ namespace IoTManager.Utility.Serializers
 
         public ThresholdSerializer(ThresholdModel thresholdModel)
         {
+            Dictionary<String, String> op = new Dictionary<string, string>();
+            op.Add("less", "<");
+            op.Add("greater", ">");
+            op.Add("equal", "=");
             this.id = thresholdModel.Id;
             this.field = thresholdModel.IndexId;
             this.deviceGroup = thresholdModel.DeviceId;
@@ -34,6 +39,7 @@ namespace IoTManager.Utility.Serializers
             this.name = thresholdModel.RuleName;
             this.description = thresholdModel.Description;
             this.severity = thresholdModel.Severity;
+            this.conditionString = thresholdModel.IndexId + " " + op[thresholdModel.Operator] + " " + thresholdModel.ThresholdValue.ToString();
         }
         
         public int id { get; set; }
@@ -46,5 +52,6 @@ namespace IoTManager.Utility.Serializers
         public String name { get; set; }
         public String description { get; set; }
         public String severity { get; set; }
+        public String conditionString { get; set; }
     }
 }

@@ -54,5 +54,32 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._thresholdBus.GetThresholdNumber(searchType, deviceName));
         }
+
+        [HttpDelete("{id}")]
+        public ResponseSerializer Delete(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.DeleteThreshold(id));
+        }
+
+        [HttpPut("{id}")]
+        public ResponseSerializer Put(int id, [FromBody] ThresholdSerializer thresholdSerializer)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.UpdateThreshold(id, thresholdSerializer));
+        }
+
+        [HttpPost("batch/thresholds")]
+        public ResponseSerializer BatchDelete([FromBody] BatchNumber batchNumber)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.BatchDeleteThreshold(batchNumber.number));
+        }
     }
 }

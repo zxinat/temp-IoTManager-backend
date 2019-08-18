@@ -17,7 +17,7 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<FieldModel> fields = connection.Query<FieldModel>(
-                    "select fieldName, fieldId, deviceName device from field join device on field.device=device.id").ToList();
+                    "select field.id, fieldName, fieldId, deviceName device, field.updateTime, field.createTime from field join device on field.device=device.id").ToList();
                 return fields;
             }
         }
