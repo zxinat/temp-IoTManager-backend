@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="0-Common" t="Include" />
+      <e p="1-Host" t="Include" />
+      <e p="2-Contract" t="Include" />
+      <e p="3-Service" t="Include" />
+      <e p="4-Core" t="Include" />
+      <e p="5-Repository" t="Include" />
+      <e p="6-Test" t="Include" />
+      <e p="IoTManager" t="IncludeRecursive">
+        <e p="API" t="Include">
+          <e p="Controllers" t="Include">
+            <e p="AlarmInfoController.cs" t="Include" />
+            <e p="CityController.cs" t="Include" />
+            <e p="DeviceController.cs" t="Include" />
+            <e p="DeviceDataController.cs" t="Include" />
+            <e p="FactoryController.cs" t="Include" />
+            <e p="FieldController.cs" t="Include" />
+            <e p="GatewayController.cs" t="Include" />
+            <e p="LoginController.cs" t="Include" />
+            <e p="SeverityController.cs" t="Include" />
+            <e p="StateTypeController.cs" t="Include" />
+            <e p="ThresholdController.cs" t="Include" />
+            <e p="UserController.cs" t="Include" />
+            <e p="ValuesController.cs" t="Include" />
+            <e p="WorkshopController.cs" t="Include" />
+          </e>
+          <e p="Formalizers" t="Include">
+            <e p="CityFormalizer.cs" t="Include" />
+            <e p="DepartmentFormalizer.cs" t="Include" />
+            <e p="DeviceFormalizer.cs" t="Include" />
+            <e p="DeviceStateFormalizer.cs" t="Include" />
+            <e p="DeviceTypeFormalizer.cs" t="Include" />
+            <e p="FactoryFormalizer.cs" t="Include" />
+            <e p="GatewayFormalizer.cs" t="Include" />
+            <e p="GatewayStateFormalizer.cs" t="Include" />
+            <e p="GatewayTypeFormalizer.cs" t="Include" />
+            <e p="UserFormalizer.cs" t="Include" />
+            <e p="WorkshopFormalizer.cs" t="Include" />
+          </e>
+          <e p="Services" t="Include">
+            <e p="ConstantService.cs" t="Include" />
+            <e p="EncryptionService.cs" t="Include" />
+            <e p="LoginService.cs" t="Include" />
+          </e>
+        </e>
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DAL" t="Include">
+          <e p="DbContext" t="Include">
+            <e p="DatabaseContext.cs" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="City.cs" t="Include" />
+            <e p="Department.cs" t="Include" />
+            <e p="Device.cs" t="Include" />
+            <e p="DeviceState.cs" t="Include" />
+            <e p="DeviceType.cs" t="Include" />
+            <e p="Factory.cs" t="Include" />
+            <e p="Gateway.cs" t="Include" />
+            <e p="GatewayState.cs" t="Include" />
+            <e p="GatewayType.cs" t="Include" />
+            <e p="PageElement.cs" t="Include" />
+            <e p="Role.cs" t="Include" />
+            <e p="User.cs" t="Include" />
+            <e p="Workshop.cs" t="Include" />
+          </e>
+          <e p="ReturnType" t="Include">
+            <e p="Result.cs" t="Include" />
+          </e>
+        </e>
+        <e p="IoTManager.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="API文档.md" t="Include" />
+          <e p="API文档_登陆.md" t="Include" />
+          <e p="db_init.sql" t="Include" />
+          <e p="db_seed_201904222006.sql" t="Include" />
+          <e p="db_seed_201904252331.sql" t="Include" />
+          <e p="db_seed_201904261634.sql" t="Include" />
+          <e p="db_seed_201904261748.sql" t="Include" />
+          <e p="PostDataSample" t="Include">
+            <e p="CitySample.json" t="Include" />
+            <e p="DeviceSample.json" t="Include" />
+            <e p="FactorySample.json" t="Include" />
+            <e p="GatewaySample.json" t="Include" />
+            <e p="UserSample.json" t="Include" />
+            <e p="WorkshopSample.json" t="Include" />
+          </e>
+          <e p="数据库表结构.md" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="wwwroot" t="Include" />
+      </e>
+      <e p="IoTManager.AzureIoTHub" t="IncludeRecursive">
+        <e p="AzureIoTHub.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="IoTManager.AzureIoTHub.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.AzureIoTHub.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="IoTManager.Core" t="IncludeRecursive">
+        <e p="AlarmInfoBus.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CityBus.cs" t="Include" />
+        <e p="DepartmentBus.cs" t="Include" />
+        <e p="DeviceBus.cs" t="Include" />
+        <e p="DeviceDataBus.cs" t="Include" />
+        <e p="FactoryBus.cs" t="Include" />
+        <e p="FieldBus.cs" t="Include" />
+        <e p="GatewayBus.cs" t="Include" />
+        <e p="Infrastructures" t="Include">
+          <e p="IAlarmInfoBus.cs" t="Include" />
+          <e p="ICityBus.cs" t="Include" />
+          <e p="IDepartmentBus.cs" t="Include" />
+          <e p="IDeviceBus.cs" t="Include" />
+          <e p="IDeviceDataBus.cs" t="Include" />
+          <e p="IFactoryBus.cs" t="Include" />
+          <e p="IFieldBus.cs" t="Include" />
+          <e p="IGatewayBus.cs" t="Include" />
+          <e p="ILoginBus.cs" t="Include" />
+          <e p="IRoleBus.cs" t="Include" />
+          <e p="ISeverityBus.cs" t="Include" />
+          <e p="IStateTypeBus.cs" t="Include" />
+          <e p="IThresholdBus.cs" t="Include" />
+          <e p="IUserBus.cs" t="Include" />
+          <e p="IWorkshopBus.cs" t="Include" />
+        </e>
+        <e p="IoTManager.Core.csproj" t="IncludeRecursive" />
+        <e p="Jobs" t="Include">
+          <e p="AlarmInfoJob.cs" t="Include" />
+        </e>
+        <e p="LoginBus.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Core.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="RoleBus.cs" t="Include" />
+        <e p="SeverityBus.cs" t="Include" />
+        <e p="StateTypeBus.cs" t="Include" />
+        <e p="ThresholdBus.cs" t="Include" />
+        <e p="UserBus.cs" t="Include" />
+        <e p="WorkshopBus.cs" t="Include" />
+      </e>
+      <e p="IoTManager.Dao" t="IncludeRecursive">
+        <e p="AlarmInfoDao.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CityDao.cs" t="Include" />
+        <e p="DepartmentDao.cs" t="Include" />
+        <e p="DeviceDao.cs" t="Include" />
+        <e p="DeviceDataDao.cs" t="Include" />
+        <e p="FactoryDao.cs" t="Include" />
+        <e p="FieldDao.cs" t="Include" />
+        <e p="GatewayDao.cs" t="Include" />
+        <e p="IoTManager.Dao.csproj" t="IncludeRecursive" />
+        <e p="MySQL" t="Include">
+          <e p="MySQLCityDao.cs" t="Include" />
+          <e p="MySQLDepartmentDao.cs" t="Include" />
+          <e p="MySQLDeviceDao.cs" t="Include" />
+          <e p="MySQLFactoryDao.cs" t="Include" />
+          <e p="MySQLFieldDao.cs" t="Include" />
+          <e p="MySQLGatewayDao.cs" t="Include" />
+          <e p="MySQLRoleDao.cs" t="Include" />
+          <e p="MySQLSeverityDao.cs" t="Include" />
+          <e p="MySQLStateTypeDao.cs" t="Include" />
+          <e p="MySQLThresholdDao.cs" t="Include" />
+          <e p="MySQLUserDao.cs" t="Include" />
+          <e p="MySQLWorkshopDao.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Dao.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="RoleDao.cs" t="Include" />
+        <e p="SeverityDao.cs" t="Include" />
+        <e p="StateTypeDao.cs" t="Include" />
+        <e p="ThresholdDao.cs" t="Include" />
+        <e p="UserDao.cs" t="Include" />
+        <e p="WorkshopDao.cs" t="Include" />
+      </e>
+      <e p="IoTManager.DI" t="IncludeRecursive">
+        <e p="AutofacContainer.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Infrastructures" t="Include">
+          <e p="IocContainer.cs" t="Include" />
+        </e>
+        <e p="IoTManager.DI.csproj" t="IncludeRecursive" />
+        <e p="IoTModel.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.DI.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="IoTManager.Http.MonitorDataSync" t="IncludeRecursive">
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Controllers" t="Include">
+          <e p="ValuesController.cs" t="Include" />
+        </e>
+        <e p="IoTManager.Http.MonitorDataSync.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Http.MonitorDataSync.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="wwwroot" t="Include" />
+      </e>
+      <e p="IoTManager.IDao" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="IAlarmInfoDao.cs" t="Include" />
+        <e p="ICityDao.cs" t="Include" />
+        <e p="IDepartmentDao.cs" t="Include" />
+        <e p="IDeviceDao.cs" t="Include" />
+        <e p="IDeviceDataDao.cs" t="Include" />
+        <e p="IFactoryDao.cs" t="Include" />
+        <e p="IFieldDao.cs" t="Include" />
+        <e p="IGatewayDao.cs" t="Include" />
+        <e p="IMonitorDataDao.cs" t="Include" />
+        <e p="IoTManager.IDao.csproj" t="IncludeRecursive" />
+        <e p="IRoleDao.cs" t="Include" />
+        <e p="ISeverityDao.cs" t="Include" />
+        <e p="IStateTypeDao.cs" t="Include" />
+        <e p="IThresholdDao.cs" t="Include" />
+        <e p="IUserDao.cs" t="Include" />
+        <e p="IWorkshopDao.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.IDao.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="IoTManager.IHub" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="IoTHub.cs" t="Include" />
+        <e p="IoTManager.IHub.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.IHub.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="IoTManager.Model" t="IncludeRecursive">
+        <e p="AlarmInfoModel.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CityModel.cs" t="Include" />
+        <e p="Configuration" t="Include">
+          <e p="IoTHubAppSetting.cs" t="Include" />
+        </e>
+        <e p="Contracts" t="Include">
+          <e p="MultipleMonitorDataContract.cs" t="Include" />
+          <e p="SingleMonitorDataContract.cs" t="Include" />
+        </e>
+        <e p="DepartmentModel.cs" t="Include" />
+        <e p="DeviceDataModel.cs" t="Include" />
+        <e p="DeviceModel.cs" t="Include" />
+        <e p="FactoryModel.cs" t="Include" />
+        <e p="FieldModel.cs" t="Include" />
+        <e p="GatewayModel.cs" t="Include" />
+        <e p="GeoModel.cs" t="Include" />
+        <e p="IoTHubDeviceModel.cs" t="Include" />
+        <e p="IoTManager.Model.csproj" t="IncludeRecursive" />
+        <e p="LoginModel.cs" t="Include" />
+        <e p="MonitorDataModel.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Model.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="RoleModel.cs" t="Include" />
+        <e p="SeverityModel.cs" t="Include" />
+        <e p="StatisticDurationModel.cs" t="Include" />
+        <e p="ThresholdModel.cs" t="Include" />
+        <e p="UserModel.cs" t="Include" />
+        <e p="WorkshopModel.cs" t="Include" />
+      </e>
+      <e p="IoTManager.MonitorService" t="IncludeRecursive">
+        <e p=".gitignore" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="host.json" t="Include" />
+        <e p="IoTManager.MonitorService.csproj" t="IncludeRecursive" />
+        <e p="local.settings.json" t="Include" />
+        <e p="Models" t="Include">
+          <e p="LogEntity.cs" t="Include" />
+        </e>
+        <e p="MonitorService.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.MonitorService.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Proxy" t="Include">
+          <e p="StorageProxy.cs" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="Utility" t="Include">
+          <e p="AppSetting.cs" t="Include" />
+        </e>
+      </e>
+      <e p="IoTManager.sln" t="IncludeFlat" />
+      <e p="IoTManager.Tcp.MonitorDataSync" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Configure" t="Include">
+          <e p="AppSetting.cs" t="Include" />
+        </e>
+        <e p="Contracts" t="Include">
+          <e p="MonitorDataContract.cs" t="Include" />
+        </e>
+        <e p="IoTManager.Tcp.MonitorDataSync.csproj" t="IncludeRecursive" />
+        <e p="Jobs" t="Include">
+          <e p="AcquireMonitorDataJob.cs" t="Include" />
+          <e p="JobManager.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Tcp.MonitorDataSync.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="HumidResolveService.cs" t="Include" />
+          <e p="SockerManager.cs" t="Include" />
+          <e p="SurveyService.cs" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="Utility" t="Include">
+          <e p="JobQueue.cs" t="Include" />
+        </e>
+      </e>
+      <e p="IoTManager.Test" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="Base" t="Include">
+          <e p="TestController.cs" t="Include" />
+          <e p="TestServerFixture.cs" t="Include" />
+          <e p="TestStartup.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Controllers" t="Include">
+          <e p="TestAlarmInfoController.cs" t="Include" />
+          <e p="TestCityController.cs" t="Include" />
+          <e p="TestDeviceController.cs" t="Include" />
+          <e p="TestDeviceDataController.cs" t="Include" />
+          <e p="TestFactoryController.cs" t="Include" />
+          <e p="TestFieldController.cs" t="Include" />
+          <e p="TestGateWayController.cs" t="Include" />
+          <e p="TestLoginController.cs" t="Include" />
+          <e p="TestSeverityController.cs" t="Include" />
+          <e p="TestStateTypeController.cs" t="Include" />
+          <e p="TestThresholdController.cs" t="Include" />
+          <e p="TestUserController.cs" t="Include" />
+          <e p="TestWorkshopController.cs" t="Include" />
+        </e>
+        <e p="IoTManager.Test.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Test.AssemblyInfo.cs" t="Include" />
+              <e p="IoTManager.Test.Program.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="UnitTest1.cs" t="Include" />
+      </e>
+      <e p="IoTManager.Utility" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Constant.cs" t="Include" />
+        <e p="Extensions" t="Include">
+          <e p="ObjectExtension.cs" t="Include" />
+          <e p="StringExtension.cs" t="Include" />
+        </e>
+        <e p="Helpers" t="Include">
+          <e p="CosmosDBHelper.cs" t="Include" />
+          <e p="MongoDBHelper.cs" t="Include" />
+          <e p="MongoHelper.cs" t="Include" />
+          <e p="SqlHelper.cs" t="Include" />
+        </e>
+        <e p="IoTManager.Utility.csproj" t="IncludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.1" t="Include">
+              <e p="IoTManager.Utility.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Serializers" t="Include">
+          <e p="AlarmInfoSerializer.cs" t="Include" />
+          <e p="CitySerializer.cs" t="Include" />
+          <e p="DeviceDataSerializer.cs" t="Include" />
+          <e p="DeviceSerializer.cs" t="Include" />
+          <e p="FactorySerializer.cs" t="Include" />
+          <e p="FieldSerializer.cs" t="Include" />
+          <e p="GatewaySerializer.cs" t="Include" />
+          <e p="ResponseSerializer.cs" t="Include" />
+          <e p="SeveritySerializer.cs" t="Include" />
+          <e p="ThresholdSerializer.cs" t="Include" />
+          <e p="ThresholdSerializerDisplay.cs" t="Include" />
+          <e p="UserSerializer.cs" t="Include" />
+          <e p="WorkshopSerializer.cs" t="Include" />
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+    <e p="$USER_HOME$/Library/Caches/Rider2018.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.3/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_IoTManager.55920609.00" t="ExcludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/Extensions" t="IncludeRecursive" />
+  </component>
+</project>
