@@ -3,12 +3,20 @@ using IoTManager.IDao;
 using IoTManager.IHub;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.Azure.Devices;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using DotNetty.Common.Utilities;
+using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Primitives;
+using MongoDB.Driver;
 
 namespace IoTManager.Core
 {
@@ -57,15 +65,21 @@ namespace IoTManager.Core
             return result;
         }
 
-        public List<DeviceSerializer> GetDevicesByDeviceId(String deviceId)
+        public List<DeviceSerializer> GetDevicesByFuzzyDeviceId(String deviceId)
         {
-            List<DeviceModel> devices = this._deviceDao.GetByDeviceId(deviceId);
+            List<DeviceModel> devices = this._deviceDao.GetByFuzzyDeviceId(deviceId);
             List<DeviceSerializer> result = new List<DeviceSerializer>();
             foreach (DeviceModel device in devices)
             {
                 result.Add(new DeviceSerializer(device));
             }
             return result;
+        }
+
+        public DeviceSerializer GetDeviceByDeviceId(String deviceId)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceId(deviceId);
+            return new DeviceSerializer(device);
         }
 
         public String CreateNewDevice(DeviceSerializer deviceSerializer)
@@ -100,6 +114,7 @@ namespace IoTManager.Core
             deviceModel.Mac = deviceSerializer.mac;
             deviceModel.DeviceType = deviceSerializer.deviceType;
             deviceModel.Remark = deviceSerializer.remark;
+            deviceModel.PictureRoute = deviceSerializer.pictureRoute;
             return this._deviceDao.Update(id, deviceModel);
         }
 
@@ -164,6 +179,47 @@ namespace IoTManager.Core
             }
 
             return result;
+        }
+
+        public String UploadPicture(IFormCollection data)
+        {
+            try{
+                IFormFileCollection files = data.Files;
+                IFormFile picture = files.GetFile("picture");
+                Console.WriteLine(picture.Length);
+                String today = DateTime.Now.ToString("yyyyMMdd");
+                var filePath = "D:/IoTManager/" + today + "-" + System.Guid.NewGuid().ToString() + picture.FileName;
+                var stream = new FileStream(filePath, FileMode.Create);
+                picture.CopyToAsync(stream);
+                stream.Close();
+                DeviceSerializer device = this.GetDeviceByDeviceId(data["deviceId"]);
+                device.pictureRoute = filePath;
+                this.UpdateDevice(device.id, device);
+                return "图片上传成功";
+            }
+            catch(Exception ex){
+                return ex.Message;
+            }
+
+        }
+
+        public String GetPicture(String deviceId)
+        {
+            try
+            {
+                DeviceSerializer device = this.GetDeviceByDeviceId(deviceId);
+                FileInfo file = new FileInfo(device.pictureRoute);
+                var stream = file.OpenRead();
+                byte[] buffer = new byte[file.Length];
+                stream.Read(buffer, 0, Convert.ToInt32(file.Length));
+                stream.Close();
+                return Convert.ToBase64String(buffer);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

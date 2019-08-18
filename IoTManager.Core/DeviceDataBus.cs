@@ -12,6 +12,7 @@ namespace IoTManager.Core
     public sealed class DeviceDataBus: IDeviceDataBus
     {
         private readonly IDeviceDataDao _deviceDataDao;
+        private readonly IDeviceDao _deviceDao;
         private readonly ILogger _logger;
 
         public DeviceDataBus(IDeviceDataDao deviceDataDao, ILogger<DeviceDataBus> logger)
@@ -20,9 +21,12 @@ namespace IoTManager.Core
             this._logger = logger;
         }
 
-        public List<DeviceDataSerializer> GetAllDeviceData()
+        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
         {
-            List<DeviceDataModel> deviceData = this._deviceDataDao.Get();
+            List<DeviceModel> devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
+            int offset = (page - 1) * 12;
+            int limit = 12;
+            List<DeviceDataModel> deviceData = this._deviceDataDao.Get(searchType, devices, offset, limit, sortColumn, order);
             List<DeviceDataSerializer> result = new List<DeviceDataSerializer>();
             foreach (DeviceDataModel dd in deviceData)
             {

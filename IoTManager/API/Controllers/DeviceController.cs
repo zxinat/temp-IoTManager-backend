@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using IoTManager.API.Formalizers;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 using IoTManager.Core.Infrastructures;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
+using System.Windows;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace IoTManager.API.Controllers
 {
@@ -64,9 +68,18 @@ namespace IoTManager.API.Controllers
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetDevicesByDeviceId(deviceId));
+                this._deviceBus.GetDeviceByDeviceId(deviceId));
         }
 
+        [HttpGet("fuzzyDeviceid/{deviceId}")]
+        public ResponseSerializer GetByFuzzyDeviceId(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDevicesByFuzzyDeviceId(deviceId)
+            );
+        }
         // POST api/values
         [HttpPost]
         public ResponseSerializer Post([FromBody] DeviceSerializer deviceSerializer)
@@ -159,5 +172,24 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetFieldOptions());
         }
+        [HttpPost("uploadPicture")]
+        public ResponseSerializer UploadPicture([FromForm]IFormCollection data)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.UploadPicture(data)
+            );
+        }
+
+        [HttpGet("getPicture/{deviceId}")]
+        public ResponseSerializer GetPicture(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetPicture(deviceId));
+        } 
+
     }
 }
