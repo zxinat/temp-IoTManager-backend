@@ -17,13 +17,15 @@ namespace IoTManager.Dao
     {
         private readonly IMongoCollection<DeviceDataModel> _deviceData;
         private readonly IMongoCollection<AlarmInfoModel> _alarmInfo;
+        private readonly IThresholdDao _thresholdDao;
 
-        public DeviceDataDao()
+        public DeviceDataDao(IThresholdDao thresholdDao)
         {
             var client = new MongoClient(Constant.getMongoDBConnectionString());
             var database = client.GetDatabase("iotmanager");
             _deviceData = database.GetCollection<DeviceDataModel>("devicedata");
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
+            this._thresholdDao = thresholdDao;
         }
 
         public List<DeviceDataModel> Get(String searchType, List<DeviceModel> devices, int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc")
@@ -171,6 +173,15 @@ namespace IoTManager.Dao
             return query;
         }
 
+        public List<DeviceDataModel> GetAllDataByDeviceId(String DeviceId)
+        {
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == DeviceId)
+                .OrderByDescending(dd => dd.Timestamp)
+                .ToList();
+            return query;
+        }
+
         public List<DeviceDataModel> GetNotInspected()
         {
             List<DeviceDataModel> deviceDataModels = _deviceData.Find<DeviceDataModel>(dd => dd.Inspected == "No").ToList();
@@ -283,6 +294,17 @@ namespace IoTManager.Dao
                 recentAlarm = recentAlarmQuery[0].Timestamp;
             }
 
+            List<ThresholdModel> thresholdModels = this._thresholdDao.GetByDeviceId(deviceId);
+            List<object> ruleResult = new List<object>();
+            Dictionary<String, String> opDict = new Dictionary<string, string>();
+            opDict.Add("greater", ">");
+            opDict.Add("equal", "=");
+            opDict.Add("less", "<");
+            foreach (ThresholdModel t in thresholdModels)
+            {
+                ruleResult.Add(new {name=t.RuleName, description=t.Description, conditionString=t.IndexId + opDict[t.Operator.ToString()] + t.ThresholdValue.ToString(), severity=t.Severity});
+            }
+
             return new
             {
                 deviceName = device.DeviceName,
@@ -298,7 +320,8 @@ namespace IoTManager.Dao
                               lastingTime.ToString("%m") + "分钟" + 
                               lastingTime.ToString("%s") + "秒",
                 alarmTimes = alarmTimes.ToString(),
-                recentAlarmTime = recentAlarm.ToString(Constant.getDateFormatString())
+                recentAlarmTime = recentAlarm.ToString(Constant.getDateFormatString()),
+                rules = ruleResult
             };
         }
 

@@ -17,7 +17,7 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 List<ThresholdModel> thresholdModels = connection.Query<ThresholdModel>(
-                    "select * from threshold where deviceId=@did", new
+                    "select threshold.id, indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join severity on threshold.severity=severity.id where deviceId=@did", new
                     {
                         did = deviceId
                     }).ToList();
@@ -83,7 +83,7 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 allThreshold = connection.Query<ThresholdModel>(
-                    "select * from threshold").ToList();
+                    "select threshold.id, indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join severity on threshold.severity=severity.id").ToList();
 //                allThreshold = connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
             }
             List<ThresholdModel> selected = new List<ThresholdModel>();
