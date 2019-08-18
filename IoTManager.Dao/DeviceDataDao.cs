@@ -22,7 +22,6 @@ namespace IoTManager.Dao
         {
             var client = new MongoClient(Constant.getMongoDBConnectionString());
             var database = client.GetDatabase("iotmanager");
-
             _deviceData = database.GetCollection<DeviceDataModel>("devicedata");
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
         }
@@ -306,6 +305,30 @@ namespace IoTManager.Dao
         public object GetDeviceStatistic(StatisticDurationModel statisticDurationModel)
         {
             return null;
+        }
+
+        public long GetDeviceDataNumber(String searchType, List<DeviceModel> devices)
+        {
+            long number = 0;
+            if (searchType == "search")
+            {
+                foreach (var device in devices)
+                {
+                    var query = this._deviceData.AsQueryable()
+                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
+                        .ToList();
+                    number += query.Count;
+                }
+            }
+            else
+            {
+                var query = this._deviceData.AsQueryable()
+                    .Where(dd => true)
+                    .ToList();
+                number = query.Count;
+            }
+
+            return number;
         }
     }
 }

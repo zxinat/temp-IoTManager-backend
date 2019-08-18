@@ -73,5 +73,16 @@ namespace IoTManager.Core
         {
             return this._deviceDataDao.GetDeviceStatusById(id);
         }
+
+        public long GetDeviceDataNumber(String searchType, String city = "all", String factory = "all",
+            String workshop = "all")
+        {
+            List<DeviceModel> devices = new List<DeviceModel>();
+            if (searchType == "search")
+            {
+                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);   
+            }
+            return this._deviceDataDao.GetDeviceDataNumber(searchType, devices);
+        }
     }
 }

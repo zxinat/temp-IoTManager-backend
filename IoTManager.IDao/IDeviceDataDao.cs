@@ -14,5 +14,7 @@ namespace IoTManager.IDao
         int GetDeviceDataAmount();
         object GetDeviceStatusById(int id);
         object GetDeviceStatistic(StatisticDurationModel statisticDurationModel);
+
+        long GetDeviceDataNumber(String searchType, List<DeviceModel> devices);
     }
 }

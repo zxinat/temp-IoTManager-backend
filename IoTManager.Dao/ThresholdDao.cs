@@ -218,5 +218,31 @@ namespace IoTManager.Dao
 
             return result;
         }
+        public long GetThresholdNumber(String searchType, List<DeviceModel> devices)
+        {
+            long number = 0;
+            List<ThresholdModel> allThreshold = new List<ThresholdModel>();
+            using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                allThreshold = connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
+//                allThreshold = connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
+            }
+            if (searchType == "search")
+            {
+                foreach (var device in devices )
+                {
+                    var query = allThreshold.AsQueryable()
+                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
+                        .ToList();
+                    number += query.Count;
+                }
+            }
+            else
+            {
+                number = allThreshold.Count;
+            }
+
+            return number;
+        }
     }
 }

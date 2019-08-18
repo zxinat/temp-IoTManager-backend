@@ -57,5 +57,16 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public long GetThresholdNumber(String searchType, String city, String factory, String workshop)
+        {
+            List<DeviceModel> devices = new List<DeviceModel>();
+            if (searchType == "search")
+            {
+                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
+            }
+
+            return this._thresholdDao.GetThresholdNumber(searchType, devices);
+        }
     }
 }

@@ -45,5 +45,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._thresholdBus.GetAllRules(searchType, city, factory, workshop, page, sortColumn, order));
         }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetThresholdNumber(String searchType, String city, String factory, String workshop)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.GetThresholdNumber(searchType, city, factory, workshop));
+        }
     }
 }

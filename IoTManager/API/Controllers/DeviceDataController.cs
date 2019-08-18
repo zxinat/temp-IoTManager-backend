@@ -3,6 +3,7 @@ using IoTManager.Core.Infrastructures;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace IoTManager.API.Controllers
 {
@@ -72,6 +73,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._deviceDataBus.GetDeviceStatusById(id));
+        }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetDeviceDataNumber(String searchType, String city = "all", String factory = "all", String workshop = "all")
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDeviceDataNumber(searchType, city, factory, workshop));
         }
     }
 }
