@@ -27,15 +27,134 @@ namespace IoTManager.Dao
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
         }
 
-        public List<DeviceDataModel> Get(String searchType, List<DeviceModel> devices, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
+        public List<DeviceDataModel> Get(String searchType, List<DeviceModel> devices, int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc")
         {
             //return _deviceData.Find<DeviceDataModel>(d => true).ToList();
-            var query = this._deviceData.AsQueryable()
-                .Where(dd => true)
-                .OrderByDescending(dd => dd.Timestamp)
-                .Take(15)
-                .ToList();
-            return query;
+            List<DeviceDataModel> deviceList = new List<DeviceDataModel>();
+
+            if (searchType == "search")
+            {
+                foreach (var device in devices)
+                {
+                    var query = this._deviceData.AsQueryable()
+                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
+                        .ToList();
+                    foreach (var q in query)
+                    {
+                        deviceList.Add(q);
+                    }
+                }
+            }
+            else
+            {
+                var query = this._deviceData.AsQueryable()
+                    .Where(dd => true)
+                    .ToList();
+                foreach (var q in query)
+                {
+                    deviceList.Add(q);
+                }
+            }
+            List<DeviceDataModel> result = new List<DeviceDataModel>();
+            if (order != "no" && sortColumn != "no")
+            {
+                if (sortColumn == "DeviceId")
+                {
+                    if (order == "asc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderBy(dd => dd.DeviceId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderByDescending(dd => dd.DeviceId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "IndexId")
+                {
+                    if (order == "asc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderBy(dd => dd.IndexId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderByDescending(dd => dd.IndexId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "IndexName")
+                {
+                    if (order == "asc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderBy(dd => dd.IndexName)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderByDescending(dd => dd.IndexName)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "Timestamp")
+                {
+                    if (order == "asc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderBy(dd => dd.Timestamp)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderByDescending(dd => dd.Timestamp)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "Id")
+                {
+                    if (order == "asc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderBy(dd => dd.Id)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = deviceList.AsQueryable()
+                            .OrderByDescending(dd => dd.Id)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+            }
+            return result;
         }
 
         public DeviceDataModel GetById(String Id)

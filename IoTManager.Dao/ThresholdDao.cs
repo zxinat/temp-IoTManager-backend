@@ -53,12 +53,170 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<ThresholdModel> Get()
+        public List<ThresholdModel> Get(String searchType, List<DeviceModel>devices, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
+            List<ThresholdModel> allThreshold = new List<ThresholdModel>();
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
-                return connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
+                allThreshold = connection.Query<ThresholdModel>("select threshold.id, fieldName indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join field on indexId=fieldId inner join severity on threshold.severity=severity.id").ToList();
             }
+            List<ThresholdModel> selected = new List<ThresholdModel>();
+            if (searchType == "search")
+            {
+                foreach (var device in devices )
+                {
+                    var query = allThreshold.AsQueryable()
+                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
+                        .ToList();
+                    foreach (var q in query)
+                    {
+                        selected.Add(q);
+                    }
+                }
+            }
+            else
+            {
+                selected = allThreshold;
+            }
+            List<ThresholdModel> result = new List<ThresholdModel>();
+            if (order != "no" && sortColumn != "no")
+            {
+                if (sortColumn == "DeviceId")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.DeviceId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.DeviceId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "IndexId")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.IndexId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.IndexId)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "CreateTime")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.CreateTime)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.CreateTime)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "UpdateTime")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.UpdateTime)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.UpdateTime)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "Id")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.Id)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.Id)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "RuleName")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.RuleName)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.RuleName)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+                else if (sortColumn == "Severity")
+                {
+                    if (order == "asc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderBy(dd => dd.Severity)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                    else if (order == "desc")
+                    {
+                        result = selected.AsQueryable()
+                            .OrderByDescending(dd => dd.Severity)
+                            .Skip(offset)
+                            .Take(limit)
+                            .ToList();
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

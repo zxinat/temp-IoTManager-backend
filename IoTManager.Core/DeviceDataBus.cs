@@ -15,15 +15,21 @@ namespace IoTManager.Core
         private readonly IDeviceDao _deviceDao;
         private readonly ILogger _logger;
 
-        public DeviceDataBus(IDeviceDataDao deviceDataDao, ILogger<DeviceDataBus> logger)
+        public DeviceDataBus(IDeviceDataDao deviceDataDao, ILogger<DeviceDataBus> logger, IDeviceDao deviceDao)
         {
             this._deviceDataDao = deviceDataDao;
             this._logger = logger;
+            this._deviceDao = deviceDao;
         }
 
-        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
+        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
         {
-            List<DeviceModel> devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
+            List<DeviceModel> devices = new List<DeviceModel>();
+            if (searchType == "search")
+            {
+                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
+            }
+
             int offset = (page - 1) * 12;
             int limit = 12;
             List<DeviceDataModel> deviceData = this._deviceDataDao.Get(searchType, devices, offset, limit, sortColumn, order);

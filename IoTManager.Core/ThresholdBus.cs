@@ -11,12 +11,14 @@ namespace IoTManager.Core
     public sealed class ThresholdBus: IThresholdBus
     {
         private readonly IThresholdDao _thresholdDao;
+        private readonly IDeviceDao _deviceDao;
         private readonly ILogger _logger;
 
-        public ThresholdBus(IThresholdDao thresholdDao, ILogger<ThresholdBus> logger)
+        public ThresholdBus(IThresholdDao thresholdDao, ILogger<ThresholdBus> logger, IDeviceDao deviceDao)
         {
             this._thresholdDao = thresholdDao;
             this._logger = logger;
+            this._deviceDao = deviceDao;
         }
         
         public List<ThresholdModel> GetByDeviceId(String deviceId)
@@ -37,9 +39,16 @@ namespace IoTManager.Core
             return this._thresholdDao.Create(t);
         }
 
-        public List<ThresholdSerializerDisplay> GetAllRules()
+        public List<ThresholdSerializerDisplay> GetAllRules(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
         {
-            List<ThresholdModel> thresholds = this._thresholdDao.Get();
+            List<DeviceModel> devices = new List<DeviceModel>();
+            if (searchType == "search")
+            {
+                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
+            }
+            int offset = (page - 1) * 12;
+            int limit = 12;
+            List<ThresholdModel> thresholds = this._thresholdDao.Get(searchType, devices, offset, limit, sortColumn, order);
             List<ThresholdSerializerDisplay> result = new List<ThresholdSerializerDisplay>();
             foreach (ThresholdModel t in thresholds)
             {

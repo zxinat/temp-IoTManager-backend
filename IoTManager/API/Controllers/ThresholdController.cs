@@ -38,12 +38,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._thresholdBus.GetAllRules());
+                this._thresholdBus.GetAllRules(searchType, city, factory, workshop, page, sortColumn, order));
         }
     }
 }

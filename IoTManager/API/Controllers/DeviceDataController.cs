@@ -21,12 +21,12 @@ namespace IoTManager.API.Controllers
 
         //GET api/deviceData
         [HttpGet]
-        public ResponseSerializer Get(String searchType, int page, String sortColumn, String order, String city, String factory, String workshop)
+        public ResponseSerializer Get(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetAllDeviceData(searchType, page, sortColumn, order, city, factory, workshop));
+                this._deviceDataBus.GetAllDeviceData(searchType, city, factory, workshop, page, sortColumn, order));
         }
 
         [HttpGet("id/{Id}")]
