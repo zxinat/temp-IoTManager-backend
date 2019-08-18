@@ -314,13 +314,13 @@ namespace IoTManager.Dao
                 imageUrl = device.ImageUrl,
                 alarmInfo = alarmQuery,
                 deviceData = deviceDataQuery,
-                startTime = startTime.ToString(Constant.getDateFormatString()),
-                runningTime = lastingTime.ToString("%d") + "天" + 
+                startTime = startTime == DateTime.MinValue ? "未收到数据" : startTime.ToString(Constant.getDateFormatString()),
+                runningTime = lastingTime == TimeSpan.Zero ? "未收到数据" : lastingTime.ToString("%d") + "天" + 
                               lastingTime.ToString("%h") + "小时" + 
                               lastingTime.ToString("%m") + "分钟" + 
                               lastingTime.ToString("%s") + "秒",
                 alarmTimes = alarmTimes.ToString(),
-                recentAlarmTime = recentAlarm.ToString(Constant.getDateFormatString()),
+                recentAlarmTime = recentAlarm == DateTime.MinValue ? "未收到数据" : recentAlarm.ToString(Constant.getDateFormatString()),
                 rules = ruleResult
             };
         }
