@@ -13,7 +13,9 @@ namespace IoTManager.Core.Infrastructures
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();
         object GetDeviceStatusById(int id);
-
         long GetDeviceDataNumber(String searchType, String deviceId = "all");
+        String DeleteDeviceData(String id);
+        int BatchDeleteDeviceData(List<String> ids);
+        String UpdateDeviceData(String id, DeviceDataSerializer deviceDataSerializer);
     }
 }

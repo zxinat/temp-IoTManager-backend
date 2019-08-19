@@ -72,5 +72,28 @@ namespace IoTManager.Core
         {
             return this._deviceDataDao.GetDeviceDataNumber(searchType, deviceId);
         }
+
+        public String DeleteDeviceData(String id)
+        {
+            return this._deviceDataDao.Delete(id);
+        }
+
+        public int BatchDeleteDeviceData(List<String> ids)
+        {
+            return this._deviceDataDao.BatchDelete(ids);
+        }
+
+        public String UpdateDeviceData(String id, DeviceDataSerializer deviceDataSerializer)
+        {
+            DeviceDataModel deviceDataModel = new DeviceDataModel();
+            deviceDataModel.Id = deviceDataSerializer.id;
+            deviceDataModel.DeviceId = deviceDataSerializer.deviceId;
+            deviceDataModel.IndexName = deviceDataSerializer.indexName;
+            deviceDataModel.IndexId = deviceDataSerializer.indexId;
+            deviceDataModel.IndexUnit = deviceDataSerializer.indexUnit;
+            deviceDataModel.IndexType = deviceDataSerializer.indexType;
+            deviceDataModel.IndexValue = deviceDataSerializer.indexValue;
+            return this._deviceDataDao.Update(id, deviceDataModel);
+        }
     }
 }

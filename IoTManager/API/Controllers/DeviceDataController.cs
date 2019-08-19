@@ -83,5 +83,32 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetDeviceDataNumber(searchType, deviceId));
         }
+
+        [HttpDelete("{id}")]
+        public ResponseSerializer DeleteDeviceData(String id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.DeleteDeviceData(id));
+        }
+
+        [HttpPost("batch/deviceData")]
+        public ResponseSerializer BatchDelete([FromBody] BatchString batchString)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.BatchDeleteDeviceData(batchString.str));
+        }
+
+        [HttpPut("{id}")]
+        public ResponseSerializer Put(String id, [FromBody] DeviceDataSerializer deviceDataSerializer)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.UpdateDeviceData(id, deviceDataSerializer));
+        }
     }
 }

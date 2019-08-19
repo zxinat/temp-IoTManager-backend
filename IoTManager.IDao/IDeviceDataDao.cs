@@ -14,7 +14,9 @@ namespace IoTManager.IDao
         int GetDeviceDataAmount();
         object GetDeviceStatusById(int id);
         object GetDeviceStatistic(StatisticDurationModel statisticDurationModel);
-
         long GetDeviceDataNumber(String searchType, String deviceId = "all");
+        String Delete(String id);
+        int BatchDelete(List<String> ids);
+        String Update(String id, DeviceDataModel deviceDataModel);
     }
 }

@@ -259,5 +259,32 @@ namespace IoTManager.Dao
                 return query.Count;
             }
         }
+
+        public String Delete(String id)
+        {
+            var filter = Builders<DeviceDataModel>.Filter.Eq("_id", new ObjectId(id));
+            var result = this._deviceData.DeleteOne(filter);
+            return result.DeletedCount == 1 ? "success" : "error";
+        }
+
+        public int BatchDelete(List<String> ids)
+        {
+            int num = 0;
+            foreach (String id in ids)
+            {
+                var filter = Builders<DeviceDataModel>.Filter.Eq("_id", new ObjectId(id));
+                var result = this._deviceData.DeleteOne(filter);
+                num = num + 1;
+            }
+            return num;
+        }
+
+        public String Update(String id, DeviceDataModel deviceDataModel)
+        {
+            var filter = Builders<DeviceDataModel>.Filter.Eq("_id", new ObjectId(id));
+            var update = Builders<DeviceDataModel>.Update.Set("IndexValue", deviceDataModel.IndexValue.ToString());
+            var result = _deviceData.UpdateOne(filter, update);
+            return result.ModifiedCount == 1 ? "success" : "error";
+        }
     }
 }
