@@ -22,12 +22,12 @@ namespace IoTManager.API.Controllers
 
         //GET api/deviceData
         [HttpGet]
-        public ResponseSerializer Get(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
+        public ResponseSerializer Get(String searchType, String deviceId = "all", int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetAllDeviceData(searchType, city, factory, workshop, page, sortColumn, order));
+                this._deviceDataBus.GetAllDeviceData(searchType, deviceId, page, sortColumn, order));
         }
 
         [HttpGet("id/{Id}")]
@@ -76,12 +76,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet("number")]
-        public ResponseSerializer GetDeviceDataNumber(String searchType, String city = "all", String factory = "all", String workshop = "all")
+        public ResponseSerializer GetDeviceDataNumber(String searchType, String deviceId = "all")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetDeviceDataNumber(searchType, city, factory, workshop));
+                this._deviceDataBus.GetDeviceDataNumber(searchType, deviceId));
         }
     }
 }

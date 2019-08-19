@@ -22,17 +22,11 @@ namespace IoTManager.Core
             this._deviceDao = deviceDao;
         }
 
-        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc")
+        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "id", String order = "asc")
         {
-            List<DeviceModel> devices = new List<DeviceModel>();
-            if (searchType == "search")
-            {
-                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);
-            }
-
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<DeviceDataModel> deviceData = this._deviceDataDao.Get(searchType, devices, offset, limit, sortColumn, order);
+            List<DeviceDataModel> deviceData = this._deviceDataDao.Get(searchType, deviceId, offset, limit, sortColumn, order);
             List<DeviceDataSerializer> result = new List<DeviceDataSerializer>();
             foreach (DeviceDataModel dd in deviceData)
             {
@@ -74,15 +68,9 @@ namespace IoTManager.Core
             return this._deviceDataDao.GetDeviceStatusById(id);
         }
 
-        public long GetDeviceDataNumber(String searchType, String city = "all", String factory = "all",
-            String workshop = "all")
+        public long GetDeviceDataNumber(String searchType, String deviceId = "all")
         {
-            List<DeviceModel> devices = new List<DeviceModel>();
-            if (searchType == "search")
-            {
-                devices = this._deviceDao.GetByWorkshop(city, factory, workshop);   
-            }
-            return this._deviceDataDao.GetDeviceDataNumber(searchType, devices);
+            return this._deviceDataDao.GetDeviceDataNumber(searchType, deviceId);
         }
     }
 }

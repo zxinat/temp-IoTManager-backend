@@ -7,13 +7,13 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IDeviceDataBus
     {
-        List<DeviceDataSerializer> GetAllDeviceData(String searchType, String city, String factory, String workshop, int page = 1, String sortColumn = "Id", String order = "asc");
+        List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "id", String order = "asc");
         DeviceDataSerializer GetDeviceDataById(String Id);
         List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId);
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();
         object GetDeviceStatusById(int id);
 
-        long GetDeviceDataNumber(String searchType, String city = "all", String factory = "all", String workshop = "all");
+        long GetDeviceDataNumber(String searchType, String deviceId = "all");
     }
 }

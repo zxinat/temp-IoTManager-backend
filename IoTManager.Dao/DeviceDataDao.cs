@@ -10,6 +10,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MySql.Data.MySqlClient;
+using System.Linq.Dynamic;
 
 namespace IoTManager.Dao
 {
@@ -28,134 +29,33 @@ namespace IoTManager.Dao
             this._thresholdDao = thresholdDao;
         }
 
-        public List<DeviceDataModel> Get(String searchType, List<DeviceModel> devices, int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc")
+        public List<DeviceDataModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             //return _deviceData.Find<DeviceDataModel>(d => true).ToList();
             List<DeviceDataModel> deviceList = new List<DeviceDataModel>();
-
-            if (searchType == "search")
+            if (searchType == "all")
             {
-                foreach (var device in devices)
-                {
-                    var query = this._deviceData.AsQueryable()
-                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
-                        .ToList();
-                    foreach (var q in query)
-                    {
-                        deviceList.Add(q);
-                    }
-                }
+                return this._deviceData.AsQueryable()
+                    .Where(dd => true)
+                    .ToList();
             }
             else
             {
-                var query = this._deviceData.AsQueryable()
-                    .Where(dd => true)
+                var query = deviceId != "all"
+                    ? this._deviceData.AsQueryable()
+                        .Where(dd => dd.DeviceId == deviceId)
+                    : this._deviceData.AsQueryable()
+                        .Where(dd => true);
+                var beforeOrder = query.OrderByDescending(dd => dd.Timestamp)
+                    .Take(60)
                     .ToList();
-                foreach (var q in query)
-                {
-                    deviceList.Add(q);
-                }
+                var ordered = order == "asc"
+                    ? beforeOrder.OrderBy(dd => dd.GetType().GetProperty(sortColumn).GetValue(dd))
+                    : beforeOrder.OrderByDescending(dd => dd.GetType().GetProperty(sortColumn).GetValue(dd));
+                return ordered.Skip(offset)
+                    .Take(limit)
+                    .ToList();
             }
-            List<DeviceDataModel> result = new List<DeviceDataModel>();
-            if (order != "no" && sortColumn != "no")
-            {
-                if (sortColumn == "DeviceId")
-                {
-                    if (order == "asc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderBy(dd => dd.DeviceId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderByDescending(dd => dd.DeviceId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "IndexId")
-                {
-                    if (order == "asc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderBy(dd => dd.IndexId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderByDescending(dd => dd.IndexId)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "IndexName")
-                {
-                    if (order == "asc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderBy(dd => dd.IndexName)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderByDescending(dd => dd.IndexName)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "Timestamp")
-                {
-                    if (order == "asc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderBy(dd => dd.Timestamp)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderByDescending(dd => dd.Timestamp)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-                else if (sortColumn == "Id")
-                {
-                    if (order == "asc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderBy(dd => dd.Id)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                    else if (order == "desc")
-                    {
-                        result = deviceList.AsQueryable()
-                            .OrderByDescending(dd => dd.Id)
-                            .Skip(offset)
-                            .Take(limit)
-                            .ToList();
-                    }
-                }
-            }
-            return result;
         }
 
         public DeviceDataModel GetById(String Id)
@@ -330,17 +230,25 @@ namespace IoTManager.Dao
             return null;
         }
 
-        public long GetDeviceDataNumber(String searchType, List<DeviceModel> devices)
+        public long GetDeviceDataNumber(String searchType, String deviceId = "all")
         {
-            long number = 0;
             if (searchType == "search")
             {
-                foreach (var device in devices)
+                if (deviceId != "all")
                 {
                     var query = this._deviceData.AsQueryable()
-                        .Where(dd => dd.DeviceId == device.HardwareDeviceId)
+                        .Where(dd => dd.DeviceId == deviceId)
+                        .Take(60)
                         .ToList();
-                    number += query.Count;
+                    return query.Count;
+                }
+                else
+                {
+                    var query = this._deviceData.AsQueryable()
+                        .Where(dd => true)
+                        .Take(60)
+                        .ToList();
+                    return query.Count;
                 }
             }
             else
@@ -348,10 +256,8 @@ namespace IoTManager.Dao
                 var query = this._deviceData.AsQueryable()
                     .Where(dd => true)
                     .ToList();
-                number = query.Count;
+                return query.Count;
             }
-
-            return number;
         }
     }
 }
