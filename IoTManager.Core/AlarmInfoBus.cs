@@ -21,9 +21,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
 
-        public List<AlarmInfoSerializer> GetAllAlarmInfo()
+        public List<AlarmInfoSerializer> GetAllAlarmInfo(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
         {
-            List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get();
+            int offset = (page - 1) * 12;
+            int limit = 12;
+            List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get(searchType, deviceId, offset, limit, sortColumn, order);
             List<AlarmInfoSerializer> result = new List<AlarmInfoSerializer>();
             foreach (AlarmInfoModel alarmInfo in alarmInfos)
             {
@@ -108,6 +110,21 @@ namespace IoTManager.Core
         public int GetVerySeriousAlarmInfoAmount()
         {
             return this._alarmInfoDao.GetVerySeriousAlarmInfoAmount();
+        }
+
+        public String UpdateProcessed(String id)
+        {
+            return this._alarmInfoDao.UpdateProcessed(id);
+        }
+
+        public long GetAlarmInfoNumber(String searchType, String deviceId = "all")
+        {
+            return this._alarmInfoDao.GetAlarmInfoNumber(searchType, deviceId);
+        }
+
+        public String DeleteAlarmInfo(String id)
+        {
+            return this._alarmInfoDao.Delete(id);
         }
     }
 }

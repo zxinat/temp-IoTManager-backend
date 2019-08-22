@@ -29,10 +29,8 @@ namespace IoTManager.Dao
             this._thresholdDao = thresholdDao;
         }
 
-        public List<DeviceDataModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
+        public List<DeviceDataModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc")
         {
-            //return _deviceData.Find<DeviceDataModel>(d => true).ToList();
-            List<DeviceDataModel> deviceList = new List<DeviceDataModel>();
             if (searchType == "all")
             {
                 return this._deviceData.AsQueryable()

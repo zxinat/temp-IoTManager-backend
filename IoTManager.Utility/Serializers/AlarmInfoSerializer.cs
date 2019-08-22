@@ -16,6 +16,7 @@ namespace IoTManager.Utility.Serializers
             this.thresholdValue = null;
             this.timestamp = null;
             this.severity = null;
+            this.processed = null;
         }
 
         public AlarmInfoSerializer(AlarmInfoModel alarmInfoModel)
@@ -30,6 +31,7 @@ namespace IoTManager.Utility.Serializers
             this.timestamp = alarmInfoModel.Timestamp
                 .ToString(Constant.getDateFormatString());
             this.severity = alarmInfoModel.Severity;
+            this.processed = alarmInfoModel.Processed;
         }
         
         public String id { get; set; }
@@ -41,5 +43,6 @@ namespace IoTManager.Utility.Serializers
         public String thresholdValue { get; set; }
         public String timestamp { get; set; }
         public String severity { get; set; }
+        public String processed { get; set; }
     }
 }

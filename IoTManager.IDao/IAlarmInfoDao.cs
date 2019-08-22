@@ -6,7 +6,7 @@ namespace IoTManager.IDao
 {
     public interface IAlarmInfoDao
     {
-        List<AlarmInfoModel> Get();
+        List<AlarmInfoModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc");
         AlarmInfoModel GetById(String Id);
         List<AlarmInfoModel> GetByDeviceId(String DeviceId);
         List<AlarmInfoModel> GetByIndexId(String IndexId);
@@ -15,5 +15,8 @@ namespace IoTManager.IDao
         int GetNoticeAlarmInfoAmount();
         int GetSeriousAlarmInfoAmount();
         int GetVerySeriousAlarmInfoAmount();
+        String UpdateProcessed(String id);
+        long GetAlarmInfoNumber(String searchType, String deviceId = "all");
+        String Delete(String id);
     }
 }

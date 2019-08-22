@@ -98,6 +98,7 @@ namespace IoTManager.Core.Jobs
                             alarmInfo.ThresholdValue = operatorName[op] + threshold.ToString();
                             alarmInfo.Timestamp = DateTime.Now;
                             alarmInfo.Severity = svty;
+                            alarmInfo.Processed = "No";
 
                             _alarmInfoDao.Create(alarmInfo);
                         }

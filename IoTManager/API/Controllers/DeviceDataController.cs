@@ -22,7 +22,7 @@ namespace IoTManager.API.Controllers
 
         //GET api/deviceData
         [HttpGet]
-        public ResponseSerializer Get(String searchType, String deviceId = "all", int page = 1, String sortColumn = "id", String order = "asc")
+        public ResponseSerializer Get(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,

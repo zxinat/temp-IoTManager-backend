@@ -7,7 +7,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IDeviceDataBus
     {
-        List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "id", String order = "asc");
+        List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc");
         DeviceDataSerializer GetDeviceDataById(String Id);
         List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId);
         Object GetLineChartData(String deviceId, String indexId);

@@ -22,7 +22,7 @@ namespace IoTManager.Core
             this._deviceDao = deviceDao;
         }
 
-        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "id", String order = "asc")
+        public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
         {
             int offset = (page - 1) * 12;
             int limit = 12;

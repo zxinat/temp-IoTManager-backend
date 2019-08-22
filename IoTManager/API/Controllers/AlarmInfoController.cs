@@ -21,12 +21,12 @@ namespace IoTManager.API.Controllers
         
         //GET api/alarmInfo
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(String searchType, String deviceId, int page = 1, String sortColumn = "Id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                _alarmInfoBus.GetAllAlarmInfo());
+                _alarmInfoBus.GetAllAlarmInfo(searchType, deviceId, page, sortColumn, order));
         }
 
         [HttpGet("id/{Id}")]
@@ -99,6 +99,33 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._alarmInfoBus.GetVerySeriousAlarmInfoAmount());
+        }
+
+        [HttpPost("processed/{id}")]
+        public ResponseSerializer UpdateProcessed(String id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.UpdateProcessed(id));
+        }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetAlarmInfoNumber(String searchType, String deviceId = "all")
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.GetAlarmInfoNumber(searchType, deviceId));
+        }
+
+        [HttpDelete("{id}")]
+        public ResponseSerializer Delete(String id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.DeleteAlarmInfo(id));
         }
     }
 }
