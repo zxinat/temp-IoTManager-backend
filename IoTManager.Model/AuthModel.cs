@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System;
 
 namespace IoTManager.Model
 {
-    public sealed class RoleModel
+    public class AuthModel
     {
         public int Id { get; set; }
-        public String RoleName { get; set; }
+        public String AuthId { get; set; }
         public String Description { get; set; }
         public DateTime Timestamp { get; set; }
         
