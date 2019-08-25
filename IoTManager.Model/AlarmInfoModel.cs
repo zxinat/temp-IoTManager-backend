@@ -23,10 +23,10 @@ namespace IoTManager.Model
         public String IndexName { get; set; }
         
         [BsonElement("IndexValue")]
-        public String IndexValue { get; set; }
+        public Double IndexValue { get; set; }
         
         [BsonElement("ThresholdValue")]
-        public String ThresholdValue { get; set; }
+        public Double ThresholdValue { get; set; }
         
         [BsonElement("Timestamp")]
         public DateTime Timestamp { get; set; }

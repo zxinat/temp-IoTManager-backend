@@ -102,7 +102,7 @@ namespace IoTManager.Dao
 
             foreach (var dd in query)
             {
-                chartValue.Add(double.Parse(dd.IndexValue));
+                chartValue.Add(dd.IndexValue);
                 xAxises.Add(dd.Timestamp.ToString(Constant.getLineChartDateFormatString()));
             }
 

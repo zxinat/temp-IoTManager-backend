@@ -61,27 +61,26 @@ namespace IoTManager.Core.Jobs
                     {
                         String op = th.Operator;
                         double threshold = th.ThresholdValue;
-                        String svty = this._severityDao.GetById(int.Parse(th.Severity)).SeverityName;
 
                         Boolean abnormal = false;
 
                         if (op == "equal")
                         {
-                            if (double.Parse(data.IndexValue) - threshold < 0.0001)
+                            if (data.IndexValue - threshold < 0.0001)
                             {
                                 abnormal = true;
                             }
                         }
                         else if (op == "less")
                         {
-                            if (double.Parse(data.IndexValue) <= threshold)
+                            if (data.IndexValue <= threshold)
                             {
                                 abnormal = true;
                             }
                         }
                         else if (op == "greater")
                         {
-                            if (double.Parse(data.IndexValue) >= threshold)
+                            if (data.IndexValue >= threshold)
                             {
                                 abnormal = true;
                             }
@@ -95,9 +94,9 @@ namespace IoTManager.Core.Jobs
                             alarmInfo.IndexId = data.IndexId;
                             alarmInfo.IndexName = data.IndexName;
                             alarmInfo.IndexValue = data.IndexValue;
-                            alarmInfo.ThresholdValue = operatorName[op] + threshold.ToString();
+                            alarmInfo.ThresholdValue = threshold;
                             alarmInfo.Timestamp = DateTime.Now;
-                            alarmInfo.Severity = svty;
+                            alarmInfo.Severity = th.Severity;
                             alarmInfo.Processed = "No";
 
                             _alarmInfoDao.Create(alarmInfo);

@@ -76,7 +76,7 @@ namespace IoTManager.Core
                     alarmInfo.IndexId = dd.IndexId;
                     alarmInfo.IndexName = dd.IndexName;
                     alarmInfo.IndexValue = dd.IndexValue;
-                    alarmInfo.ThresholdValue = "100";
+                    alarmInfo.ThresholdValue = 100;
                     alarmInfo.Timestamp = DateTime.Now;
 
                     _alarmInfoDao.Create(alarmInfo);

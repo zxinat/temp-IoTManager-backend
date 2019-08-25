@@ -13,7 +13,7 @@ namespace IoTManager.Utility.Serializers
             this.indexId = null;
             this.indexUnit = null;
             this.indexType = null;
-            this.indexValue = null;
+            this.indexValue = 0;
             this.timestamp = null;
         }
 
@@ -36,7 +36,7 @@ namespace IoTManager.Utility.Serializers
         public String indexId { get; set; }
         public String indexUnit { get; set; }
         public String indexType { get; set; }
-        public String indexValue { get; set; }
+        public Double indexValue { get; set; }
         public String timestamp { get; set; }
     }
 }

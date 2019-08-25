@@ -26,7 +26,7 @@ namespace IoTManager.Model
         public String IndexType { get; set; }
         
         [BsonElement("IndexValue")]
-        public String IndexValue { get; set; }
+        public Double IndexValue { get; set; }
         
         [BsonElement("Timestamp")]
         public DateTime Timestamp { get; set; }

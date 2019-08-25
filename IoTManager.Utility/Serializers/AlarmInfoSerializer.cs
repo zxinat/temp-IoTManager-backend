@@ -12,8 +12,8 @@ namespace IoTManager.Utility.Serializers
             this.deviceId = null;
             this.indexId = null;
             this.indexName = null;
-            this.indexValue = null;
-            this.thresholdValue = null;
+            this.indexValue = 0.0;
+            this.thresholdValue = 0.0;
             this.timestamp = null;
             this.severity = null;
             this.processed = null;
@@ -39,8 +39,8 @@ namespace IoTManager.Utility.Serializers
         public String deviceId { get; set; }
         public String indexId { get; set; }
         public String indexName { get; set; }
-        public String indexValue { get; set; }
-        public String thresholdValue { get; set; }
+        public Double indexValue { get; set; }
+        public Double thresholdValue { get; set; }
         public String timestamp { get; set; }
         public String severity { get; set; }
         public String processed { get; set; }
