@@ -284,5 +284,52 @@ namespace IoTManager.Dao
             var result = _deviceData.UpdateOne(filter, update);
             return result.ModifiedCount == 1 ? "success" : "error";
         }
+
+        public object GetDayAggregateData(String deviceId, String indexId)
+        {
+            var avg = this._deviceData.Aggregate()
+                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId)
+                .Project(dd => new
+                {
+                    year = dd.Timestamp.Year,
+                    month = dd.Timestamp.Month,
+                    day = dd.Timestamp.Day,
+                    DeviceId = dd.DeviceId,
+                    IndexId = dd.IndexId,
+                    IndexValue = dd.IndexValue
+                })
+                .Group(x => new {year = x.year, month = x.month, day = x.day},
+                    g => new {time = g.Key, avg = g.Average(x => x.IndexValue)})
+                .ToList();
+            var max = this._deviceData.Aggregate()
+                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId)
+                .Project(dd => new
+                {
+                    year = dd.Timestamp.Year,
+                    month = dd.Timestamp.Month,
+                    day = dd.Timestamp.Day,
+                    DeviceId = dd.DeviceId,
+                    IndexId = dd.IndexId,
+                    IndexValue = dd.IndexValue
+                })
+                .Group(x => new {year = x.year, month = x.month, day = x.day},
+                    g => new {time = g.Key, max = g.Max(x => x.IndexValue)})
+                .ToList();
+            var min = this._deviceData.Aggregate()
+                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId)
+                .Project(dd => new
+                {
+                    year = dd.Timestamp.Year,
+                    month = dd.Timestamp.Month,
+                    day = dd.Timestamp.Day,
+                    DeviceId = dd.DeviceId,
+                    IndexId = dd.IndexId,
+                    IndexValue = dd.IndexValue
+                })
+                .Group(x => new {year = x.year, month = x.month, day = x.day},
+                    g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
+                .ToList();
+            return new {max = max, avg = avg, min = min};
+        }
     }
 }

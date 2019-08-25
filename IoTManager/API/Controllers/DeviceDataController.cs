@@ -110,5 +110,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.UpdateDeviceData(id, deviceDataSerializer));
         }
+
+        [HttpGet("aggregate/day/{deviceId}")]
+        public ResponseSerializer GetDayAggregateData(String deviceId, String indexId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDayAggregateData(deviceId, indexId));
+        }
     }
 }
