@@ -112,5 +112,14 @@ namespace IoTManager.API.Controllers
                 this._cityBus.GetCityCascaderOptions()
             );
         }
+
+        [HttpGet("cityName/{cityName}")]
+        public ResponseSerializer GetByCityName(String cityName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetByCityName(cityName));
+        }
     }
 }

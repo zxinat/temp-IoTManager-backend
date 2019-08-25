@@ -78,5 +78,14 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+
+        public List<CityModel> GetByCityName(String cityName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<CityModel>("select * from city where cityName like '%" + cityName + "%'")
+                    .ToList();
+            }
+        }
     }
 }

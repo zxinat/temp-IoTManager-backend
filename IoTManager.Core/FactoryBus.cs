@@ -76,5 +76,16 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public List<FactorySerializer> GetByFactoryName(String factoryName)
+        {
+            List<FactoryModel> factories = this._factoryDao.GetByFactoryName(factoryName);
+            List<FactorySerializer> result = new List<FactorySerializer>();
+            foreach (FactoryModel factory in factories)
+            {
+                result.Add(new FactorySerializer(factory));
+            }
+            return result;
+        }
     }
 }

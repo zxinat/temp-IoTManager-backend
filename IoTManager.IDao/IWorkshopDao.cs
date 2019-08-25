@@ -12,5 +12,6 @@ namespace IoTManager.IDao
         String Update(int id, WorkshopModel workshopModel);
         String Delete(int id);
         List<WorkshopModel> GetAffiliateWorkshop(String fName);
+        List<WorkshopModel> GetByWorkshopName(String workshopName);
     }
 }

@@ -76,5 +76,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._factoryBus.GetAffiliateFactory(cName));
         }
+
+        [HttpGet("factoryName/{factoryName}")]
+        public ResponseSerializer GetByFactoryName(String factoryName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._factoryBus.GetByFactoryName(factoryName));
+        }
     }
 }

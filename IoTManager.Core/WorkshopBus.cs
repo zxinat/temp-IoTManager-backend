@@ -76,5 +76,16 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public List<WorkshopSerializer> GetByWorkshopName(String workshopName)
+        {
+            List<WorkshopModel> workshops = this._workshopDao.GetByWorkshopName(workshopName);
+            List<WorkshopSerializer> result = new List<WorkshopSerializer>();
+            foreach (WorkshopModel workshop in workshops)
+            {
+                result.Add(new WorkshopSerializer(workshop));
+            }
+            return result;
+        }
     }
 }

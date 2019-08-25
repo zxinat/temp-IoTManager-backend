@@ -127,5 +127,26 @@ namespace IoTManager.Dao
                 return workshops;
             }
         }
+
+        public List<WorkshopModel> GetByWorkshopName(String workshopName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                List<WorkshopModel> workshopModels = connection
+                    .Query<WorkshopModel>("SELECT workshop.id, " +
+                                          "workshopName, " +
+                                          "workshopPhoneNumber, " +
+                                          "workshopAddress, " +
+                                          "workshop.remark, " +
+                                          "workshop.createTime, " +
+                                          "workshop.updateTime, " +
+                                          "factory.factoryName AS factory " +
+                                          "FROM workshop JOIN factory " +
+                                          "ON workshop.factory=factory.id " + 
+                                          "WHERE workshop.workshopName LIKE '%" + workshopName + "%'")
+                    .ToList();
+                return workshopModels;
+            }
+        }
     }
 }

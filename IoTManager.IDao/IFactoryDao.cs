@@ -13,5 +13,6 @@ namespace IoTManager.IDao
         String Update(int id, FactoryModel factoryModel);
         String Delete(int id);
         List<FactoryModel> GetAffiliateFactory(String city);
+        List<FactoryModel> GetByFactoryName(String factoryName);
     }
 }
