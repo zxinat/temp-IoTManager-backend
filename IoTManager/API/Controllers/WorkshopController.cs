@@ -84,5 +84,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._workshopBus.GetAffiliateWorkshop(fName));
         }
+
+        [HttpGet("workshopName/{workshopName}")]
+        public ResponseSerializer GetByWorkshopName(String workshopName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._workshopBus.GetByWorkshopName(workshopName));
+        }
     }
 }

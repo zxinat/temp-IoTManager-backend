@@ -12,5 +12,6 @@ namespace IoTManager.IDao
         CityModel GetById(int id);
         String Update(int id, CityModel cityModel);
         String Delete(int id);
+        List<CityModel> GetByCityName(String cityName);
     }
 }

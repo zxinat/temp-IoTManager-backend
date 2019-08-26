@@ -137,5 +137,17 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public List<CitySerializer> GetByCityName(String cityName)
+        {
+            List<CityModel> cities = this._cityDao.GetByCityName(cityName);
+            List<CitySerializer> result = new List<CitySerializer>();
+            foreach (CityModel c in cities)
+            {
+                result.Add(new CitySerializer(c));
+            }
+
+            return result;
+        }
     }
 }

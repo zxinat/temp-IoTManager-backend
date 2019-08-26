@@ -10,7 +10,7 @@ using IoTManager.Utility.Serializers;
 
 namespace IoTManager.Dao
 {
-    public sealed class FactoryDao: IFactoryDao
+    public sealed class FactoryDao
     {
         public List<FactoryModel> Get()
         {

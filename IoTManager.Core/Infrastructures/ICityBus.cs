@@ -16,5 +16,6 @@ namespace IoTManager.Core.Infrastructures
         List<object> GetCityCascaderOptions();
         List<object> GetCityOptions();
         List<object> GetMapInfo();
+        List<CitySerializer> GetByCityName(String cityName);
     }
 }

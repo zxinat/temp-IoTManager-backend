@@ -95,5 +95,10 @@ namespace IoTManager.Core
             deviceDataModel.IndexValue = deviceDataSerializer.indexValue;
             return this._deviceDataDao.Update(id, deviceDataModel);
         }
+
+        public object GetDayAggregateData(String deviceId, String indexId)
+        {
+            return this._deviceDataDao.GetDayAggregateData(deviceId, indexId);
+        }
     }
 }

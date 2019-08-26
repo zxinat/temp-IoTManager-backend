@@ -124,5 +124,26 @@ namespace IoTManager.Dao
                 return factories;
             }
         }
+        
+        public List<FactoryModel> GetByFactoryName(String factoryName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                List<FactoryModel> factoryModels = connection
+                    .Query<FactoryModel>("SELECT factory.id, " +
+                                         "factoryName, " +
+                                         "factoryPhoneNumber, " +
+                                         "factoryAddress, " +
+                                         "factory.remark, " +
+                                         "factory.createTime,"+
+                                         " factory.updateTime, " +
+                                         "city.cityName AS city " +
+                                         "FROM factory " +
+                                         "JOIN city ON factory.city=city.id " +
+                                         "WHERE factory.factoryName LIKE '%" + factoryName + "%'")
+                    .ToList();
+                return factoryModels;
+            }
+        }
     }
 }

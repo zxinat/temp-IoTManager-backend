@@ -13,7 +13,7 @@ using Constant = IoTManager.Utility.Constant;
 
 namespace IoTManager.Dao
 {
-    public sealed class CityDao:ICityDao
+    public sealed class CityDao
     {
         public String Create(CityModel cityModel)
         {

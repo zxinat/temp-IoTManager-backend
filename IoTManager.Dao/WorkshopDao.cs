@@ -9,7 +9,7 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class WorkshopDao: IWorkshopDao
+    public sealed class WorkshopDao
     {
         public List<WorkshopModel> Get()
         {
