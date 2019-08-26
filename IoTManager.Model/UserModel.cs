@@ -15,5 +15,7 @@ namespace IoTManager.Model
         public String Remark { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
+        public Boolean Identify { get; set; }
+        public int Role { get; set; }
     }
 }

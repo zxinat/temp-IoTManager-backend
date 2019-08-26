@@ -178,6 +178,7 @@
         <e p="GatewayDao.cs" t="Include" />
         <e p="IoTManager.Dao.csproj" t="IncludeRecursive" />
         <e p="MySQL" t="Include">
+          <e p="MySQLAuthDao.cs" t="Include" />
           <e p="MySQLCityDao.cs" t="Include" />
           <e p="MySQLDepartmentDao.cs" t="Include" />
           <e p="MySQLDeviceDao.cs" t="Include" />
@@ -246,6 +247,7 @@
       <e p="IoTManager.IDao" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="IAlarmInfoDao.cs" t="Include" />
+        <e p="IAuthDao.cs" t="Include" />
         <e p="ICityDao.cs" t="Include" />
         <e p="IDepartmentDao.cs" t="Include" />
         <e p="IDeviceDao.cs" t="Include" />

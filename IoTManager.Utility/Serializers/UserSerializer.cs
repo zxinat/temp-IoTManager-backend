@@ -16,6 +16,8 @@ namespace IoTManager.Utility.Serializers
             this.remark = null;
             this.createTime = null;
             this.updateTime = null;
+            this.identify = false;
+            this.role = 0;
         }
 
         public UserSerializer(UserModel userModel)
@@ -31,6 +33,8 @@ namespace IoTManager.Utility.Serializers
                 .ToString(Constant.getDateFormatString());
             this.updateTime = userModel.UpdateTime
                 .ToString(Constant.getDateFormatString());
+            this.identify = userModel.Identify;
+            this.role = userModel.Role;
 
         }
         
@@ -43,5 +47,7 @@ namespace IoTManager.Utility.Serializers
         public String remark { get; set; }
         public String createTime { get; set; }
         public String updateTime { get; set; }
+        public Boolean identify { get; set; }
+        public int role { get; set; }
     }
 }
