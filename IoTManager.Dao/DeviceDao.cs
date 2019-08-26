@@ -17,7 +17,7 @@ namespace IoTManager.Dao
             using (var connection = new SqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<DeviceModel>(
-                                                     "select top "+ limit.ToString() +" device.id, " +
+                                                     "select top " + limit.ToString() +" device.id, " +
                                                      "hardwareDeviceID, " +
                                                      "deviceName, " +
                                                      "city.cityName as city, " +

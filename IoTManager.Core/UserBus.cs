@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
+using Org.BouncyCastle.Crypto.Modes;
 
 namespace IoTManager.Core
 {
@@ -13,10 +14,12 @@ namespace IoTManager.Core
     {
         private readonly IUserDao _userDao;
         private readonly ILogger _logger;
-        public UserBus(IUserDao userDao,ILogger<UserBus> logger)
+        private readonly IAuthDao _authDao;
+        public UserBus(IUserDao userDao,ILogger<UserBus> logger, IAuthDao authDao)
         {
             this._userDao = userDao;
             this._logger = logger;
+            this._authDao = authDao;
         }
 
         public List<UserSerializer> GetAllUsers()
@@ -89,6 +92,11 @@ namespace IoTManager.Core
         public String UpdatePassword(String userName, String password)
         {
             return this._userDao.UpdatePassword(userName, password);
+        }
+
+        public List<String> GetAuthByUserId(int userId)
+        {
+            return this._authDao.GetAuthByUserId(userId);
         }
     }
 }

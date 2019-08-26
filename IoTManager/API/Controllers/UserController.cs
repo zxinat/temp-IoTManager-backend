@@ -29,7 +29,7 @@ namespace IoTManager.API.Controllers
             this._userBus = userBus;
             this._logger = logger;
         }
-        
+
         // GET api/values
         [HttpGet]
         public ResponseSerializer Get()
@@ -38,7 +38,7 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.GetAllUsers()
-                );
+            );
         }
 
         // GET api/values/{id}
@@ -49,7 +49,7 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.GetUserById(id)
-                );
+            );
         }
 
         //GET api/user/username/{userName}
@@ -60,7 +60,7 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.GetUserByUserName(userName)
-                );
+            );
         }
 
         // POST api/values
@@ -71,7 +71,7 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.CreateNewUser(userSerializer)
-                );
+            );
         }
 
         // PUT api/values/{id}
@@ -82,7 +82,7 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.UpdateUser(id, userSerializer)
-                );
+            );
         }
 
         // DELETE api/values/5
@@ -93,7 +93,7 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.DeleteUser(id)
-                );
+            );
         }
 
         [HttpGet("name/{userName}")]
@@ -112,6 +112,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.UpdatePassword(userName, user.Password));
+        }
+
+        [HttpGet("getAuth/{userId}")]
+        public ResponseSerializer GetAuthByUserId(int userId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._userBus.GetAuthByUserId(userId));
         }
     }
 }

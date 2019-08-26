@@ -16,5 +16,6 @@ namespace IoTManager.Core.Infrastructures
         String DeleteUser(int id);
         List<UserSerializer> GetUsersByUserName(String userName);
         String UpdatePassword(String userName, String password);
+        List<String> GetAuthByUserId(int userId);
     }
 }
