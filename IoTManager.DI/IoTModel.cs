@@ -60,6 +60,7 @@ namespace IoTManager.DI
             builder.RegisterType<MySQLFieldDao>().As<IFieldDao>();
             builder.RegisterType<MySQLSeverityDao>().As<ISeverityDao>();
             builder.RegisterType<MySQLAuthDao>().As<IAuthDao>();
+            builder.RegisterType<MySQLRoleDao>().As<IRoleDao>();
             //IoTManager.AzureIoTHub
             builder.RegisterType<AzureIoTHub.AzureIoTHub>().As<IoTHub>();
             //base.Load(builder);

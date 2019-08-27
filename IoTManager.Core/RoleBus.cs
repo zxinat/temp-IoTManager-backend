@@ -16,5 +16,15 @@ namespace IoTManager.Core
             this._roleDao = roleDao;
             this._logger = logger;
         }
+
+        public String UpdateAuthByRoleId(String roleId, List<String> authId)
+        {
+            if (this._roleDao.DeleteAllAuth(roleId) == "error")
+            {
+                return "error";
+            }
+
+            return this._roleDao.InsertAllAuth(roleId, authId);
+        }
     }
 }

@@ -6,5 +6,7 @@ namespace IoTManager.IDao
 {
     public interface IRoleDao
     {
+        String DeleteAllAuth(String roleId);
+        String InsertAllAuth(String roleId, List<String> authId);
     }
 }

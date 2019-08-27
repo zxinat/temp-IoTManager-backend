@@ -22,12 +22,14 @@ namespace IoTManager.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserBus _userBus;
+        private readonly IRoleBus _roleBus;
         private readonly ILogger _logger;
 
-        public UserController(IUserBus userBus, ILogger<UserController> logger)
+        public UserController(IUserBus userBus, ILogger<UserController> logger, IRoleBus roleBus)
         {
             this._userBus = userBus;
             this._logger = logger;
+            this._roleBus = roleBus;
         }
 
         // GET api/values
@@ -121,6 +123,24 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._userBus.GetAuthByUserId(userId));
+        }
+
+        [HttpPost("updateRoleAuth/{roleId}")]
+        public ResponseSerializer UpdateAuthByRoleId(String roleId, [FromBody]BatchString batchString)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._roleBus.UpdateAuthByRoleId(roleId, batchString.str));
+        }
+        
+        [HttpPost("updateUserAuth/{userId}")]
+        public ResponseSerializer UpdateAuthByUserId(int userId, [FromBody]BatchString batchString)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._roleBus.UpdateAuthByUserId(userId, batchString.str));
         }
     }
 }

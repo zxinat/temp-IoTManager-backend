@@ -29,8 +29,6 @@ namespace IoTManager.Dao
                 {
                     uid = userId
                 }).ToList()[0];
-                Console.WriteLine(user.identify);
-                Console.WriteLine(user.identify.GetType());
                 if (user.identify == 1)
                 {
                     var query = connection.Query("select accountauth.operation, accountauth.account, accountauth.auth, auth.id, auth.authId, auth.description from account " + 
