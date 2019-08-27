@@ -13,25 +13,40 @@ namespace IoTManager.Model
         [BsonElement("DeviceId")]
         public String DeviceId { get; set; }
         
-        [BsonElement("IndexName")]
+        [BsonElement("DeviceName")]
+        public String DeviceName { get; set; }
+        
+        [BsonElement("MonitorName")]
         public String IndexName { get; set; }
         
-        [BsonElement("IndexId")]
+        [BsonElement("MonitorId")]
         public String IndexId { get; set; }
         
-        [BsonElement("IndexUnit")]
+        [BsonElement("Unit")]
         public String IndexUnit { get; set; }
         
-        [BsonElement("IndexType")]
+        [BsonElement("MonitorType")]
         public String IndexType { get; set; }
         
-        [BsonElement("IndexValue")]
+        [BsonElement("Value")]
         public Double IndexValue { get; set; }
         
         [BsonElement("Timestamp")]
         public DateTime Timestamp { get; set; }
         
-        [BsonElement("Inspected")]
+        [BsonElement("IsScam")]
         public String Inspected { get; set; }
+        
+        [BsonElement("GatewayId")]
+        public String GatewayId { get; set; }
+        
+        [BsonElement("DeviceType")]
+        public String DeviceType { get; set; }
+        
+        [BsonElement("Mark")]
+        public String Mark { get; set; }
+        
+        [BsonElement("IsCheck")]
+        public String IsCheck { get; set; }
     }
 }

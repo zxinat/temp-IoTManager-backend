@@ -18,5 +18,6 @@ namespace IoTManager.Core.Infrastructures
         int BatchDeleteDeviceData(List<String> ids);
         String UpdateDeviceData(String id, DeviceDataSerializer deviceDataSerializer);
         object GetDayAggregateData(String deviceId, String indexId);
+        object GetMultipleLineChartData(String deviceId, List<String> fields);
     }
 }

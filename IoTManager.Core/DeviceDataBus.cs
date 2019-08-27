@@ -100,5 +100,16 @@ namespace IoTManager.Core
         {
             return this._deviceDataDao.GetDayAggregateData(deviceId, indexId);
         }
+
+        public object GetMultipleLineChartData(String deviceId, List<String> fields)
+        {
+            List<object> data = new List<object>();
+            foreach (String f in fields)
+            {
+                data.Add(this._deviceDataDao.GetLineChartData(deviceId, f));
+            }
+
+            return data;
+        }
     }
 }

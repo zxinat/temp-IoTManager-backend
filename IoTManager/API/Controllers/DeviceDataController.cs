@@ -57,6 +57,15 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.GetLineChartData(deviceId, indexId));
         }
 
+        [HttpPost("multipleLineChart/{deviceId}")]
+        public ResponseSerializer GetMultipleLineChartData(String deviceId, [FromBody] BatchString fields)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetMultipleLineChartData(deviceId, fields.str));
+        }
+
         [HttpGet("amount")]
         public ResponseSerializer GetDeviceDataAmount()
         {

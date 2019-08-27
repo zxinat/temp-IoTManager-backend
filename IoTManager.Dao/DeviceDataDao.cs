@@ -24,7 +24,7 @@ namespace IoTManager.Dao
         {
             var client = new MongoClient(Constant.getMongoDBConnectionString());
             var database = client.GetDatabase("iotmanager");
-            _deviceData = database.GetCollection<DeviceDataModel>("devicedata");
+            _deviceData = database.GetCollection<DeviceDataModel>("monitordata");
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
             this._thresholdDao = thresholdDao;
         }
@@ -82,9 +82,9 @@ namespace IoTManager.Dao
 
         public List<DeviceDataModel> GetNotInspected()
         {
-            List<DeviceDataModel> deviceDataModels = _deviceData.Find<DeviceDataModel>(dd => dd.Inspected == "No").ToList();
-            var filter = Builders<DeviceDataModel>.Filter.Eq("Inspected", "No");
-            var update = Builders<DeviceDataModel>.Update.Set("Inspected", "Yes");
+            List<DeviceDataModel> deviceDataModels = _deviceData.Find<DeviceDataModel>(dd => dd.Inspected == "false").ToList();
+            var filter = Builders<DeviceDataModel>.Filter.Eq("IsScam", "false");
+            var update = Builders<DeviceDataModel>.Update.Set("IsScam", "true");
             var result = _deviceData.UpdateMany(filter, update);
             return deviceDataModels;
         }
@@ -109,7 +109,7 @@ namespace IoTManager.Dao
             xAxises.Reverse();
             chartValue.Reverse();
 
-            return new {xAxis = xAxises, series = chartValue};
+            return new {xAxis = xAxises, series = chartValue, indexId = indexId};
         }
 
         public int GetDeviceDataAmount()
