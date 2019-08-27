@@ -109,7 +109,7 @@ namespace IoTManager.Dao
             xAxises.Reverse();
             chartValue.Reverse();
 
-            return new {xAxis = xAxises, series = chartValue};
+            return new {xAxis = xAxises, series = chartValue, indexId = indexId};
         }
 
         public int GetDeviceDataAmount()
