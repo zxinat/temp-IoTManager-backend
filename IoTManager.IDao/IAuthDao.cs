@@ -7,5 +7,6 @@ namespace IoTManager.IDao
     public interface IAuthDao
     {
         List<String> GetAuthByUserId(int userId);
+        List<String> GetAuthByRoleId(int roleId);
     }
 }

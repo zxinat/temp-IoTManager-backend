@@ -1,6 +1,7 @@
 ﻿using IoTManager.IDao;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using Dapper;
@@ -61,6 +62,61 @@ namespace IoTManager.Dao
                 }
                 int rows = connection.Execute("insert into roleauth (role, auth) values " + items);
                 return rows == auth.Count ? "success" : "error";
+            }
+        }
+
+        public String UpdateUserAuth(int userId, Dictionary<String, int> dic)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var user = connection.Query("select identify from account where id=@uId", new
+                {
+                    uid = userId
+                }).ToList()[0];
+                int count = connection.Query<int>("select count(*) FROM accountauth WHERE account=@uId", new
+                {
+                    uId = userId
+                }).FirstOrDefault();
+                int rows = connection.Execute("DELETE FROM accountauth WHERE account=@uId", new
+                {
+                    uId = userId
+                });
+                if (rows != count) return "error";
+                if (dic.Count == 0)
+                {
+                    int rows2 = connection.Execute("update account set identify=0 where id=@uId", new
+                    {
+                        uId = userId
+                    });
+                    return rows2 == 1 ? "success" : "error";
+                }
+                else
+                {
+                    int rows2 = connection.Execute("update account set identify=1 where id=@uId", new
+                    {
+                        uId = userId
+                    });
+                    if (rows2 != 1) return "error";
+                    String items = "";
+                    foreach (var d in dic)
+                    {
+                        var auth = connection.Query(String.Format("select id from auth where authId=\"{0}\"", d.Key))
+                            .ToList()[0];
+                        if (d.Value == 1)
+                        {
+                            items += String.Format("(\"ADD\", {0}, {1}), ", userId, auth.id);
+                        }
+                        else
+                        {
+                            items += String.Format("(\"DELETE\", {0}, {1}), ", userId, auth.id);
+                        }
+                    }
+
+                    items = items.Substring(0, items.Length - 2);
+                    int rows3 = connection.Execute("insert into accountauth (operation, account, auth) values " + items);
+                    return rows3 == dic.Count ? "success" : "error";
+                }
+
             }
         }
     }
