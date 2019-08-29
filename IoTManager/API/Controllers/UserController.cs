@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using IoTManager.DAL.Models;
 using IoTManager.DAL.DbContext;
 using IoTManager.DAL.ReturnType;
+using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.EntityFrameworkCore;
@@ -141,6 +142,24 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._roleBus.UpdateAuthByUserId(userId, batchString.str));
+        }
+
+        [HttpGet("getRole/{userId}")]
+        public ResponseSerializer GetRoleByUserId(int userId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._roleBus.GetRoleByUserId(userId));
+        }
+
+        [HttpGet("getAllAuth")]
+        public ResponseSerializer GetAllAuth()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._roleBus.GetAllAuth());
         }
     }
 }

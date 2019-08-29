@@ -85,5 +85,20 @@ namespace IoTManager.Dao
                 return roleAuth;
             }
         }
+
+        public List<String> GetAllAuth()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var auth = connection.Query("select authId from auth").ToList();
+                List<String> authList = new List<string>();
+                foreach (var a in auth)
+                {
+                    authList.Add(a.authId);
+                }
+
+                return authList;
+            }
+        }
     }
 }

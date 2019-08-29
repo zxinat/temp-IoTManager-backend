@@ -119,5 +119,17 @@ namespace IoTManager.Dao
 
             }
         }
+
+        public String GetRoleByUserId(int userId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var user = connection.Query("select role.roleName from account join role on account.role=role.id where account.id=@uId", new
+                {
+                    uId = userId
+                }).ToList()[0];
+                return user.roleName;
+            }
+        }
     }
 }

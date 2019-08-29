@@ -8,7 +8,7 @@ namespace IoTManager.IDao
     {
         String DeleteAllAuth(String roleId);
         String InsertAllAuth(String roleId, List<String> authId);
-
         String UpdateUserAuth(int userId, Dictionary<String, int> dic);
+        String GetRoleByUserId(int userId);
     }
 }

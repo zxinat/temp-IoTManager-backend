@@ -51,5 +51,15 @@ namespace IoTManager.Core
             
             return this._roleDao.UpdateUserAuth(userId, dic);
         }
+
+        public String GetRoleByUserId(int userId)
+        {
+            return this._roleDao.GetRoleByUserId(userId);
+        }
+
+        public List<String> GetAllAuth()
+        {
+            return this._authDao.GetAllAuth();
+        }
     }
 }

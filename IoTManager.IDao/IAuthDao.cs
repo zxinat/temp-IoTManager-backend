@@ -8,5 +8,6 @@ namespace IoTManager.IDao
     {
         List<String> GetAuthByUserId(int userId);
         List<String> GetAuthByRoleId(int roleId);
+        List<String> GetAllAuth();
     }
 }
