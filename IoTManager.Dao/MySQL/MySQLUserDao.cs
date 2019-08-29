@@ -28,7 +28,7 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute(
-                    "INSERT INTO account(userName, displayName, password, email, phoneNumber, remark) VALUES (@un, @dn, @p, @e, @pn, @r)",
+                    "INSERT INTO account(userName, displayName, password, email, phoneNumber, remark, role) VALUES (@un, @dn, @p, @e, @pn, @r, 1)",
                     new
                     {
                         un = userModel.UserName,
