@@ -87,5 +87,14 @@ namespace IoTManager.Dao
                     .ToList();
             }
         }
+
+        public CityModel GetOneCityByName(String cityName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<CityModel>("select * from city where cityName=@cn", new {cn = cityName})
+                    .FirstOrDefault();
+            }
+        }
     }
 }

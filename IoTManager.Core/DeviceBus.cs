@@ -221,5 +221,20 @@ namespace IoTManager.Core
                 throw;
             }
         }
+
+        public List<DeviceSerializer> GetDeviceByCity(String cityName)
+        {
+            List<DeviceModel> devices = this._deviceDao.Get("all");
+            List<DeviceModel> query = devices.AsQueryable()
+                .Where(d => d.City == cityName)
+                .ToList();
+            List<DeviceSerializer> result = new List<DeviceSerializer>();
+            foreach (DeviceModel d in query)
+            {
+                result.Add(new DeviceSerializer(d));
+            }
+
+            return result;
+        }
     }
 }

@@ -103,6 +103,15 @@ namespace IoTManager.API.Controllers
                 this._cityBus.GetMapInfo());
         }
 
+        [HttpGet("oneMapInfo")]
+        public ResponseSerializer GetOneMapInfo(String cityName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetCityMapInfo(cityName));
+        }
+
         [HttpGet("cityCascaderOptions")]
         public ResponseSerializer GetCityCascaderOptions()
         {

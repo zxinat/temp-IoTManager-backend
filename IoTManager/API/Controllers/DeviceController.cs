@@ -189,7 +189,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._deviceBus.GetPicture(deviceId));
-        } 
+        }
 
+        [HttpGet("getByCity")]
+        public ResponseSerializer GetDeviceByCity(String cityName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceByCity(cityName));
+        }
     }
 }

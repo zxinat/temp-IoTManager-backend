@@ -23,15 +23,15 @@ namespace IoTManager.Core
             UserModel user = this._userDao.GetByUserName(loginModel.Name);
             if (user == null)
             {
-                return new {status="Failed", user=loginModel.Name};
+                return new {status="Failed", user=loginModel.Name, uid=user.Id};
             } 
             else if (user != null && loginModel.Password != user.Password)
             {
-                return new {status="Failed", user=loginModel.Name};
+                return new {status="Failed", user=loginModel.Name, uid=user.Id};
             }
             else
             {
-                return new {status="success", user=loginModel.Name};
+                return new {status="success", user=loginModel.Name, uid=user.Id};
             }
         }
     }

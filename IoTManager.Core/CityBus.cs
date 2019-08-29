@@ -138,6 +138,22 @@ namespace IoTManager.Core
             return result;
         }
 
+        public List<object> GetCityMapInfo(String cityName)
+        {
+            CityModel city = this._cityDao.GetOneCityByName(cityName);
+            List<DeviceModel> devices = this._deviceDao.Get("all");
+            var query = devices.AsQueryable()
+                .Where(d => d.City == cityName)
+                .ToList();
+            List<object> result = new List<object>();
+            List<double> info = new List<double>();
+            info.Add(city.longitude);
+            info.Add(city.latitude);
+            info.Add(query.Count);
+            result.Add(new {name=cityName, value=info});
+            return result;
+        }
+
         public List<CitySerializer> GetByCityName(String cityName)
         {
             List<CityModel> cities = this._cityDao.GetByCityName(cityName);
