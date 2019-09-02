@@ -16,5 +16,6 @@ namespace IoTManager.IDao
         int BatchDelete(int[] ids);
         String CreateGatewayType(String gatewayType);
         long GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all");
+        int GetAffiliateDeviceNumber(int id);
     }
 }

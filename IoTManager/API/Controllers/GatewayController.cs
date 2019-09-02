@@ -114,5 +114,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._gatewayBus.GetGatewayNumber(searchType, city, factory, workshop));
         }
+
+        [HttpGet("affiliateDevice/{id}")]
+        public ResponseSerializer GetAffiliateDeviceNumber(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._gatewayBus.GetAffiliateDeviceNumber(id));
+        }
     }
 }

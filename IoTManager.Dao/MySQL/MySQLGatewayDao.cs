@@ -285,5 +285,17 @@ namespace IoTManager.Dao
                 return result.number;
             }
         }
+
+        public int GetAffiliateDeviceNumber(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from device where gatewayId=@did", new
+                {
+                    did = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

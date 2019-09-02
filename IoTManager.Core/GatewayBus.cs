@@ -101,5 +101,10 @@ namespace IoTManager.Core
         {
             return this._gatewayDao.GetGatewayNumber(searchType, city, factory, workshop);
         }
+
+        public int GetAffiliateDeviceNumber(int id)
+        {
+            return this._gatewayDao.GetAffiliateDeviceNumber(id);
+        }
     }
 }
