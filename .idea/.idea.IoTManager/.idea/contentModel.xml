@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
-    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
-    <e p="$PROJECT_DIR$" t="IncludeFlat">
+    <e p="C:\Users\Kana\.nuget\packages\xunit.runner.visualstudio\2.4.0\build\netcoreapp1.0\xunit.runner.reporters.netcoreapp10.dll" t="Include" />
+    <e p="C:\Users\Kana\.nuget\packages\xunit.runner.visualstudio\2.4.0\build\netcoreapp1.0\xunit.runner.utility.netcoreapp10.dll" t="Include" />
+    <e p="C:\Users\Kana\.nuget\packages\xunit.runner.visualstudio\2.4.0\build\netcoreapp1.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
+    <e p="C:\Users\Kana\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Kana\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_IoTManager.-1587501396.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Kana\Desktop\PROJECT\IoTManager-Backend" t="IncludeFlat">
       <e p="0-Common" t="Include" />
       <e p="1-Host" t="Include" />
       <e p="2-Contract" t="Include" />
@@ -316,6 +318,7 @@
         <e p="RoleModel.cs" t="Include" />
         <e p="SeverityModel.cs" t="Include" />
         <e p="StatisticDurationModel.cs" t="Include" />
+        <e p="TagModel.cs" t="Include" />
         <e p="ThresholdModel.cs" t="Include" />
         <e p="UserModel.cs" t="Include" />
         <e p="WorkshopModel.cs" t="Include" />
@@ -323,7 +326,7 @@
       <e p="IoTManager.MonitorService" t="IncludeRecursive">
         <e p=".gitignore" t="Include" />
         <e p="appsettings.json" t="Include" />
-        <e p="bin" t="ExcludeRecursive" />
+        <e p="bin\Debug\netcoreapp2.1\bin" t="ExcludeRecursive" />
         <e p="host.json" t="Include" />
         <e p="IoTManager.MonitorService.csproj" t="IncludeRecursive" />
         <e p="local.settings.json" t="Include" />
@@ -450,6 +453,7 @@
           <e p="ResponseSerializer.cs" t="Include" />
           <e p="RoleSerializer.cs" t="Include" />
           <e p="SeveritySerializer.cs" t="Include" />
+          <e p="TagSerializer.cs" t="Include" />
           <e p="ThresholdSerializer.cs" t="Include" />
           <e p="ThresholdSerializerDisplay.cs" t="Include" />
           <e p="UserSerializer.cs" t="Include" />
@@ -458,9 +462,5 @@
       </e>
       <e p="packages" t="ExcludeRecursive" />
     </e>
-    <e p="$USER_HOME$/Library/Caches/Rider2018.3/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2018.3/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_IoTManager.55920609.00" t="ExcludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/Extensions" t="IncludeRecursive" />
   </component>
 </project>

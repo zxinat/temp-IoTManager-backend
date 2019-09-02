@@ -236,5 +236,22 @@ namespace IoTManager.Core
 
             return result;
         }
+        
+        public List<DeviceSerializer> GetDeviceByTag(String tag)
+        {
+            List<DeviceModel> deviceModels = this._deviceDao.GetDeviceByTag(tag);
+            List<DeviceSerializer> deviceSerializers = new List<DeviceSerializer>();
+            foreach (var dm in deviceModels)
+            {
+                deviceSerializers.Add(new DeviceSerializer(dm));
+            }
+
+            return deviceSerializers;
+        }
+
+        public List<String> GetAllTag()
+        {
+            return this._deviceDao.GetAllTag();
+        }
     }
 }

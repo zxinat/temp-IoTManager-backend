@@ -441,5 +441,44 @@ namespace IoTManager.Dao
                 return result.number;
             }
         }
+        
+        public List<DeviceModel> GetDeviceByTag(String tag)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                String tg = String.Format("\"{0}\"", tag);
+                return connection.Query<DeviceModel>("select device.id, " +
+                                                          "hardwareDeviceID, " +
+                                                          "deviceName, " +
+                                                          "city.cityName as city, " +
+                                                          "factory.factoryName as factory, " +
+                                                          "workshop.workshopName as workshop, " +
+                                                          "deviceState, " +
+                                                          "imageUrl, " +
+                                                          "gatewayID, " +
+                                                          "mac, " +
+                                                          "deviceType, " +
+                                                          "device.remark, " +
+                                                          "lastConnectionTime, " +
+                                                          "device.createTime, " +
+                                                          "device.updateTime, " +
+                                                          "device.pictureRoute " +
+                                                          "from tag " +
+                                                          "join devicetag on devicetag.tagId=tag.id " +
+                                                          "join device on device.id=devicetag.deviceId " +
+                                                          "join city on city.id=device.city " +
+                                                          "join factory on factory.id=device.factory " +
+                                                          "join workshop on workshop.id=device.workshop " +
+                                                          "where tag.tagName=" + tg).ToList();
+            }
+        }
+
+        public List<String> GetAllTag()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<String>("select tagName from tag").ToList();
+            }
+        }
     }
 }

@@ -241,5 +241,23 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._thresholdBus.GetDeviceAffiliateThreshold(deviceId));
         }
+        
+        [HttpGet("tag/{tag}")]
+        public ResponseSerializer GetDeviceByTag(String tag)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceByTag(tag));
+        }
+
+        [HttpGet("getalltag")]
+        public ResponseSerializer GetAllTag()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetAllTag());
+        }
     }
 }

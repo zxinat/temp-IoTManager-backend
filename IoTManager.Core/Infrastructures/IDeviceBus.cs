@@ -26,5 +26,7 @@ namespace IoTManager.Core.Infrastructures
         String UploadPicture(IFormCollection data);
         String GetPicture(String deviceId);
         List<DeviceSerializer> GetDeviceByCity(String cityName);
+        List<DeviceSerializer> GetDeviceByTag(String tag);
+        List<String> GetAllTag();
     }
 }
