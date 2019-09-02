@@ -25,7 +25,7 @@ namespace IoTManager.Dao
                        "device.imageUrl, " +
                        "gateway.gatewayName gatewayId, " +
                        "mac, " +
-                       "deviceType, " +
+                       "config.configValue deviceType, " +
                        "device.remark, " +
                        "device.lastConnectionTime, " +
                        "device.createTime, " +
@@ -35,7 +35,8 @@ namespace IoTManager.Dao
                        "join city on city.id=device.city " +
                        "join factory on factory.id=device.factory " +
                        "join workshop on workshop.id=device.workshop " +
-                       "join gateway on gateway.id=device.gatewayId ";
+                       "join gateway on gateway.id=device.gatewayId " +
+                       "join config on config.id=device.deviceType ";
             if (searchType == "search")
             {
                 if (city != "all")
@@ -210,6 +211,12 @@ namespace IoTManager.Dao
                     }).FirstOrDefault();
                 GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
                     new {gn = deviceModel.GatewayId}).FirstOrDefault();
+                int deviceType = connection.Query<int>(
+                    "select id from config where configTag=@ct and configValue=@cv", new
+                    {
+                        ct = "deviceType",
+                        cv = deviceModel.DeviceType
+                    }).FirstOrDefault();
                 int rows = connection.Execute(
                     "INSERT INTO "+ 
                     "device(hardwareDeviceID, deviceName, city, factory, workshop, deviceState, imageUrl, gatewayId, mac, deviceType, remark)" +
@@ -224,7 +231,7 @@ namespace IoTManager.Dao
                         iu = deviceModel.ImageUrl,
                         gid = gateway.Id,
                         m = deviceModel.Mac,
-                        dt = deviceModel.DeviceType,
+                        dt = deviceType,
                         r = deviceModel.Remark
                     });
                 return rows == 1 ? "success" : "error";
@@ -250,8 +257,14 @@ namespace IoTManager.Dao
                     {
                         wn = deviceModel.Workshop
                     }).FirstOrDefault();
-                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where Id=@gn",
+                GatewayModel gateway = connection.Query<GatewayModel>("select * from gateway where gatewayName=@gn",
                     new {gn = deviceModel.GatewayId}).FirstOrDefault();
+                int deviceType = connection.Query<int>(
+                    "select id from config where configTag=@ct and configValue=@cv", new
+                    {
+                        ct = "deviceType",
+                        cv = deviceModel.DeviceType
+                    }).FirstOrDefault();
                 int rows = connection
                     .Execute(
                         "UPDATE device "+
@@ -281,7 +294,7 @@ namespace IoTManager.Dao
                             iu = deviceModel.ImageUrl,
                             gid = gateway.Id,
                             m = deviceModel.Mac,
-                            dt = deviceModel.DeviceType,
+                            dt = deviceType,
                             r = deviceModel.Remark,
                             pr = deviceModel.PictureRoute
                         });
