@@ -148,5 +148,17 @@ namespace IoTManager.Dao
                 return rows;
             }
         }
+
+        public int GetDeviceAffiliateThreshold(String deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from threshold where deviceId=@did", new
+                {
+                    did = deviceId
+                }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

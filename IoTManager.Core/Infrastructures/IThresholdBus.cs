@@ -14,5 +14,6 @@ namespace IoTManager.Core.Infrastructures
         String DeleteThreshold(int id);
         String UpdateThreshold(int id, ThresholdSerializer thresholdSerializer);
         int BatchDeleteThreshold(int[] id);
+        int GetDeviceAffiliateThreshold(String deviceId);
     }
 }

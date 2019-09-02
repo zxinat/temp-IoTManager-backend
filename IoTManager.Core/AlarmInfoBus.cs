@@ -126,5 +126,10 @@ namespace IoTManager.Core
         {
             return this._alarmInfoDao.Delete(id);
         }
+
+        public int GetDeviceAffiliateAlarmInfo(String deviceId)
+        {
+            return this._alarmInfoDao.GetDeviceAffiliateAlarmInfo(deviceId);
+        }
     }
 }

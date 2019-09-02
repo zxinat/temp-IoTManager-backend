@@ -81,5 +81,10 @@ namespace IoTManager.Core
         {
             return this._thresholdDao.BatchDelete(ids);
         }
+
+        public int GetDeviceAffiliateThreshold(String deviceId)
+        {
+            return this._thresholdDao.GetDeviceAffiliateThreshold(deviceId);
+        }
     }
 }

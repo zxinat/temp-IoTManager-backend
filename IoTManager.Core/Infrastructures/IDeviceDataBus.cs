@@ -20,5 +20,6 @@ namespace IoTManager.Core.Infrastructures
         object GetDayAggregateData(String deviceId, String indexId);
         object GetMultipleLineChartData(String deviceId, List<String> fields);
         object GetDashboardDeviceStatus();
+        int GetDeviceAffiliateData(String deviceId);
     }
 }

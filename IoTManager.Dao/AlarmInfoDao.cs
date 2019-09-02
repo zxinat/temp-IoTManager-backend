@@ -145,5 +145,12 @@ namespace IoTManager.Dao
             var result = this._alarmInfo.DeleteOne(filter);
             return result.DeletedCount == 1 ? "success" : "error";
         }
+
+        public int GetDeviceAffiliateAlarmInfo(String deviceId)
+        {
+            return _alarmInfo.AsQueryable()
+                .Where(ai => ai.DeviceId == deviceId)
+                .ToList().Count;
+        }
     }
 }

@@ -18,5 +18,6 @@ namespace IoTManager.IDao
         String UpdateProcessed(String id);
         long GetAlarmInfoNumber(String searchType, String deviceId = "all");
         String Delete(String id);
+        int GetDeviceAffiliateAlarmInfo(String deviceId);
     }
 }

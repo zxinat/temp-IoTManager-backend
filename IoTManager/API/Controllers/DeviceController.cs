@@ -26,11 +26,15 @@ namespace IoTManager.API.Controllers
     {
         private readonly IDeviceBus _deviceBus;
         private readonly IDeviceDataBus _deviceDataBus;
+        private readonly IAlarmInfoBus _alarmInfoBus;
+        private readonly IThresholdBus _thresholdBus;
 
-        public DeviceController(IDeviceBus deviceBus, IDeviceDataBus deviceDataBus)
+        public DeviceController(IDeviceBus deviceBus, IDeviceDataBus deviceDataBus, IAlarmInfoBus alarmInfoBus, IThresholdBus thresholdBus)
         {
             this._deviceBus = deviceBus;
             this._deviceDataBus = deviceDataBus;
+            this._alarmInfoBus = alarmInfoBus;
+            this._thresholdBus = thresholdBus;
         }
 
         // GET api/values
@@ -209,6 +213,33 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._deviceDataBus.GetDashboardDeviceStatus());
+        }
+
+        [HttpGet("affiliateData/{deviceId}")]
+        public ResponseSerializer GetDeviceAffiliateData(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDeviceAffiliateData(deviceId));
+        }
+
+        [HttpGet("affiliateAlarmInfo/{deviceId}")]
+        public ResponseSerializer GetDeviceAffiliateAlarmInfo(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._alarmInfoBus.GetDeviceAffiliateAlarmInfo(deviceId));
+        }
+
+        [HttpGet("affiliateThreshold/{deviceId}")]
+        public ResponseSerializer GetDeviceAffiliateThreshold(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._thresholdBus.GetDeviceAffiliateThreshold(deviceId));
         }
     }
 }

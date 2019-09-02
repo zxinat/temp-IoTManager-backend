@@ -157,5 +157,10 @@ namespace IoTManager.Core
                 critical = criticalDevices.Count
             };
         }
+
+        public int GetDeviceAffiliateData(String deviceId)
+        {
+            return this._deviceDataDao.GetDeviceAffiliateData(deviceId);
+        }
     }
 }

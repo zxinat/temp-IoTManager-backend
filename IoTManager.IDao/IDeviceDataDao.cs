@@ -19,5 +19,6 @@ namespace IoTManager.IDao
         int BatchDelete(List<String> ids);
         String Update(String id, DeviceDataModel deviceDataModel);
         object GetDayAggregateData(String deviceId, String indexId);
+        int GetDeviceAffiliateData(String deviceId);
     }
 }

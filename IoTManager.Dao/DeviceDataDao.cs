@@ -331,5 +331,12 @@ namespace IoTManager.Dao
                 .ToList();
             return new {max = max, avg = avg, min = min};
         }
+
+        public int GetDeviceAffiliateData(String deviceId)
+        {
+            return this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId)
+                .ToList().Count;
+        }
     }
 }
