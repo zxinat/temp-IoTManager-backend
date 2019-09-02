@@ -25,10 +25,12 @@ namespace IoTManager.API.Controllers
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceBus _deviceBus;
+        private readonly IDeviceDataBus _deviceDataBus;
 
-        public DeviceController(IDeviceBus deviceBus)
+        public DeviceController(IDeviceBus deviceBus, IDeviceDataBus deviceDataBus)
         {
             this._deviceBus = deviceBus;
+            this._deviceDataBus = deviceDataBus;
         }
 
         // GET api/values
@@ -198,6 +200,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._deviceBus.GetDeviceByCity(cityName));
+        }
+
+        [HttpGet("dashboardStatus")]
+        public ResponseSerializer GetDashboardDeviceStatus()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDashboardDeviceStatus());
         }
     }
 }

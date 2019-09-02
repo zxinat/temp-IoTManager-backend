@@ -19,5 +19,6 @@ namespace IoTManager.Core.Infrastructures
         String UpdateDeviceData(String id, DeviceDataSerializer deviceDataSerializer);
         object GetDayAggregateData(String deviceId, String indexId);
         object GetMultipleLineChartData(String deviceId, List<String> fields);
+        object GetDashboardDeviceStatus();
     }
 }

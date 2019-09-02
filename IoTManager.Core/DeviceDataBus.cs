@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
@@ -12,12 +13,14 @@ namespace IoTManager.Core
     public sealed class DeviceDataBus: IDeviceDataBus
     {
         private readonly IDeviceDataDao _deviceDataDao;
+        private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly IDeviceDao _deviceDao;
         private readonly ILogger _logger;
 
-        public DeviceDataBus(IDeviceDataDao deviceDataDao, ILogger<DeviceDataBus> logger, IDeviceDao deviceDao)
+        public DeviceDataBus(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, ILogger<DeviceDataBus> logger, IDeviceDao deviceDao)
         {
             this._deviceDataDao = deviceDataDao;
+            this._alarmInfoDao = alarmInfoDao;
             this._logger = logger;
             this._deviceDao = deviceDao;
         }
@@ -110,6 +113,49 @@ namespace IoTManager.Core
             }
 
             return data;
+        }
+
+        public object GetDashboardDeviceStatus()
+        {
+            var query = this._alarmInfoDao.Get("all");
+            var info = query.AsQueryable()
+                .Where(ai => ai.Severity == "Info").ToList();
+            List<String> infoDevices = new List<string>();
+            foreach (var a in info)
+            {
+                if (!infoDevices.Contains(a.DeviceId))
+                {
+                    infoDevices.Add(a.DeviceId);
+                }
+            }
+
+            var warning = query.AsQueryable()
+                .Where(ai => ai.Severity == "Warning").ToList();
+            List<String> warningDevices = new List<string>();
+            foreach (var a in warning)
+            {
+                if (!warningDevices.Contains(a.DeviceId))
+                {
+                    warningDevices.Add(a.DeviceId);
+                }
+            }
+
+            var critical = query.AsQueryable()
+                .Where(ai => ai.Severity == "Critical").ToList();
+            List<String> criticalDevices = new List<string>();
+            foreach (var a in critical)
+            {
+                if (!criticalDevices.Contains(a.DeviceId))
+                {
+                    criticalDevices.Add(a.DeviceId);
+                }
+            }
+            return new
+            {
+                info = infoDevices.Count,
+                warning = warningDevices.Count,
+                critical = criticalDevices.Count
+            };
         }
     }
 }
