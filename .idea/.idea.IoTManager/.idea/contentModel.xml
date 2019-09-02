@@ -312,6 +312,7 @@
             </e>
           </e>
         </e>
+        <e p="RegionModel.cs" t="Include" />
         <e p="RoleModel.cs" t="Include" />
         <e p="SeverityModel.cs" t="Include" />
         <e p="StatisticDurationModel.cs" t="Include" />

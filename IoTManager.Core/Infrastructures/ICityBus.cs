@@ -18,5 +18,6 @@ namespace IoTManager.Core.Infrastructures
         List<object> GetMapInfo();
         List<CitySerializer> GetByCityName(String cityName);
         List<object> GetCityMapInfo(String cityName);
+        object GetThreeLevelMenu();
     }
 }

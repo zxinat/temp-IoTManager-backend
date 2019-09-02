@@ -14,5 +14,6 @@ namespace IoTManager.IDao
         String Delete(int id);
         List<CityModel> GetByCityName(String cityName);
         CityModel GetOneCityByName(String cityName);
+        object GetThreeLevelMenu();
     }
 }

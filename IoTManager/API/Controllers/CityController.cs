@@ -130,5 +130,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._cityBus.GetByCityName(cityName));
         }
+
+        [HttpGet("threeLevelMenu")]
+        public ResponseSerializer GetThreeLevelMenu()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetThreeLevelMenu());
+        }
     }
 }

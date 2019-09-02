@@ -165,5 +165,10 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public object GetThreeLevelMenu()
+        {
+            return this._cityDao.GetThreeLevelMenu();
+        }
     }
 }

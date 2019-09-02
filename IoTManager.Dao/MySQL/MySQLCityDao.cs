@@ -96,5 +96,20 @@ namespace IoTManager.Dao
                     .FirstOrDefault();
             }
         }
+
+        public object GetThreeLevelMenu()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var query = connection.Query<RegionModel>("select * from region").ToList();
+                Dictionary<String, String> result = new Dictionary<string, string>();
+                foreach (var q in query)
+                {
+                    result.Add(q.Level, q.RegionName);
+                }
+
+                return result;
+            }
+        }
     }
 }
