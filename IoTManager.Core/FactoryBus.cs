@@ -87,5 +87,20 @@ namespace IoTManager.Core
             }
             return result;
         }
+
+        public int GetFactoryAffiliateWorkshop(int id)
+        {
+            return this._factoryDao.GetFactoryAffiliateWorkshop(id);
+        }
+
+        public int GetFactoryAffiliateDevice(int id)
+        {
+            return this._factoryDao.GetFactoryAffiliateDevice(id);
+        }
+
+        public int GetFactoryAffiliateGateway(int id)
+        {
+            return this._factoryDao.GetFactoryAffiliateGateway(id);
+        }
     }
 }

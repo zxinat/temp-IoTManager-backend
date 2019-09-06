@@ -145,5 +145,41 @@ namespace IoTManager.Dao
                 return factoryModels;
             }
         }
+
+        public int GetFactoryAffiliateWorkshop(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from workshop where factory=@fid", new
+                {
+                    fid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetFactoryAffiliateDevice(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from device where factory=@fid", new
+                {
+                    fid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetFactoryAffiliateGateway(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from gateway where factory=@fid", new
+                {
+                    fid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

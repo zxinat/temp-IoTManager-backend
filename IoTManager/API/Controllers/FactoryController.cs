@@ -85,5 +85,32 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._factoryBus.GetByFactoryName(factoryName));
         }
+
+        [HttpGet("affiliateWorkshop/{id}")]
+        public ResponseSerializer GetFactoryAffiliateWorkshop(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success", 
+                this._factoryBus.GetFactoryAffiliateWorkshop(id));
+        }
+
+        [HttpGet("affiliateDevice/{id}")]
+        public ResponseSerializer GetFactoryAffiliateDevice(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._factoryBus.GetFactoryAffiliateDevice(id));
+        }
+
+        [HttpGet("affiliateGateway/{id}")]
+        public ResponseSerializer GetFactoryAffiliateGateway(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._factoryBus.GetFactoryAffiliateGateway(id));
+        }
     }
 }
