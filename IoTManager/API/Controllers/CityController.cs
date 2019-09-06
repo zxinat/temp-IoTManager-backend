@@ -139,5 +139,32 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._cityBus.GetThreeLevelMenu());
         }
+
+        [HttpGet("affiliateFactory/{id}")]
+        public ResponseSerializer GetCityAffiliateFactory(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetCityAffiliateFactory(id));
+        }
+
+        [HttpGet("affiliateDevice/{id}")]
+        public ResponseSerializer GetCityAffiliateDevice(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetCityAffiliateDevice(id));
+        }
+
+        [HttpGet("affiliateGateway/{id}")]
+        public ResponseSerializer GetCityAffiliateGateway(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetCityAffiliateGateway(id));
+        }
     }
 }

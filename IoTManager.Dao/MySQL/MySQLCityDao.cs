@@ -111,5 +111,41 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public int GetCityAffiliateFactory(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from factory where city=@cid", new
+                {
+                    cid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetCityAffiliateDevice(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from device where city=@cid", new
+                {
+                    cid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetCityAffiliateGateway(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from gateway where city=@cid", new
+                {
+                    cid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

@@ -170,5 +170,20 @@ namespace IoTManager.Core
         {
             return this._cityDao.GetThreeLevelMenu();
         }
+
+        public int GetCityAffiliateFactory(int id)
+        {
+            return this._cityDao.GetCityAffiliateFactory(id);
+        }
+
+        public int GetCityAffiliateDevice(int id)
+        {
+            return this._cityDao.GetCityAffiliateDevice(id);
+        }
+
+        public int GetCityAffiliateGateway(int id)
+        {
+            return this._cityDao.GetCityAffiliateGateway(id);
+        }
     }
 }
