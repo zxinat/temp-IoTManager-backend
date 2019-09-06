@@ -148,5 +148,29 @@ namespace IoTManager.Dao
                 return workshopModels;
             }
         }
+
+        public int GetWorkshopAffiliateDevice(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from device where workshop=@wid", new
+                {
+                    wid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public int GetWorkshopAffiliateGateway(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>("select count(*) number from gateway where workshop=@wid", new
+                {
+                    wid = id
+                }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }
