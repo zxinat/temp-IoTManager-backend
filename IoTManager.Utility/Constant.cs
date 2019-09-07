@@ -24,7 +24,7 @@ namespace IoTManager.Utility
 
         public static String getDateFormatString()
         {
-            return "yyyy年MM月dd日 hh:mm:ss";
+            return "yyyy-MM-dd hh:mm:ss";
         }
 
         public static String getLineChartDateFormatString()
@@ -34,7 +34,7 @@ namespace IoTManager.Utility
 
         public static String getStatisticDateFormatString()
         {
-            return "yyyy/MM/dd\nhh:mm:ss";
+            return "yyyy-MM-dd\nhh:mm:ss";
         }
     }
 }
