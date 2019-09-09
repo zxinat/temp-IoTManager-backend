@@ -1,5 +1,6 @@
 using System;
 using IoTManager.Core.Infrastructures;
+using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -75,13 +76,14 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.GetDeviceDataAmount());
         }
 
-        [HttpGet("status/{id}")]
-        public ResponseSerializer GetDeviceStatusById(int id)
+        [HttpPost("status/{id}")]
+        public ResponseSerializer GetDeviceStatusById(int id, [FromBody] DataStatisticRequestModel date)
         {
+            System.Console.WriteLine(date.EndTime);
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetDeviceStatusById(id));
+                this._deviceDataBus.GetDeviceStatusById(id, date.StartTime, date.EndTime));
         }
 
         [HttpGet("number")]
@@ -120,13 +122,23 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.UpdateDeviceData(id, deviceDataSerializer));
         }
 
-        [HttpGet("aggregate/day/{deviceId}")]
-        public ResponseSerializer GetDayAggregateData(String deviceId, String indexId)
+        [HttpPost("aggregate/day/{deviceId}")]
+        public ResponseSerializer GetDayAggregateData(String deviceId, String indexId, [FromBody] DataStatisticRequestModel request)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetDayAggregateData(deviceId, indexId));
+                this._deviceDataBus.GetDayAggregateData(deviceId, indexId, request.StartTime, request.EndTime));
+        }
+
+        [HttpPost("statistic/{deviceId}")]
+        public ResponseSerializer GetDataStatistic(String deviceId, [FromBody] DataStatisticRequestModel request)
+        {
+            System.Console.WriteLine(request);
+            return new ResponseSerializer(
+                200,
+                "success",
+                request);
         }
     }
 }

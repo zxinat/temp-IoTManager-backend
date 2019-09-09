@@ -12,12 +12,12 @@ namespace IoTManager.Core.Infrastructures
         List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId);
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();
-        object GetDeviceStatusById(int id);
+        object GetDeviceStatusById(int id, DateTime sTime, DateTime eTime);
         long GetDeviceDataNumber(String searchType, String deviceId = "all");
         String DeleteDeviceData(String id);
         int BatchDeleteDeviceData(List<String> ids);
         String UpdateDeviceData(String id, DeviceDataSerializer deviceDataSerializer);
-        object GetDayAggregateData(String deviceId, String indexId);
+        object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime);
         object GetMultipleLineChartData(String deviceId, List<String> fields);
         object GetDashboardDeviceStatus();
         int GetDeviceAffiliateData(String deviceId);

@@ -12,13 +12,15 @@ namespace IoTManager.IDao
         List<DeviceDataModel> GetNotInspected();
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();
-        object GetDeviceStatusById(int id);
+        object GetDeviceStatusById(int id, DateTime sTime, DateTime eTime);
         object GetDeviceStatistic(StatisticDurationModel statisticDurationModel);
         long GetDeviceDataNumber(String searchType, String deviceId = "all");
         String Delete(String id);
         int BatchDelete(List<String> ids);
         String Update(String id, DeviceDataModel deviceDataModel);
-        object GetDayAggregateData(String deviceId, String indexId);
+        object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime);
+        object GetHourAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime);
+        object GetMonthAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime);
         int GetDeviceAffiliateData(String deviceId);
     }
 }

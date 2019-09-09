@@ -66,9 +66,9 @@ namespace IoTManager.Core
             return this._deviceDataDao.GetDeviceDataAmount();
         }
 
-        public object GetDeviceStatusById(int id)
+        public object GetDeviceStatusById(int id, DateTime sTime, DateTime eTime)
         {
-            return this._deviceDataDao.GetDeviceStatusById(id);
+            return this._deviceDataDao.GetDeviceStatusById(id, sTime, eTime);
         }
 
         public long GetDeviceDataNumber(String searchType, String deviceId = "all")
@@ -99,9 +99,9 @@ namespace IoTManager.Core
             return this._deviceDataDao.Update(id, deviceDataModel);
         }
 
-        public object GetDayAggregateData(String deviceId, String indexId)
+        public object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
         {
-            return this._deviceDataDao.GetDayAggregateData(deviceId, indexId);
+            return this._deviceDataDao.GetDayAggregateData(deviceId, indexId, startTime, endTime);
         }
 
         public object GetMultipleLineChartData(String deviceId, List<String> fields)
