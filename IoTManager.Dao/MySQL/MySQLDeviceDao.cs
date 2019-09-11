@@ -480,5 +480,42 @@ namespace IoTManager.Dao
                 return connection.Query<String>("select tagName from tag").ToList();
             }
         }
+
+        public List<DeviceModel> GetByDeviceType(String deviceType)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int typeNum = connection.Query<int>("select id from config where configValue=@cv", new
+                {
+                    cv = deviceType
+                }).FirstOrDefault();
+                return connection.Query<DeviceModel>("select device.id, " +
+                                                     "hardwareDeviceID, " +
+                                                     "deviceName, " +
+                                                     "city.cityName as city, " +
+                                                     "factory.factoryName as factory, " +
+                                                     "workshop.workshopName as workshop, " +
+                                                     "deviceState, " +
+                                                     "device.imageUrl, " +
+                                                     "gateway.gatewayName gatewayId, " +
+                                                     "mac, " +
+                                                     "config.configValue deviceType, " +
+                                                     "device.remark, " +
+                                                     "device.lastConnectionTime, " +
+                                                     "device.createTime, " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute " +
+                                                     "from device " +
+                                                     "join city on city.id=device.city " +
+                                                     "join factory on factory.id=device.factory " +
+                                                     "join workshop on workshop.id=device.workshop " +
+                                                     "join gateway on gateway.id=device.gatewayId " +
+                                                     "join config on config.id=device.deviceType " +
+                                                     "where device.deviceType=@dt", new
+                {
+                    dt = typeNum
+                }).ToList();
+            }
+        }
     }
 }

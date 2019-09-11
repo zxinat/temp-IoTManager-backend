@@ -18,19 +18,22 @@ namespace IoTManager.Core
         private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly IDeviceDao _deviceDao;
         private readonly IWorkshopDao _workshopDao;
+        private readonly IStateTypeDao _stateTypeDao;
         private readonly ILogger _logger;
 
         public DeviceDataBus(IDeviceDataDao deviceDataDao, 
             IAlarmInfoDao alarmInfoDao, 
             ILogger<DeviceDataBus> logger, 
             IDeviceDao deviceDao, 
-            IWorkshopDao workshopDao)
+            IWorkshopDao workshopDao,
+            IStateTypeDao stateTypeDao)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
             this._logger = logger;
             this._deviceDao = deviceDao;
             this._workshopDao = workshopDao;
+            this._stateTypeDao = stateTypeDao;
         }
 
         public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
@@ -299,8 +302,87 @@ namespace IoTManager.Core
 
         public object GetReportByType(DateTime startTime, DateTime endTime)
         {
-            return null;
+            List<String> deviceTypes = this._stateTypeDao.GetDeviceType();
+            
+            List<String> xAxis = new List<string>();
+            List<Double> averageOnlineTime = new List<Double>();
+            List<object> alarmTimes = new List<object>();
+            List<object> deviceAmount = new List<object>();
+            
+            foreach (String deviceType in deviceTypes)
+            {
+                xAxis.Add(deviceType);
+                
+                List<DeviceModel> relatedDevices = this._deviceDao.GetByDeviceType(deviceType);
+                List<String> relatedDevicesId = new List<string>();
+                foreach (DeviceModel dm in relatedDevices)
+                {
+                    relatedDevicesId.Add(dm.HardwareDeviceId);
+                }
 
+                if (relatedDevices.Count > 0)
+                {
+                    deviceAmount.Add(new 
+                    {
+                        value = relatedDevices.Count,
+                        name = deviceType
+                    });
+                }
+
+                List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
+                List<AlarmInfoModel> relatedAlarmInfos = alarmInfos.AsQueryable()
+                    .Where(ai =>
+                        relatedDevicesId.Contains(ai.DeviceId) && ai.Timestamp >= startTime && ai.Timestamp <= endTime)
+                    .ToList();
+                if (relatedAlarmInfos.Count > 0)
+                {
+                    alarmTimes.Add(new
+                    {
+                        value = relatedAlarmInfos.Count,
+                        name = deviceType
+                    });
+                }
+
+                TimeSpan t = TimeSpan.Zero;
+                foreach (DeviceModel dm in relatedDevices)
+                {
+                    List<DeviceDataModel> deviceData = this._deviceDataDao.Get("all");
+                    List<DeviceDataModel> relatedData = deviceData.AsQueryable()
+                        .Where(dd =>
+                            dd.DeviceId == dm.HardwareDeviceId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
+                        .OrderBy(dd => dd.Timestamp)
+                        .ToList();
+                    if (relatedData.Count > 0)
+                    {
+                        var tmpTime = relatedData.Last().Timestamp - relatedData.First().Timestamp;
+                        t += tmpTime;
+                    }
+                }
+                averageOnlineTime.Add(t.TotalMinutes / relatedDevices.Count);
+            }
+            List<object> lineChartSeries = new List<object>();
+            lineChartSeries.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
+            List<object> pieChart1Series = new List<object>();
+            System.Console.WriteLine("Alarm Times:  " + alarmTimes.Count.ToString());
+            if (alarmTimes.Count == 0)
+            {
+                alarmTimes.Add(new {value = 0, name = "无数据"});
+            }
+            pieChart1Series.Add(alarmTimes);
+            List<object> pieChart2Series = new List<object>();
+            if (deviceAmount.Count == 0)
+            {
+                deviceAmount.Add(new {value = 0, name = "无数据"});
+            }
+            pieChart2Series.Add(deviceAmount);
+
+            return new
+            {
+                xAxis = xAxis,
+                lineChartSeries = lineChartSeries,
+                pieChart1Series = alarmTimes,
+                pieChart2Series = deviceAmount
+            };
         }
 
         public object GetReportByTag(DateTime startTime, DateTime endTime)
