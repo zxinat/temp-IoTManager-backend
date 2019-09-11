@@ -32,7 +32,10 @@ namespace IoTManager.API.Controllers
         [HttpPost("byTime")]
         public ResponseSerializer GetReportByTime([FromBody] DataStatisticRequestModel date)
         {
-            return null;
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetReportByTime(date.StartTime, date.EndTime));
         }
     }
 }

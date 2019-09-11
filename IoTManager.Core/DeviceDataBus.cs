@@ -6,6 +6,7 @@ using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
+using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Logging;
 using MySqlX.XDevAPI.Common;
 
@@ -220,6 +221,75 @@ namespace IoTManager.Core
             result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
             result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
             result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
+            return new
+            {
+                xAxis = xAxis,
+                series = result
+            };
+        }
+
+        public object GetReportByTime(DateTime startTime, DateTime endTime)
+        {
+            List<DeviceModel> devices = this._deviceDao.Get("all");
+            List<String> xAxis = new List<string>();
+            List<Double> averageOnlineTime = new List<Double>();
+            List<int> alarmTimes = new List<int>();
+            List<int> deviceAmount = new List<int>();
+
+            List<DeviceDataModel> deviceData = this._deviceDataDao.Get("all");
+            List<DeviceDataModel> filteredDeviceData = deviceData.AsQueryable()
+                .Where(dd => dd.Timestamp >= startTime && dd.Timestamp <= endTime)
+                .OrderBy(dd => dd.Timestamp)
+                .ToList();
+            List<int> years = new List<int>();
+            foreach (DeviceDataModel d in filteredDeviceData)
+            {
+                if (!years.Contains(d.Timestamp.Year))
+                {
+                    years.Add(d.Timestamp.Year);
+                }
+            }
+            
+            years.Sort();
+
+            foreach (int year in years)
+            {
+                xAxis.Add(year.ToString());
+                
+                deviceAmount.Add(devices.Count);
+                
+                List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
+                List<AlarmInfoModel> selectedAlarmInfo = alarmInfos.AsQueryable()
+                    .Where(ai => ai.Timestamp.Year == year)
+                    .ToList();
+                alarmTimes.Add(selectedAlarmInfo.Count);
+                
+                
+                List<DeviceDataModel> deviceDataByYear = filteredDeviceData.AsQueryable()
+                    .Where(dd => dd.Timestamp.Year == year)
+                    .ToList();
+                
+                TimeSpan t = TimeSpan.Zero;
+                foreach (DeviceModel d in devices)
+                {
+                    List<DeviceDataModel> relatedData = deviceDataByYear.AsQueryable()
+                        .Where(dd => dd.DeviceId == d.HardwareDeviceId)
+                        .OrderBy(dd => dd.Timestamp)
+                        .ToList();
+                    if (relatedData.Count > 0)
+                    {
+                        var tmpTime = relatedData.Last().Timestamp - relatedData.First().Timestamp;
+                        t += tmpTime;
+                    }
+                }
+                averageOnlineTime.Add(t.TotalMinutes / devices.Count);
+            }
+            
+            List<object> result = new List<object>();
+            result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
+            result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
+            result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
+
             return new
             {
                 xAxis = xAxis,

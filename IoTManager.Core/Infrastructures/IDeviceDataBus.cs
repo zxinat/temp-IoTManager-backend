@@ -22,5 +22,6 @@ namespace IoTManager.Core.Infrastructures
         object GetDashboardDeviceStatus();
         int GetDeviceAffiliateData(String deviceId);
         object GetReportByRegion(String factoryName, DateTime startTime, DateTime endTime);
+        object GetReportByTime(DateTime startTime, DateTime endTime);
     }
 }
