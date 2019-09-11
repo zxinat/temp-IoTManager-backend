@@ -166,5 +166,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._cityBus.GetCityAffiliateGateway(id));
         }
+
+        [HttpGet("cityFactoryTree")]
+        public ResponseSerializer GetCityFactoryTree()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetCityFactoryTree());
+        }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Net.Http;
 using System.Text;
 using IoTManager.Model;
@@ -184,6 +185,27 @@ namespace IoTManager.Core
         public int GetCityAffiliateGateway(int id)
         {
             return this._cityDao.GetCityAffiliateGateway(id);
+        }
+
+        public object GetCityFactoryTree()
+        {
+            List<CityModel> cities = this._cityDao.Get();
+            List<FactoryModel> factories = this._factoryDao.Get();
+            List<object> result = new List<object>();
+            foreach (CityModel c in cities)
+            {
+                List<FactoryModel> relatedFactories = factories.AsQueryable()
+                    .Where(f => f.City == c.CityName)
+                    .ToList();
+                List<object> children = new List<object>();
+                foreach (FactoryModel f in relatedFactories)
+                {
+                    children.Add(new {value = f.FactoryName, label = f.FactoryName, id = f.Id, factoryName = f.FactoryName});
+                }
+                result.Add(new {value = c.CityName, label = c.CityName, children = children});
+            }
+
+            return result;
         }
     }
 }

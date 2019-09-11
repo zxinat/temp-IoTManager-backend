@@ -21,5 +21,6 @@ namespace IoTManager.Core.Infrastructures
         object GetMultipleLineChartData(String deviceId, List<String> fields);
         object GetDashboardDeviceStatus();
         int GetDeviceAffiliateData(String deviceId);
+        object GetReportByRegion(String factoryName, DateTime startTime, DateTime endTime);
     }
 }

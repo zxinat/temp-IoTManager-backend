@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
@@ -15,14 +16,20 @@ namespace IoTManager.Core
         private readonly IDeviceDataDao _deviceDataDao;
         private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly IDeviceDao _deviceDao;
+        private readonly IWorkshopDao _workshopDao;
         private readonly ILogger _logger;
 
-        public DeviceDataBus(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, ILogger<DeviceDataBus> logger, IDeviceDao deviceDao)
+        public DeviceDataBus(IDeviceDataDao deviceDataDao, 
+            IAlarmInfoDao alarmInfoDao, 
+            ILogger<DeviceDataBus> logger, 
+            IDeviceDao deviceDao, 
+            IWorkshopDao workshopDao)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
             this._logger = logger;
             this._deviceDao = deviceDao;
+            this._workshopDao = workshopDao;
         }
 
         public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
@@ -161,6 +168,63 @@ namespace IoTManager.Core
         public int GetDeviceAffiliateData(String deviceId)
         {
             return this._deviceDataDao.GetDeviceAffiliateData(deviceId);
+        }
+
+        public object GetReportByRegion(String factoryName, DateTime startTime, DateTime endTime)
+        {
+            List<WorkshopModel> affiliateWorkshop = this._workshopDao.GetAffiliateWorkshop(factoryName);
+            List<String> xAxis = new List<string>();
+            List<Double> averageOnlineTime = new List<Double>();
+            List<int> alarmTimes = new List<int>();
+            List<int> deviceAmount = new List<int>();
+            foreach (WorkshopModel w in affiliateWorkshop)
+            {
+                xAxis.Add(w.WorkshopName);
+                
+                List<DeviceModel> allDevices = this._deviceDao.Get("all");
+                List<DeviceModel> relatedDevices = allDevices.AsQueryable()
+                    .Where(d => d.Workshop == w.WorkshopName)
+                    .ToList();
+                deviceAmount.Add(relatedDevices.Count);
+                
+                List<String> relatedDevicesId = new List<string>();
+                foreach (DeviceModel d in relatedDevices)
+                {
+                    relatedDevicesId.Add(d.HardwareDeviceId);
+                }
+
+                List<AlarmInfoModel> allAlarmInfo = this._alarmInfoDao.Get("all");
+                List<AlarmInfoModel> relatedAlarmInfo = allAlarmInfo.AsQueryable()
+                    .Where(ai => relatedDevicesId.Contains(ai.DeviceId) && ai.Timestamp >= startTime && ai.Timestamp <= endTime)
+                    .ToList();
+                alarmTimes.Add(relatedAlarmInfo.Count);
+                
+                TimeSpan t = TimeSpan.Zero;
+                foreach (String did in relatedDevicesId)
+                {
+                    List<DeviceDataModel> allDeviceData = this._deviceDataDao.Get("all");
+                    List<DeviceDataModel> relatedData = allDeviceData.AsQueryable()
+                        .Where(dd => dd.DeviceId == did && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
+                        .OrderBy(dd => dd.Timestamp)
+                        .ToList();
+                    if (relatedData.Count > 0)
+                    {
+                        var tmpTime = relatedData.Last().Timestamp - relatedData.First().Timestamp;
+                        t += tmpTime;
+                    }
+                }
+                averageOnlineTime.Add(t.TotalMinutes / relatedDevices.Count);
+            }
+            
+            List<object> result = new List<object>();
+            result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
+            result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
+            result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
+            return new
+            {
+                xAxis = xAxis,
+                series = result
+            };
         }
     }
 }

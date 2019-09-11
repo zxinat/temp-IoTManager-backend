@@ -22,5 +22,6 @@ namespace IoTManager.Core.Infrastructures
         int GetCityAffiliateFactory(int id);
         int GetCityAffiliateDevice(int id);
         int GetCityAffiliateGateway(int id);
+        object GetCityFactoryTree();
     }
 }

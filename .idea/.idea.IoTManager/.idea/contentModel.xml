@@ -23,6 +23,7 @@
             <e p="FieldController.cs" t="Include" />
             <e p="GatewayController.cs" t="Include" />
             <e p="LoginController.cs" t="Include" />
+            <e p="ReportController.cs" t="Include" />
             <e p="SeverityController.cs" t="Include" />
             <e p="StateTypeController.cs" t="Include" />
             <e p="ThresholdController.cs" t="Include" />
