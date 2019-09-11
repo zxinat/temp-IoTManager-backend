@@ -37,5 +37,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetReportByTime(date.StartTime, date.EndTime));
         }
+
+        [HttpPost("byTag")]
+        public ResponseSerializer GetReportByTag([FromBody] DataStatisticRequestModel date)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetReportByTag(date.StartTime, date.EndTime));
+        }
     }
 }

@@ -296,5 +296,71 @@ namespace IoTManager.Core
                 series = result
             };
         }
+
+        public object GetReportByType(DateTime startTime, DateTime endTime)
+        {
+            return null;
+
+        }
+
+        public object GetReportByTag(DateTime startTime, DateTime endTime)
+        {
+            List<String> tags = this._deviceDao.GetAllTag();
+            List<DeviceDataModel> deviceData = this._deviceDataDao.Get("all");
+            
+            List<String> xAxis = new List<string>();
+            List<Double> averageOnlineTime = new List<Double>();
+            List<int> alarmTimes = new List<int>();
+            List<int> deviceAmount = new List<int>();
+
+            foreach (String tag in tags)
+            {
+                xAxis.Add(tag);
+
+                List<DeviceModel> relatedDevices = this._deviceDao.GetDeviceByTag(tag);
+                deviceAmount.Add(relatedDevices.Count);
+                
+                List<String> relatedDevicesId = new List<string>();
+                foreach (DeviceModel d in relatedDevices)
+                {
+                    relatedDevicesId.Add(d.HardwareDeviceId);
+                }
+
+                List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
+                List<AlarmInfoModel> relatedAlarmInfos = alarmInfos.AsQueryable()
+                    .Where(ai =>
+                        relatedDevicesId.Contains(ai.DeviceId) && ai.Timestamp >= startTime && ai.Timestamp <= endTime)
+                    .ToList();
+                alarmTimes.Add(relatedAlarmInfos.Count);
+
+                TimeSpan t = TimeSpan.Zero;
+                foreach (DeviceModel device in relatedDevices)
+                {
+                    List<DeviceDataModel> relatedDeviceData = deviceData.AsQueryable()
+                        .Where(dd =>
+                            dd.DeviceId == device.HardwareDeviceId && dd.Timestamp >= startTime &&
+                            dd.Timestamp <= endTime)
+                        .OrderBy(dd => dd.Timestamp)
+                        .ToList();
+                    if (relatedDeviceData.Count > 0)
+                    {
+                        TimeSpan tmpTime = relatedDeviceData.Last().Timestamp - relatedDeviceData.First().Timestamp;
+                        t += tmpTime;
+                    }
+                }
+                averageOnlineTime.Add(t.TotalMinutes / relatedDevices.Count);
+            }
+            
+            List<object> result = new List<object>();
+            result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
+            result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
+            result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
+            
+            return new
+            {
+                xAxis = xAxis,
+                series = result
+            };
+        }
     }
 }

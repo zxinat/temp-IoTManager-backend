@@ -23,5 +23,7 @@ namespace IoTManager.Core.Infrastructures
         int GetDeviceAffiliateData(String deviceId);
         object GetReportByRegion(String factoryName, DateTime startTime, DateTime endTime);
         object GetReportByTime(DateTime startTime, DateTime endTime);
+        object GetReportByType(DateTime startTime, DateTime endTime);
+        object GetReportByTag(DateTime startTime, DateTime endTime);
     }
 }
