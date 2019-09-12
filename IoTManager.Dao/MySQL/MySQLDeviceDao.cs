@@ -30,7 +30,8 @@ namespace IoTManager.Dao
                        "device.lastConnectionTime, " +
                        "device.createTime, " +
                        "device.updateTime, " +
-                       "device.pictureRoute " +
+                       "device.pictureRoute, " +
+                       "isOnline " + 
                        "from device " +
                        "join city on city.id=device.city " +
                        "join factory on factory.id=device.factory " +
@@ -89,7 +90,8 @@ namespace IoTManager.Dao
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute " +
+                                                     "device.pictureRoute, " +
+                                                     "isOnline " + 
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -120,7 +122,8 @@ namespace IoTManager.Dao
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute " +
+                                                     "device.pictureRoute, " +
+                                                     "isOnline " + 
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -149,7 +152,8 @@ namespace IoTManager.Dao
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute " +
+                                                     "device.pictureRoute ," +
+                                                     "isOnline " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -179,7 +183,8 @@ namespace IoTManager.Dao
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute " +
+                                                     "device.pictureRoute,  " +
+                                                     "isOnline " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -350,7 +355,8 @@ namespace IoTManager.Dao
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute " +
+                                                     "device.pictureRoute,  " +
+                                                     "isOnline " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -462,7 +468,8 @@ namespace IoTManager.Dao
                                                           "lastConnectionTime, " +
                                                           "device.createTime, " +
                                                           "device.updateTime, " +
-                                                          "device.pictureRoute " +
+                                                          "device.pictureRoute, " +
+                                                          "isOnline " +
                                                           "from tag " +
                                                           "join devicetag on devicetag.tagId=tag.id " +
                                                           "join device on device.id=devicetag.deviceId " +
@@ -504,7 +511,8 @@ namespace IoTManager.Dao
                                                      "device.lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute " +
+                                                     "device.pictureRoute, " +
+                                                     "isOnline " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +

@@ -99,7 +99,7 @@ namespace IoTManager.Dao
             var query = this._deviceData.AsQueryable()
                 .Where(dd => (dd.DeviceId == deviceId && dd.IndexId == indexId))
                 .OrderByDescending(dd => dd.Timestamp)
-                .Take(7)
+                .Take(12)
                 .ToList();
 
             foreach (var dd in query)

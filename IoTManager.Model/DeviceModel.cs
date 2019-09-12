@@ -22,5 +22,6 @@ namespace IoTManager.Model
         public DateTime UpdateTime { get; set; }
         public String Remark { get; set; }
         public String PictureRoute{ get; set; }
+        public String IsOnline { get; set; }
     }
 }
