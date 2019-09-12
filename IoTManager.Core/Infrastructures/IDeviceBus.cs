@@ -23,7 +23,7 @@ namespace IoTManager.Core.Infrastructures
         String CreateDeviceType(String deviceType);
         long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all");
         List<object> GetFieldOptions();
-        String UploadPicture(IFormCollection data);
+        String UploadPicture(PictureUploadSerializer pic);
         String GetPicture(String deviceId);
         List<DeviceSerializer> GetDeviceByCity(String cityName);
         List<DeviceSerializer> GetDeviceByTag(String tag);

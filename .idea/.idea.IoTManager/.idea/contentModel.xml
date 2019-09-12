@@ -452,6 +452,7 @@
           <e p="FactorySerializer.cs" t="Include" />
           <e p="FieldSerializer.cs" t="Include" />
           <e p="GatewaySerializer.cs" t="Include" />
+          <e p="PictureUploadSerializer.cs" t="Include" />
           <e p="ResponseSerializer.cs" t="Include" />
           <e p="RoleSerializer.cs" t="Include" />
           <e p="SeveritySerializer.cs" t="Include" />

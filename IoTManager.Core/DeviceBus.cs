@@ -96,6 +96,8 @@ namespace IoTManager.Core
             deviceModel.Mac = deviceSerializer.mac;
             deviceModel.DeviceType = deviceSerializer.deviceType;
             deviceModel.Remark = deviceSerializer.remark;
+            deviceModel.IsOnline = deviceSerializer.isOnline;
+            deviceModel.Base64Image = deviceSerializer.base64Image;
             return this._deviceDao.Create(deviceModel);
         }
 
@@ -115,6 +117,8 @@ namespace IoTManager.Core
             deviceModel.DeviceType = deviceSerializer.deviceType;
             deviceModel.Remark = deviceSerializer.remark;
             deviceModel.PictureRoute = deviceSerializer.pictureRoute;
+            deviceModel.IsOnline = deviceSerializer.isOnline;
+            deviceModel.Base64Image = deviceSerializer.base64Image;
             return this._deviceDao.Update(id, deviceModel);
         }
 
@@ -181,19 +185,11 @@ namespace IoTManager.Core
             return result;
         }
 
-        public String UploadPicture(IFormCollection data)
+        public String UploadPicture(PictureUploadSerializer data)
         {
             try{
-                IFormFileCollection files = data.Files;
-                IFormFile picture = files.GetFile("picture");
-                Console.WriteLine(picture.Length);
-                String today = DateTime.Now.ToString("yyyyMMdd");
-                var filePath = "D:/IoTManager/" + today + "-" + System.Guid.NewGuid().ToString() + picture.FileName;
-                var stream = new FileStream(filePath, FileMode.Create);
-                picture.CopyToAsync(stream);
-                stream.Close();
-                DeviceSerializer device = this.GetDeviceByDeviceId(data["deviceId"]);
-                device.pictureRoute = filePath;
+                DeviceSerializer device = this.GetDeviceByDeviceId(data.deviceId);
+                device.base64Image = data.picture;
                 this.UpdateDevice(device.id, device);
                 return "图片上传成功";
             }

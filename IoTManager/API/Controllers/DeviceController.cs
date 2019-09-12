@@ -179,12 +179,12 @@ namespace IoTManager.API.Controllers
                 this._deviceBus.GetFieldOptions());
         }
         [HttpPost("uploadPicture")]
-        public ResponseSerializer UploadPicture([FromForm]IFormCollection data)
+        public ResponseSerializer UploadPicture([FromBody] PictureUploadSerializer pic)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.UploadPicture(data)
+                this._deviceBus.UploadPicture(pic)
             );
         }
 

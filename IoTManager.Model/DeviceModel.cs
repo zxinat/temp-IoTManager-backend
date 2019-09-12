@@ -23,5 +23,6 @@ namespace IoTManager.Model
         public String Remark { get; set; }
         public String PictureRoute{ get; set; }
         public String IsOnline { get; set; }
+        public String Base64Image { get; set; }
     }
 }

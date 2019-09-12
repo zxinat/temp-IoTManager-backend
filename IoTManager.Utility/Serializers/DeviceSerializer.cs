@@ -24,6 +24,7 @@ namespace IoTManager.Utility.Serializers
             this.remark = null;
             this.pictureRoute = null;
             this.isOnline = null;
+            this.base64Image = null;
         }
 
         public DeviceSerializer(DeviceModel deviceModel)
@@ -48,6 +49,7 @@ namespace IoTManager.Utility.Serializers
             this.remark = deviceModel.Remark;
             this.pictureRoute = deviceModel.PictureRoute;
             this.isOnline = deviceModel.IsOnline;
+            this.base64Image = deviceModel.Base64Image;
         }
         
         public int id { get; set; }
@@ -67,6 +69,7 @@ namespace IoTManager.Utility.Serializers
         public String remark { get; set; }
         public String pictureRoute{ get; set; }
         public String isOnline { get; set; }
+        public String base64Image { get; set; }
     }
 
     public class BatchNumber

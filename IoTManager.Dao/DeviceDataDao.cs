@@ -230,6 +230,7 @@ namespace IoTManager.Dao
                 id = device.Id,
                 deviceName = device.DeviceName,
                 hardwareDeviceID = device.HardwareDeviceId,
+                base64Image = device.Base64Image,
                 deviceType = device.DeviceType,
                 deviceState = device.DeviceState,
                 imageUrl = device.ImageUrl,

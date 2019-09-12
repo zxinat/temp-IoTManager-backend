@@ -31,7 +31,8 @@ namespace IoTManager.Dao
                        "device.createTime, " +
                        "device.updateTime, " +
                        "device.pictureRoute, " +
-                       "isOnline " + 
+                       "isOnline, " + 
+                       "base64Image " +
                        "from device " +
                        "join city on city.id=device.city " +
                        "join factory on factory.id=device.factory " +
@@ -91,7 +92,8 @@ namespace IoTManager.Dao
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
                                                      "device.pictureRoute, " +
-                                                     "isOnline " + 
+                                                     "isOnline, " + 
+                                                     "base64Image " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -123,7 +125,8 @@ namespace IoTManager.Dao
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
                                                      "device.pictureRoute, " +
-                                                     "isOnline " + 
+                                                     "isOnline, " + 
+                                                     "base64Image " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -153,7 +156,8 @@ namespace IoTManager.Dao
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
                                                      "device.pictureRoute ," +
-                                                     "isOnline " +
+                                                     "isOnline, " +
+                                                     "base64Image " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -175,20 +179,23 @@ namespace IoTManager.Dao
                                                      "factory.factoryName as factory, " +
                                                      "workshop.workshopName as workshop, " +
                                                      "deviceState, " +
-                                                     "imageUrl, " +
-                                                     "gatewayID, " +
+                                                     "device.imageUrl, " +
+                                                     "gateway.gatewayName gatewayId, " +
                                                      "mac, " +
-                                                     "deviceType, " +
+                                                     "config.configValue deviceType, " +
                                                      "device.remark, " +
-                                                     "lastConnectionTime, " +
+                                                     "device.lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute,  " +
-                                                     "isOnline " +
+                                                     "device.pictureRoute, " +
+                                                     "isOnline, " + 
+                                                     "base64Image " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
                                                      "join workshop on workshop.id=device.workshop " +
+                                                     "join gateway on gateway.id=device.gatewayId " +
+                                                     "join config on config.id=device.deviceType " +
                                                      "where device.hardwareDeviceID = @hardwareDeviceID", new
                 {
                     hardwareDeviceID=deviceId
@@ -285,7 +292,8 @@ namespace IoTManager.Dao
                         "deviceType=@dt, " +
                         "remark=@r, " +
                         "updateTime=CURRENT_TIMESTAMP, " +
-                        "pictureRoute=@pr " +
+                        "pictureRoute=@pr, " +
+                        "base64Image=@bi " +
                         "WHERE device.id=@deviceId",
                         new
                         {
@@ -301,7 +309,8 @@ namespace IoTManager.Dao
                             m = deviceModel.Mac,
                             dt = deviceType,
                             r = deviceModel.Remark,
-                            pr = deviceModel.PictureRoute
+                            pr = deviceModel.PictureRoute,
+                            bi = deviceModel.Base64Image
                         });
                 return rows == 1 ? "success" : "error";
             }
@@ -356,7 +365,8 @@ namespace IoTManager.Dao
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
                                                      "device.pictureRoute,  " +
-                                                     "isOnline " +
+                                                     "isOnline, " +
+                                                     "base64Image " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -469,7 +479,8 @@ namespace IoTManager.Dao
                                                           "device.createTime, " +
                                                           "device.updateTime, " +
                                                           "device.pictureRoute, " +
-                                                          "isOnline " +
+                                                          "isOnline, " +
+                                                          "base64Image " +
                                                           "from tag " +
                                                           "join devicetag on devicetag.tagId=tag.id " +
                                                           "join device on device.id=devicetag.deviceId " +
@@ -512,7 +523,8 @@ namespace IoTManager.Dao
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
                                                      "device.pictureRoute, " +
-                                                     "isOnline " +
+                                                     "isOnline, " +
+                                                     "base64Image " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
