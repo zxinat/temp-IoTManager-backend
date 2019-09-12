@@ -299,6 +299,7 @@
         <e p="DepartmentModel.cs" t="Include" />
         <e p="DeviceDataModel.cs" t="Include" />
         <e p="DeviceModel.cs" t="Include" />
+        <e p="DeviceTypeModel.cs" t="Include" />
         <e p="FactoryModel.cs" t="Include" />
         <e p="FieldModel.cs" t="Include" />
         <e p="GatewayModel.cs" t="Include" />
@@ -447,6 +448,7 @@
           <e p="CitySerializer.cs" t="Include" />
           <e p="DeviceDataSerializer.cs" t="Include" />
           <e p="DeviceSerializer.cs" t="Include" />
+          <e p="DeviceTypeSerializer.cs" t="Include" />
           <e p="FactorySerializer.cs" t="Include" />
           <e p="FieldSerializer.cs" t="Include" />
           <e p="GatewaySerializer.cs" t="Include" />

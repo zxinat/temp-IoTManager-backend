@@ -8,7 +8,7 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class StateTypeDao: IStateTypeDao
+    public sealed class StateTypeDao
     {
         public List<String> GetDeviceType()
         {

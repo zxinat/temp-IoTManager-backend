@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using IoTManager.Model;
 
 namespace IoTManager.IDao
 {
@@ -9,5 +10,6 @@ namespace IoTManager.IDao
         List<String> GetDeviceState();
         List<String> GetGatewayType();
         List<String> GetGatewayState();
+        List<DeviceTypeModel> GetDetailedDeviceType();
     }
 }

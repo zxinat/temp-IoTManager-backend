@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
+using IoTManager.Model;
+using IoTManager.Utility.Serializers;
 using Microsoft.Extensions.Logging;
 
 namespace IoTManager.Core
@@ -58,6 +60,18 @@ namespace IoTManager.Core
             {
                 result.Add(new {stateName = gs});
             }
+            return result;
+        }
+
+        public List<DeviceTypeSerializer> GetDetailedDeviceTypes()
+        {
+            List<DeviceTypeModel> deviceTypes = this._stateTypeDao.GetDetailedDeviceType();
+            List<DeviceTypeSerializer> result = new List<DeviceTypeSerializer>();
+            foreach (DeviceTypeModel dtm in deviceTypes)
+            {
+                result.Add(new DeviceTypeSerializer(dtm));
+            }
+
             return result;
         }
     }

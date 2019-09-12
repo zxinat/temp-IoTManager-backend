@@ -55,5 +55,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._stateTypeBus.GetAllGatewayStates());
         }
+
+        [HttpGet("detailedDeviceType")]
+        public ResponseSerializer GetDetailedDeviceTypes()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._stateTypeBus.GetDetailedDeviceTypes());
+        }
     }
 }
