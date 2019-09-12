@@ -525,5 +525,18 @@ namespace IoTManager.Dao
                 }).ToList();
             }
         }
+
+        public String SetDeviceOnlineStatus(String id, String status)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute("update device set isOnline=@s where device.hardwareDeviceID=@did", new
+                {
+                    s = status,
+                    did = id
+                });
+                return rows == 1 ? "success" : "error";
+            }
+        }
     }
 }

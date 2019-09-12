@@ -14,20 +14,34 @@ namespace IoTManager.Core.Jobs
         private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly IThresholdDao _thresholdDao;
         private readonly ISeverityDao _severityDao;
+        private readonly IDeviceDao _deviceDao;
         private readonly ILogger _logger;
 
-        public AlarmInfoJob(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, IThresholdDao thresholdDao, ISeverityDao severityDao, ILogger<AlarmInfoJob> logger)
+        public AlarmInfoJob(IDeviceDataDao deviceDataDao, 
+            IAlarmInfoDao alarmInfoDao, 
+            IThresholdDao thresholdDao, 
+            ISeverityDao severityDao, 
+            IDeviceDao deviceDao,
+            ILogger<AlarmInfoJob> logger)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
             this._thresholdDao = thresholdDao;
             this._severityDao = severityDao;
+            this._deviceDao = deviceDao;
             this._logger = logger;
         }
 
-        [Invoke(Begin = "2019-6-16 16:20", Interval = 1000 * 10, SkipWhileExecuting = true)]
+        [Invoke(Begin = "2019-6-16 16:20", Interval = 1000 * 30, SkipWhileExecuting = true)]
         public void Run()
         {
+            
+            List<DeviceModel> devices = this._deviceDao.Get("all");
+            foreach (DeviceModel device in devices)
+            {
+                this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "no");
+            }
+            
             List<DeviceDataModel> dataNotInspected = _deviceDataDao.GetNotInspected();
             Dictionary<String, List<DeviceDataModel>> sortedData = new Dictionary<string, List<DeviceDataModel>>();
             List<String> deviceIds = new List<string>();
@@ -45,6 +59,12 @@ namespace IoTManager.Core.Jobs
                 deviceIds.Add(d.DeviceId);
             }
             deviceIds = deviceIds.Distinct().ToList();
+
+            foreach (String did in deviceIds)
+            {
+                this._deviceDao.SetDeviceOnlineStatus(did, "yes");
+            }
+            
             Dictionary<String, String> operatorName = new Dictionary<string, string>();
             operatorName.Add("equal", "=");
             operatorName.Add("greater", ">");

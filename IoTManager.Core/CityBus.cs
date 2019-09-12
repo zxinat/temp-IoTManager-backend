@@ -126,13 +126,16 @@ namespace IoTManager.Core
             List<object> result = new List<object>();
             foreach (CityModel city in cities)
             {
-                int num = devices.AsQueryable()
-                    .Where(d => d.City == city.CityName)
+                int offlineNum = devices.AsQueryable()
+                    .Where(d => d.City == city.CityName && d.IsOnline == "no")
                     .ToList().Count;
-                List<double> info = new List<double>();
+                int onlineNum = devices.AsQueryable()
+                    .Where(d => d.City == city.CityName && d.IsOnline == "yes")
+                    .ToList().Count;
+                List<object> info = new List<object>();
                 info.Add(city.longitude);
                 info.Add(city.latitude);
-                info.Add(num);
+                info.Add("在线: " + onlineNum.ToString() + "; 离线: " + offlineNum.ToString());
                 result.Add(new {name=city.CityName, value=info});
             }
 
@@ -143,14 +146,17 @@ namespace IoTManager.Core
         {
             CityModel city = this._cityDao.GetOneCityByName(cityName);
             List<DeviceModel> devices = this._deviceDao.Get("all");
-            var query = devices.AsQueryable()
-                .Where(d => d.City == cityName)
-                .ToList();
+            var offlineQuery = devices.AsQueryable()
+                .Where(d => d.City == cityName && d.IsOnline == "no")
+                .ToList().Count;
+            var onlineQuery = devices.AsQueryable()
+                .Where(d => d.City == cityName && d.IsOnline == "yes")
+                .ToList().Count;
             List<object> result = new List<object>();
-            List<double> info = new List<double>();
+            List<object> info = new List<object>();
             info.Add(city.longitude);
             info.Add(city.latitude);
-            info.Add(query.Count);
+            info.Add("在线: " + onlineQuery.ToString() + "; 离线: " + offlineQuery.ToString());
             result.Add(new {name=cityName, value=info});
             return result;
         }
