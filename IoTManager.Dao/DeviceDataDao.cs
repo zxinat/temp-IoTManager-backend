@@ -20,8 +20,9 @@ namespace IoTManager.Dao
         private readonly IMongoCollection<AlarmInfoModel> _alarmInfo;
         private readonly IThresholdDao _thresholdDao;
         private readonly IFieldDao _fieldDao;
+        private readonly ICityDao _cityDao;
 
-        public DeviceDataDao(IThresholdDao thresholdDao, IFieldDao fieldDao)
+        public DeviceDataDao(IThresholdDao thresholdDao, IFieldDao fieldDao, ICityDao cityDao)
         {
             var client = new MongoClient(Constant.getMongoDBConnectionString());
             var database = client.GetDatabase("iotmanager");
@@ -29,6 +30,7 @@ namespace IoTManager.Dao
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
             this._thresholdDao = thresholdDao;
             this._fieldDao = fieldDao;
+            this._cityDao = cityDao;
         }
 
         public List<DeviceDataModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc")
@@ -126,7 +128,29 @@ namespace IoTManager.Dao
             DeviceModel device = new DeviceModel();
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                device = connection.Query<DeviceModel>("select * from device where id=@did", new {did = id})
+                device = connection.Query<DeviceModel>("select device.id, " +
+                                                       "hardwareDeviceID, " +
+                                                       "deviceName, " +
+                                                       "city.cityName as city, " +
+                                                       "factory.factoryName as factory, " +
+                                                       "workshop.workshopName as workshop, " +
+                                                       "deviceState, " +
+                                                       "imageUrl, " +
+                                                       "gatewayID, " +
+                                                       "mac, " +
+                                                       "deviceType, " +
+                                                       "device.remark, " +
+                                                       "lastConnectionTime, " +
+                                                       "device.createTime, " +
+                                                       "device.updateTime, " +
+                                                       "device.pictureRoute, " +
+                                                       "isOnline, " + 
+                                                       "base64Image " +
+                                                       "from device " +
+                                                       "join city on city.id=device.city " +
+                                                       "join factory on factory.id=device.factory " +
+                                                       "join workshop on workshop.id=device.workshop " + 
+                                                       "where device.id=@did", new {did = id})
                     .FirstOrDefault();
                 deviceId = device.HardwareDeviceId;
             }
@@ -225,6 +249,8 @@ namespace IoTManager.Dao
                 aggregateMonthResult.Add(tmpMonth);
             }
 
+            CityModel city = this._cityDao.GetOneCityByName(device.City);
+
             return new
             {
                 id = device.Id,
@@ -247,7 +273,10 @@ namespace IoTManager.Dao
                 fields = affiliateFields,
                 aggregateDayResult = aggregateDayResult,
                 aggregateHourResult = aggregateHourResult,
-                aggregateMonthResult = aggregateMonthResult
+                aggregateMonthResult = aggregateMonthResult,
+                city = device.City,
+                longitude = city.longitude,
+                latitude = city.latitude
             };
         }
 

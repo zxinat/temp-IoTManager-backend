@@ -175,5 +175,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._cityBus.GetCityFactoryTree());
         }
+
+        [HttpGet("oneCityByName/{cityName}")]
+        public ResponseSerializer GetOneCityByName(String cityName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._cityBus.GetOneCityByName(cityName));
+        }
     }
 }

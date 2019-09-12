@@ -23,5 +23,6 @@ namespace IoTManager.Core.Infrastructures
         int GetCityAffiliateDevice(int id);
         int GetCityAffiliateGateway(int id);
         object GetCityFactoryTree();
+        CitySerializer GetOneCityByName(String cityName);
     }
 }

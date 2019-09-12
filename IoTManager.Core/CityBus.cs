@@ -213,5 +213,12 @@ namespace IoTManager.Core
 
             return result;
         }
+
+        public CitySerializer GetOneCityByName(String cityName)
+        {
+            CityModel city = this._cityDao.GetOneCityByName(cityName);
+            CitySerializer result = new CitySerializer(city);
+            return result;
+        }
     }
 }
