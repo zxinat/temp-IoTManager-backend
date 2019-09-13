@@ -15,11 +15,13 @@ namespace IoTManager.Core
         private readonly IUserDao _userDao;
         private readonly ILogger _logger;
         private readonly IAuthDao _authDao;
-        public UserBus(IUserDao userDao,ILogger<UserBus> logger, IAuthDao authDao)
+        private readonly IThemeDao _themeDao;
+        public UserBus(IUserDao userDao,ILogger<UserBus> logger, IAuthDao authDao, IThemeDao themeDao)
         {
             this._userDao = userDao;
             this._logger = logger;
             this._authDao = authDao;
+            this._themeDao = themeDao;
         }
 
         public List<UserSerializer> GetAllUsers()
@@ -56,6 +58,7 @@ namespace IoTManager.Core
             userModel.Email = userSerializer.email;
             userModel.PhoneNumber = userSerializer.phoneNumber;
             userModel.Remark = userSerializer.remark;
+            userModel.Theme = this._themeDao.Get()[0].Id;
             return this._userDao.Create(userModel);
         }
 
@@ -69,6 +72,7 @@ namespace IoTManager.Core
             userModel.Email = userSerializer.email;
             userModel.PhoneNumber = userSerializer.phoneNumber;
             userModel.Remark = userSerializer.remark;
+            userModel.Theme = userSerializer.theme;
             return this._userDao.Update(id, userModel);
         }
 
@@ -98,5 +102,6 @@ namespace IoTManager.Core
         {
             return this._authDao.GetAuthByUserId(userId);
         }
+        
     }
 }

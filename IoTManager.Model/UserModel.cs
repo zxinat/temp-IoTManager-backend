@@ -17,5 +17,6 @@ namespace IoTManager.Model
         public DateTime UpdateTime { get; set; }
         public Boolean Identify { get; set; }
         public int Role { get; set; }
+        public int Theme { get; set; }
     }
 }

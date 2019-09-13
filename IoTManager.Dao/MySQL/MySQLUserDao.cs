@@ -82,7 +82,7 @@ namespace IoTManager.Dao
             {
                 int rows = connection
                     .Execute(
-                        "UPDATE account SET userName=@un, displayName=@dn, password=@p, email=@e, phoneNumber=@pn, remark=@r, updateTime=CURRENT_TIMESTAMP WHERE id=@userId",
+                        "UPDATE account SET userName=@un, displayName=@dn, password=@p, email=@e, phoneNumber=@pn, remark=@r, theme=@t, updateTime=CURRENT_TIMESTAMP WHERE id=@userId",
                         new
                         {
                             userId = userModel.Id,
@@ -91,7 +91,8 @@ namespace IoTManager.Dao
                             p = userModel.Password,
                             e = userModel.Email,
                             pn = userModel.PhoneNumber,
-                            r = userModel.Remark
+                            r = userModel.Remark,
+                            t = userModel.Theme
                         });
                 return rows == 1 ? "success" : "error";
             }
