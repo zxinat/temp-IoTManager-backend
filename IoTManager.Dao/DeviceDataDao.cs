@@ -276,7 +276,8 @@ namespace IoTManager.Dao
                 aggregateMonthResult = aggregateMonthResult,
                 city = device.City,
                 longitude = city.longitude,
-                latitude = city.latitude
+                latitude = city.latitude,
+                affiliateFields = affiliateFields
             };
         }
 
@@ -386,7 +387,22 @@ namespace IoTManager.Dao
                 .Group(x => new {year = x.year, month = x.month, day = x.day},
                     g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
                 .ToList();
-            return new {index = indexId, avg = avg};
+            List<object> result = new List<object>();
+            for (int i = 0; i < avg.Count; i++)
+            {
+                String t = avg[i].time.year + "-" +
+                           avg[i].time.month + "-" +
+                           avg[i].time.day;
+                result.Add(new
+                {
+                    time=t,
+                    max=max[i].max,
+                    min=min[i].min,
+                    avg=avg[i].avg
+                });
+            }
+            
+            return result;
         }
         
         public object GetHourAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
@@ -480,7 +496,8 @@ namespace IoTManager.Dao
                 .Group(x => new {year = x.year, month = x.month},
                     g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
                 .ToList();
-            return new {index = indexId, avg = avg};
+            
+            return new {index = indexId, average = avg, min = min, max = max};
         }
 
         public int GetDeviceAffiliateData(String deviceId)
