@@ -239,7 +239,7 @@ namespace IoTManager.Dao
             List<String> nonNullFields = new List<string>();
             foreach (var f in affiliateFields)
             {
-                var tmpDay = GetDayAggregateData(device.HardwareDeviceId, f.FieldId, sTime, eTime);
+                var tmpDay = GetDayStatisticAggregateData(device.HardwareDeviceId, f.FieldId, sTime, eTime);
                 aggregateDayResult.Add(tmpDay);
 
                 var tmpHour = GetHourAggregateData(device.HardwareDeviceId, f.FieldId, sTime, eTime);
@@ -250,6 +250,12 @@ namespace IoTManager.Dao
             }
 
             CityModel city = this._cityDao.GetOneCityByName(device.City);
+            
+            var hundredData = this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == device.HardwareDeviceId)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(100)
+                .ToList();
 
             return new
             {
@@ -277,7 +283,8 @@ namespace IoTManager.Dao
                 city = device.City,
                 longitude = city.longitude,
                 latitude = city.latitude,
-                affiliateFields = affiliateFields
+                affiliateFields = affiliateFields,
+                hundredData = hundredData
             };
         }
 
@@ -405,6 +412,55 @@ namespace IoTManager.Dao
             return result;
         }
         
+        public object GetDayStatisticAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
+        {
+            var avg = this._deviceData.Aggregate()
+                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
+                .Project(dd => new
+                {
+                    year = dd.Timestamp.Year,
+                    month = dd.Timestamp.Month,
+                    day = dd.Timestamp.Day,
+                    DeviceId = dd.DeviceId,
+                    IndexId = dd.IndexId,
+                    IndexValue = dd.IndexValue
+                })
+                .Group(x => new {year = x.year, month = x.month, day = x.day},
+                    g => new {time = g.Key, avg = g.Average(x => x.IndexValue)})
+                .ToList();
+            var max = this._deviceData.Aggregate()
+                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
+                .Project(dd => new
+                {
+                    year = dd.Timestamp.Year,
+                    month = dd.Timestamp.Month,
+                    day = dd.Timestamp.Day,
+                    DeviceId = dd.DeviceId,
+                    IndexId = dd.IndexId,
+                    IndexValue = dd.IndexValue
+                })
+                .Group(x => new {year = x.year, month = x.month, day = x.day},
+                    g => new {time = g.Key, max = g.Max(x => x.IndexValue)})
+                .ToList();
+            var min = this._deviceData.Aggregate()
+                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
+                .Project(dd => new
+                {
+                    year = dd.Timestamp.Year,
+                    month = dd.Timestamp.Month,
+                    day = dd.Timestamp.Day,
+                    DeviceId = dd.DeviceId,
+                    IndexId = dd.IndexId,
+                    IndexValue = dd.IndexValue
+                })
+                .Group(x => new {year = x.year, month = x.month, day = x.day},
+                    g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
+                .ToList();
+
+            return new {index = indexId, avg = avg};
+            ;
+        }
+        
         public object GetHourAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
         {
             var avg = this._deviceData.Aggregate()
@@ -497,7 +553,7 @@ namespace IoTManager.Dao
                     g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
                 .ToList();
             
-            return new {index = indexId, average = avg, min = min, max = max};
+            return new {index = indexId, avg = avg, min = min, max = max};
         }
 
         public int GetDeviceAffiliateData(String deviceId)
