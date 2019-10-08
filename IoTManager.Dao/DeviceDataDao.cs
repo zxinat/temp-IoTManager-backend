@@ -250,12 +250,18 @@ namespace IoTManager.Dao
             }
 
             CityModel city = this._cityDao.GetOneCityByName(device.City);
-            
-            var hundredData = this._deviceData.AsQueryable()
-                .Where(dd => dd.DeviceId == device.HardwareDeviceId)
-                .OrderByDescending(dd => dd.Timestamp)
-                .Take(100)
-                .ToList();
+
+            Dictionary<String, object> resultHundredData = new Dictionary<string, object>();
+            foreach (var f in affiliateFields)
+            {
+                var hundredData = this._deviceData.AsQueryable()
+                    .Where(dd => dd.DeviceId == device.HardwareDeviceId && dd.IndexId == f.FieldId)
+                    .OrderByDescending(dd => dd.Timestamp)
+                    .Take(100)
+                    .ToList();
+                hundredData.Reverse();
+                resultHundredData.Add(f.FieldName, hundredData);
+            }
 
             return new
             {
@@ -284,7 +290,7 @@ namespace IoTManager.Dao
                 longitude = city.longitude,
                 latitude = city.latitude,
                 affiliateFields = affiliateFields,
-                hundredData = hundredData
+                hundredData = resultHundredData
             };
         }
 
