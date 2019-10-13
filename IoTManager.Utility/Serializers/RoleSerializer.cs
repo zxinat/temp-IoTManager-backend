@@ -18,8 +18,8 @@ namespace IoTManager.Utility.Serializers
             this.id = roleModel.Id;
             this.roleName = roleModel.RoleName;
             this.description = roleModel.Description;
-            this.timestamp = roleModel.Timestamp
-                .ToString(Constant.getDateFormatString());
+            this.timestamp = DateTime.Parse(roleModel.Timestamp.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
         }
         public int id { get; set; }
         public String roleName { get; set; }

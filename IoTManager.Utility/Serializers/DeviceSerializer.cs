@@ -36,16 +36,16 @@ namespace IoTManager.Utility.Serializers
             this.factory = deviceModel.Factory;
             this.workshop = deviceModel.Workshop;
             this.deviceState = deviceModel.DeviceState;
-            this.lastConnectiontime = deviceModel.LastConnectionTime
-                .ToString(Constant.getDateFormatString());
+            this.lastConnectiontime = DateTime.Parse(deviceModel.LastConnectionTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.imageUrl = deviceModel.ImageUrl;
             this.gatewayId = deviceModel.GatewayId;
             this.mac = deviceModel.Mac;
             this.deviceType = deviceModel.DeviceType;
-            this.createTime = deviceModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = deviceModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(deviceModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(deviceModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.remark = deviceModel.Remark;
             this.pictureRoute = deviceModel.PictureRoute;
             this.isOnline = deviceModel.IsOnline;

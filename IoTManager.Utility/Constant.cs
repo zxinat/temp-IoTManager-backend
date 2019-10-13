@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace IoTManager.Utility
 {
@@ -24,7 +25,7 @@ namespace IoTManager.Utility
 
         public static String getDateFormatString()
         {
-            return "yyyy-MM-dd\nhh:mm:ss";
+            return "yyyy-MM-dd\nHH:mm:ss";
         }
 
         public static String getLineChartDateFormatString()

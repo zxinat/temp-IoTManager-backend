@@ -34,12 +34,12 @@ namespace IoTManager.Utility.Serializers
             this.gatewayState = gatewayModel.GatewayState;
             this.imageUrl = gatewayModel.ImageUrl;
             this.remark = gatewayModel.Remark;
-            this.lastConnectionTime = gatewayModel.LastConnectionTime
-                .ToString(Constant.getDateFormatString());
-            this.createTime = gatewayModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = gatewayModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.lastConnectionTime = DateTime.Parse(gatewayModel.LastConnectionTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(gatewayModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(gatewayModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
         }
         
         public int id { get; set; }

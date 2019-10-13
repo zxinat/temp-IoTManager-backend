@@ -24,10 +24,10 @@ namespace IoTManager.Utility.Serializers
             this.factoryPhoneNumber = factoryModel.FactoryPhoneNumber;
             this.factoryAddress = factoryModel.FactoryAddress;
             this.remark = factoryModel.Remark;
-            this.createTime = factoryModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = factoryModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(factoryModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(factoryModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.city = factoryModel.City;
         }
         

@@ -24,10 +24,10 @@ namespace IoTManager.Utility.Serializers
             this.workshopPhoneNumber = workshopModel.WorkshopPhoneNumber;
             this.workshopAddress = workshopModel.WorkshopAddress;
             this.remark = workshopModel.Remark;
-            this.createTime = workshopModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = workshopModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(workshopModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(workshopModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.factory = workshopModel.Factory;
         }
         

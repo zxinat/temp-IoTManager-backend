@@ -21,10 +21,10 @@ namespace IoTManager.Utility.Serializers
             this.id = cityModel.Id;
             this.cityName = cityModel.CityName;
             this.remark = cityModel.Remark;
-            this.createTime = cityModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = cityModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(cityModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(cityModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.longitude = cityModel.longitude;
             this.latitude = cityModel.latitude;
         }

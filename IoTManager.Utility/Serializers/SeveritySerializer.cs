@@ -17,10 +17,10 @@ namespace IoTManager.Utility.Serializers
         {
             this.id = severityModel.Id;
             this.severityName = severityModel.SeverityName;
-            this.createTime = severityModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = severityModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(severityModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(severityModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
         }
         
         public int id { get; set; }

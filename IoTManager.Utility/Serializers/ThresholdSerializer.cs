@@ -32,10 +32,10 @@ namespace IoTManager.Utility.Serializers
             this.deviceGroup = thresholdModel.DeviceId;
             this.Operator = thresholdModel.Operator;
             this.value = thresholdModel.ThresholdValue.ToString();
-            this.createTime = thresholdModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = thresholdModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(thresholdModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(thresholdModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.name = thresholdModel.RuleName;
             this.description = thresholdModel.Description;
             this.severity = thresholdModel.Severity;

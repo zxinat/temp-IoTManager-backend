@@ -19,8 +19,8 @@ namespace IoTManager.Utility.Serializers
             this.id = authModel.Id;
             this.authId = authModel.AuthId;
             this.description = authModel.Description;
-            this.timestamp = authModel.Timestamp
-                .ToString(Constant.getDateFormatString());
+            this.timestamp = DateTime.Parse(authModel.Timestamp.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             
         }
         public int id { get; set; }

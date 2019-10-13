@@ -20,10 +20,10 @@ namespace IoTManager.Utility.Serializers
             this.id = fieldModel.Id;
             this.fieldName = fieldModel.FieldName;
             this.fieldId = fieldModel.FieldId;
-            this.createTime = fieldModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = fieldModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(fieldModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(fieldModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.device = fieldModel.Device;
         }
         

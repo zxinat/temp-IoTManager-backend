@@ -30,10 +30,10 @@ namespace IoTManager.Utility.Serializers
             this.email = userModel.Email;
             this.phoneNumber = userModel.PhoneNumber;
             this.remark = userModel.Remark;
-            this.createTime = userModel.CreateTime
-                .ToString(Constant.getDateFormatString());
-            this.updateTime = userModel.UpdateTime
-                .ToString(Constant.getDateFormatString());
+            this.createTime = DateTime.Parse(userModel.CreateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
+            this.updateTime = DateTime.Parse(userModel.UpdateTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.identify = userModel.Identify;
             this.role = userModel.Role;
             this.theme = userModel.Theme;

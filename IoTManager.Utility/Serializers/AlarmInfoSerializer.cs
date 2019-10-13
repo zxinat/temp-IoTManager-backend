@@ -28,8 +28,8 @@ namespace IoTManager.Utility.Serializers
             this.indexName = alarmInfoModel.IndexName;
             this.indexValue = alarmInfoModel.IndexValue;
             this.thresholdValue = alarmInfoModel.ThresholdValue;
-            this.timestamp = alarmInfoModel.Timestamp
-                .ToString(Constant.getDateFormatString());
+            this.timestamp = DateTime.Parse(alarmInfoModel.Timestamp.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.severity = alarmInfoModel.Severity;
             this.processed = alarmInfoModel.Processed;
         }

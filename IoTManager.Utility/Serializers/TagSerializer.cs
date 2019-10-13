@@ -17,8 +17,8 @@ namespace IoTManager.Utility.Serializers
         {
             this.id = tagModel.Id;
             this.tagName = tagModel.TagName;
-            this.timestamp = tagModel.Timestamp
-                .ToString(Constant.getDateFormatString());
+            this.timestamp = DateTime.Parse(tagModel.Timestamp.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
         }
         public int id { get; set; }
         public String tagName { get; set; }
