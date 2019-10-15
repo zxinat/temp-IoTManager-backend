@@ -110,9 +110,9 @@ namespace IoTManager.Core
             return this._deviceDataDao.Update(id, deviceDataModel);
         }
 
-        public object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
+        public object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime, String scale)
         {
-            return this._deviceDataDao.GetDayAggregateData(deviceId, indexId, startTime, endTime);
+            return this._deviceDataDao.GetDayAggregateData(deviceId, indexId, startTime, endTime, scale);
         }
 
         public object GetMultipleLineChartData(String deviceId, List<String> fields)

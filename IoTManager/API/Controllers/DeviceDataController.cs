@@ -123,12 +123,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpPost("aggregate/day/{deviceId}")]
-        public ResponseSerializer GetDayAggregateData(String deviceId, String indexId, [FromBody] DataStatisticRequestModel request)
+        public ResponseSerializer GetDayAggregateData(String deviceId, String indexId, String scale, [FromBody] DataStatisticRequestModel request)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetDayAggregateData(deviceId, indexId, request.StartTime, request.EndTime));
+                this._deviceDataBus.GetDayAggregateData(deviceId, indexId, request.StartTime, request.EndTime, scale));
         }
 
         [HttpPost("statistic/{deviceId}")]

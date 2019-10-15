@@ -356,66 +356,213 @@ namespace IoTManager.Dao
             return result.ModifiedCount == 1 ? "success" : "error";
         }
 
-        public object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
+        public object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime, String scale)
         {
-            var avg = this._deviceData.Aggregate()
-                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
-                .Project(dd => new
-                {
-                    year = dd.Timestamp.Year,
-                    month = dd.Timestamp.Month,
-                    day = dd.Timestamp.Day,
-                    DeviceId = dd.DeviceId,
-                    IndexId = dd.IndexId,
-                    IndexValue = dd.IndexValue
-                })
-                .Group(x => new {year = x.year, month = x.month, day = x.day},
-                    g => new {time = g.Key, avg = g.Average(x => x.IndexValue)})
-                .ToList();
-            var max = this._deviceData.Aggregate()
-                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
-                .Project(dd => new
-                {
-                    year = dd.Timestamp.Year,
-                    month = dd.Timestamp.Month,
-                    day = dd.Timestamp.Day,
-                    DeviceId = dd.DeviceId,
-                    IndexId = dd.IndexId,
-                    IndexValue = dd.IndexValue
-                })
-                .Group(x => new {year = x.year, month = x.month, day = x.day},
-                    g => new {time = g.Key, max = g.Max(x => x.IndexValue)})
-                .ToList();
-            var min = this._deviceData.Aggregate()
-                .Match(dd => dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime && dd.Timestamp <= endTime)
-                .Project(dd => new
-                {
-                    year = dd.Timestamp.Year,
-                    month = dd.Timestamp.Month,
-                    day = dd.Timestamp.Day,
-                    DeviceId = dd.DeviceId,
-                    IndexId = dd.IndexId,
-                    IndexValue = dd.IndexValue
-                })
-                .Group(x => new {year = x.year, month = x.month, day = x.day},
-                    g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
-                .ToList();
-            List<object> result = new List<object>();
-            for (int i = 0; i < avg.Count; i++)
+            if (scale == "day")
             {
-                String t = avg[i].time.year + "-" +
-                           avg[i].time.month + "-" +
-                           avg[i].time.day;
-                result.Add(new
+                var avg = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        day = dd.Timestamp.Day,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month, day = x.day},
+                        g => new {time = g.Key, avg = g.Average(x => x.IndexValue)})
+                    .ToList();
+                var max = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        day = dd.Timestamp.Day,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month, day = x.day},
+                        g => new {time = g.Key, max = g.Max(x => x.IndexValue)})
+                    .ToList();
+                var min = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        day = dd.Timestamp.Day,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month, day = x.day},
+                        g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
+                    .ToList();
+                List<object> result = new List<object>();
+                for (int i = 0; i < avg.Count; i++)
                 {
-                    time=t,
-                    max=max[i].max,
-                    min=min[i].min,
-                    avg=avg[i].avg
-                });
+                    String t = avg[i].time.year + "-" +
+                               avg[i].time.month + "-" +
+                               avg[i].time.day;
+                    result.Add(new
+                    {
+                        time = t,
+                        max = max[i].max,
+                        min = min[i].min,
+                        avg = avg[i].avg
+                    });
+                }
+
+                return result;
+            } 
+            else if (scale == "month")
+            {
+                var avg = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month},
+                        g => new {time = g.Key, avg = g.Average(x => x.IndexValue)})
+                    .ToList();
+                var max = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month},
+                        g => new {time = g.Key, max = g.Max(x => x.IndexValue)})
+                    .ToList();
+                var min = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month},
+                        g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
+                    .ToList();
+                List<object> result = new List<object>();
+                for (int i = 0; i < avg.Count; i++)
+                {
+                    String t = avg[i].time.year + "-" +
+                               avg[i].time.month;
+                    result.Add(new
+                    {
+                        time = t,
+                        max = max[i].max,
+                        min = min[i].min,
+                        avg = avg[i].avg
+                    });
+                }
+
+                return result;
             }
-            
-            return result;
+            else if (scale == "hour")
+            {
+                var avg = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        day = dd.Timestamp.Day,
+                        hour = dd.Timestamp.Hour,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month, day = x.day, hour = x.hour},
+                        g => new {time = g.Key, avg = g.Average(x => x.IndexValue)})
+                    .ToList();
+                var max = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        day = dd.Timestamp.Day,
+                        hour = dd.Timestamp.Hour,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month, day = x.day, hour = x.hour},
+                        g => new {time = g.Key, max = g.Max(x => x.IndexValue)})
+                    .ToList();
+                var min = this._deviceData.Aggregate()
+                    .Match(dd =>
+                        dd.DeviceId == deviceId && dd.IndexId == indexId && dd.Timestamp >= startTime &&
+                        dd.Timestamp <= endTime)
+                    .Project(dd => new
+                    {
+                        year = dd.Timestamp.Year,
+                        month = dd.Timestamp.Month,
+                        day = dd.Timestamp.Day,
+                        hour = dd.Timestamp.Hour,
+                        DeviceId = dd.DeviceId,
+                        IndexId = dd.IndexId,
+                        IndexValue = dd.IndexValue
+                    })
+                    .Group(x => new {year = x.year, month = x.month, day = x.day, hour = x.hour},
+                        g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
+                    .ToList();
+                List<object> result = new List<object>();
+                for (int i = 0; i < avg.Count; i++)
+                {
+                    String t = avg[i].time.year + "-" +
+                               avg[i].time.month + "-" +
+                               avg[i].time.day + " " +
+                               avg[i].time.hour;
+                    result.Add(new
+                    {
+                        time = t,
+                        max = max[i].max,
+                        min = min[i].min,
+                        avg = avg[i].avg
+                    });
+                }
+
+                return result;
+            }
+            else
+            {
+                return null;
+            }
         }
         
         public object GetDayStatisticAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)
