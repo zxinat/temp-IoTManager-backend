@@ -259,5 +259,23 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetAllTag());
         }
+
+        [HttpPost("deviceTag/{deviceId}")]
+        public ResponseSerializer SetDeviceTag(int deviceId, [FromBody] BatchString str)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.SetDeviceTag(deviceId, str.str));
+        }
+
+        [HttpGet("deviceTag/{deviceId}")]
+        public ResponseSerializer GetDeviceTag(int deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceTag(deviceId));
+        }
     }
 }

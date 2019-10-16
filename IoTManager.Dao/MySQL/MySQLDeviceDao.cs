@@ -499,6 +499,24 @@ namespace IoTManager.Dao
             }
         }
 
+        public Object SetDeviceTag(int deviceId, List<String> tagId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                connection.Execute("delete from devicetag where deviceId=@did", new {did = deviceId});
+                foreach (String i in tagId)
+                {
+                    var tid = connection.Query<String>("select id from tag where tagName=@tn", new {tn = i});
+                    connection.Execute("insert into devicetag(deviceId, tagId) values(@did, @tid)", new
+                    {
+                        did = deviceId,
+                        tid = tid
+                    });
+                }
+                return "success";
+            }
+        }
+
         public List<DeviceModel> GetByDeviceType(String deviceType)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
@@ -548,6 +566,17 @@ namespace IoTManager.Dao
                     did = id
                 });
                 return rows == 1 ? "success" : "error";
+            }
+        }
+
+        public List<String> GetDeviceTag(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection
+                    .Query<String>("select tagName from devicetag inner join tag on tagId=tag.id where deviceId=@did", new {did=id})
+                    .ToList();
+                return result;
             }
         }
     }

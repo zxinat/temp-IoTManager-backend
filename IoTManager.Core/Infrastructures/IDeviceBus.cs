@@ -28,5 +28,7 @@ namespace IoTManager.Core.Infrastructures
         List<DeviceSerializer> GetDeviceByCity(String cityName);
         List<DeviceSerializer> GetDeviceByTag(String tag);
         List<String> GetAllTag();
+        Object SetDeviceTag(int deviceId, List<String> tagId);
+        List<String> GetDeviceTag(int id);
     }
 }

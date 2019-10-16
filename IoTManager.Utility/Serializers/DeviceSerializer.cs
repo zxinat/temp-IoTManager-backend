@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using IoTManager.Model;
 
 namespace IoTManager.Utility.Serializers
@@ -25,6 +26,7 @@ namespace IoTManager.Utility.Serializers
             this.pictureRoute = null;
             this.isOnline = null;
             this.base64Image = null;
+            this.tags = null;
         }
 
         public DeviceSerializer(DeviceModel deviceModel)
@@ -50,6 +52,7 @@ namespace IoTManager.Utility.Serializers
             this.pictureRoute = deviceModel.PictureRoute;
             this.isOnline = deviceModel.IsOnline;
             this.base64Image = deviceModel.Base64Image;
+            this.tags = deviceModel.Tags;
         }
         
         public int id { get; set; }
@@ -70,6 +73,7 @@ namespace IoTManager.Utility.Serializers
         public String pictureRoute{ get; set; }
         public String isOnline { get; set; }
         public String base64Image { get; set; }
+        public List<String> tags { get; set; }
     }
 
     public class BatchNumber

@@ -24,7 +24,9 @@ namespace IoTManager.IDao
         long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all");
         List<DeviceModel> GetDeviceByTag(String tag);
         List<String> GetAllTag();
+        Object SetDeviceTag(int deviceId, List<String> tagId);
         List<DeviceModel> GetByDeviceType(String deviceType);
         String SetDeviceOnlineStatus(String id, String status);
+        List<String> GetDeviceTag(int id);
     }
 }

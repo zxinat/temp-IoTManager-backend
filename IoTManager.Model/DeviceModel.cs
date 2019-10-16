@@ -24,5 +24,6 @@ namespace IoTManager.Model
         public String PictureRoute{ get; set; }
         public String IsOnline { get; set; }
         public String Base64Image { get; set; }
+        public List<String> Tags { get; set; }
     }
 }
