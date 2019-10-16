@@ -579,5 +579,14 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public String AddTag(String tagName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection.Execute("insert into tag(tagName) values(@tn)", new {tn = tagName});
+                return result == 1 ? "success" : "error";
+            }
+        }
     }
 }

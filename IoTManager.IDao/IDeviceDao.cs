@@ -28,5 +28,6 @@ namespace IoTManager.IDao
         List<DeviceModel> GetByDeviceType(String deviceType);
         String SetDeviceOnlineStatus(String id, String status);
         List<String> GetDeviceTag(int id);
+        String AddTag(String tagName);
     }
 }

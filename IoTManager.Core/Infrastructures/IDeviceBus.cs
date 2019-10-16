@@ -30,5 +30,6 @@ namespace IoTManager.Core.Infrastructures
         List<String> GetAllTag();
         Object SetDeviceTag(int deviceId, List<String> tagId);
         List<String> GetDeviceTag(int id);
+        String AddTag(String tagName);
     }
 }
