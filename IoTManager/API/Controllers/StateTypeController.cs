@@ -64,5 +64,32 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._stateTypeBus.GetDetailedDeviceTypes());
         }
+
+        [HttpPost("deviceType")]
+        public ResponseSerializer AddDeviceType([FromBody] DeviceTypeSerializer dts)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._stateTypeBus.AddDeviceType(dts));
+        }
+
+        [HttpPut("deviceType/{id}")]
+        public ResponseSerializer UpdateDeviceType(int id, [FromBody] DeviceTypeSerializer dts)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._stateTypeBus.UpdateDeviceType(id, dts));
+        }
+
+        [HttpDelete("deviceType/{id}")]
+        public ResponseSerializer DeleteDeviceType(int id)
+        {
+            return new ResponseSerializer(
+                200, 
+                "success",
+                this._stateTypeBus.DeleteDeviceType(id));
+        }
     }
 }

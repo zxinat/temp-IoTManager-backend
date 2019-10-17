@@ -11,5 +11,8 @@ namespace IoTManager.Core.Infrastructures
         List<object> GetAllGatewayTypes();
         List<object> GetAllGatewayStates();
         List<DeviceTypeSerializer> GetDetailedDeviceTypes();
+        String AddDeviceType(DeviceTypeSerializer deviceTypeSerializer);
+        String UpdateDeviceType(int id, DeviceTypeSerializer deviceTypeSerializer);
+        String DeleteDeviceType(int id);
     }
 }

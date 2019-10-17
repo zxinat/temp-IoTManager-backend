@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
@@ -73,6 +74,29 @@ namespace IoTManager.Core
             }
 
             return result;
+        }
+
+        public String AddDeviceType(DeviceTypeSerializer deviceTypeSerializer)
+        {
+            DeviceTypeModel deviceTypeModel = new DeviceTypeModel();
+            deviceTypeModel.Id = deviceTypeSerializer.id;
+            deviceTypeModel.DeviceTypeName = deviceTypeSerializer.deviceTypeName;
+            deviceTypeModel.OfflineTime = deviceTypeSerializer.offlineTime;
+            return this._stateTypeDao.AddDeviceType(deviceTypeModel);
+        }
+
+        public String UpdateDeviceType(int id, DeviceTypeSerializer deviceTypeSerializer)
+        {
+            DeviceTypeModel deviceTypeModel = new DeviceTypeModel();
+            deviceTypeModel.Id = deviceTypeSerializer.id;
+            deviceTypeModel.DeviceTypeName = deviceTypeSerializer.deviceTypeName;
+            deviceTypeModel.OfflineTime = deviceTypeSerializer.offlineTime;
+            return this._stateTypeDao.UpdateDeviceType(id, deviceTypeModel);
+        }
+
+        public String DeleteDeviceType(int id)
+        {
+            return this._stateTypeDao.DeleteDeviceType(id);
         }
     }
 }

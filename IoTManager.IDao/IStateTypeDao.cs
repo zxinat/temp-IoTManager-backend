@@ -11,5 +11,8 @@ namespace IoTManager.IDao
         List<String> GetGatewayType();
         List<String> GetGatewayState();
         List<DeviceTypeModel> GetDetailedDeviceType();
+        String AddDeviceType(DeviceTypeModel deviceTypeModel);
+        String UpdateDeviceType(int id, DeviceTypeModel deviceTypeModel);
+        String DeleteDeviceType(int id);
     }
 }

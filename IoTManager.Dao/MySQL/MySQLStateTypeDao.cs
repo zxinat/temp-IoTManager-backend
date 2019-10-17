@@ -64,5 +64,42 @@ namespace IoTManager.Dao
                 return deviceTypes;
             }
         }
+
+        public String AddDeviceType(DeviceTypeModel deviceTypeModel)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection.Execute(
+                    "insert into config(configTag, configValue, offlineTime) values(\'deviceType\', @cv, @ot)", new
+                    {
+                        cv = deviceTypeModel.DeviceTypeName,
+                        ot = deviceTypeModel.OfflineTime
+                    });
+                return result == 1 ? "success" : "error";
+            } 
+        }
+
+        public String UpdateDeviceType(int id, DeviceTypeModel deviceTypeModel)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection.Execute("update config set configValue=@dtn, offlineTime=@ot where id=@i", new
+                {
+                    i = id,
+                    dtn = deviceTypeModel.DeviceTypeName,
+                    ot = deviceTypeModel.OfflineTime
+                });
+                return result == 1 ? "success" : "error";
+            }
+        }
+
+        public String DeleteDeviceType(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection.Execute("delete from config where id=@i", new {i = id});
+                return result == 1 ? "success" : "error";
+            }
+        }
     }
 }
