@@ -14,5 +14,6 @@ namespace IoTManager.Core.Infrastructures
         String AddDeviceType(DeviceTypeSerializer deviceTypeSerializer);
         String UpdateDeviceType(int id, DeviceTypeSerializer deviceTypeSerializer);
         String DeleteDeviceType(int id);
+        int GetDeviceTypeAffiliateDevice(int id);
     }
 }

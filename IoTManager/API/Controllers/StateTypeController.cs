@@ -91,5 +91,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._stateTypeBus.DeleteDeviceType(id));
         }
+
+        [HttpGet("deviceType/affiliate/{id}")]
+        public ResponseSerializer GetDeviceTypeAffiliateDevice(int id)
+        {
+            return new  ResponseSerializer(
+                200,
+                "success",
+                this._stateTypeBus.GetDeviceTypeAffiliateDevice(id));
+        }
     }
 }

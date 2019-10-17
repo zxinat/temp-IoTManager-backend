@@ -101,5 +101,15 @@ namespace IoTManager.Dao
                 return result == 1 ? "success" : "error";
             }
         }
+
+        public int GetDeviceTypeAffiliateDevice(int id)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                System.Console.WriteLine(id);
+                var result = connection.Query<int>("select count(*) num from (select * from device where deviceType=@dt) tmp", new {dt = id}).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

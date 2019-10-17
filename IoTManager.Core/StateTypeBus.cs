@@ -98,5 +98,10 @@ namespace IoTManager.Core
         {
             return this._stateTypeDao.DeleteDeviceType(id);
         }
+
+        public int GetDeviceTypeAffiliateDevice(int id)
+        {
+            return this._stateTypeDao.GetDeviceTypeAffiliateDevice(id);
+        }
     }
 }
