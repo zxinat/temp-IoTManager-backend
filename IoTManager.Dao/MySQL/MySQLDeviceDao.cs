@@ -597,5 +597,17 @@ namespace IoTManager.Dao
                 return result == 1 ? "success" : "error";
             }
         }
+
+        public int FindTagAffiliate(String tagName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int tagId = connection.Query<int>("select id from tag where tagName=@tn", new {tn = tagName})
+                    .FirstOrDefault();
+                int result = connection.Query<int>("select count(*) num from (select * from devicetag where tagId=@tid) tmp", new {tid = tagId})
+                    .FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

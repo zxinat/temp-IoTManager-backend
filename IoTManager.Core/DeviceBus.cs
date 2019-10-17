@@ -272,5 +272,10 @@ namespace IoTManager.Core
         {
             return this._deviceDao.DeleteTag(tagName);
         }
+
+        public int FindTagAffiliate(String tagName)
+        {
+            return this._deviceDao.FindTagAffiliate(tagName);
+        }
     }
 }

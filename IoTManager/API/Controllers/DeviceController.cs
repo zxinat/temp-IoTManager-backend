@@ -295,5 +295,14 @@ namespace IoTManager.API.Controllers
                  "success",
                 this._deviceBus.DeleteTag(tagName));
         }
+
+        [HttpGet("tag/affiliation")]
+        public ResponseSerializer FindTagAffiliation(String tagName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.FindTagAffiliate(tagName));
+        }
     }
 }

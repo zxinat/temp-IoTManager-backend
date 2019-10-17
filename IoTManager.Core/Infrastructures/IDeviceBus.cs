@@ -33,5 +33,6 @@ namespace IoTManager.Core.Infrastructures
         List<String> GetDeviceTag(int id);
         String AddTag(String tagName);
         String DeleteTag(String tagName);
+        int FindTagAffiliate(String tagName);
     }
 }
