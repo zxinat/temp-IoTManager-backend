@@ -25,5 +25,6 @@ namespace IoTManager.Core.Infrastructures
         object GetReportByTime(DateTime startTime, DateTime endTime);
         object GetReportByType(DateTime startTime, DateTime endTime);
         object GetReportByTag(DateTime startTime, DateTime endTime);
+        int GetFieldAffiliateData(String fieldId);
     }
 }

@@ -444,5 +444,10 @@ namespace IoTManager.Core
                 series = result
             };
         }
+
+        public int GetFieldAffiliateData(String fieldId)
+        {
+            return this._deviceDataDao.GetFieldAffiliateData(fieldId);
+        }
     }
 }

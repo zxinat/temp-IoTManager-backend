@@ -22,5 +22,6 @@ namespace IoTManager.IDao
         object GetHourAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime);
         object GetMonthAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime);
         int GetDeviceAffiliateData(String deviceId);
+        int GetFieldAffiliateData(String fieldId);
     }
 }

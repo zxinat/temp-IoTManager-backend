@@ -1,3 +1,4 @@
+using System;
 using IoTManager.Core.Infrastructures;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,13 @@ namespace IoTManager.API.Controllers
     public class FieldController
     {
         private readonly IFieldBus _fieldBus;
+        private readonly IDeviceDataBus _deviceDataBus;
         private readonly ILogger _logger;
 
-        public FieldController(IFieldBus fieldBus, ILogger<FieldController> logger)
+        public FieldController(IFieldBus fieldBus, IDeviceDataBus deviceDataBus, ILogger<FieldController> logger)
         {
             this._fieldBus = fieldBus;
+            this._deviceDataBus = deviceDataBus;
             this._logger = logger;
         }
 
@@ -60,6 +63,15 @@ namespace IoTManager.API.Controllers
                 200,
                 "success",
                 this._fieldBus.DeleteField(id));
+        }
+
+        [HttpGet("affiliateData/{fieldId}")]
+        public ResponseSerializer GetFieldAffiliateData(String fieldId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetFieldAffiliateData(fieldId));
         }
     }
 }

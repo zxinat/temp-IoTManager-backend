@@ -715,5 +715,12 @@ namespace IoTManager.Dao
                 .Where(dd => dd.DeviceId == deviceId)
                 .ToList().Count;
         }
+
+        public int GetFieldAffiliateData(String fieldId)
+        {
+            return this._deviceData.AsQueryable()
+                .Where(dd => dd.IndexId == fieldId)
+                .ToList().Count;
+        }
     }
 }
