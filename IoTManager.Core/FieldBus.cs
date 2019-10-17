@@ -69,5 +69,21 @@ namespace IoTManager.Core
                 return new List<FieldSerializer>();
             }
         }
+
+        public String UpdateField(int id, FieldSerializer fieldSerializer)
+        {
+            FieldModel fieldModel = new FieldModel();
+            fieldModel.Id = fieldSerializer.id;
+            fieldModel.FieldId = fieldSerializer.fieldId;
+            fieldModel.FieldName = fieldSerializer.fieldName;
+            fieldModel.Device = fieldSerializer.device;
+            fieldModel.UpdateTime = DateTime.Now;
+            return this._fieldDao.Update(id, fieldModel);
+        }
+
+        public String DeleteField(int id)
+        {
+            return this._fieldDao.Delete(id);
+        }
     }
 }

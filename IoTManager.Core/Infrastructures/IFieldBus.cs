@@ -9,5 +9,7 @@ namespace IoTManager.Core.Infrastructures
         List<FieldSerializer> GetAllFields();
         String CreateNewField(FieldSerializer fieldSerializer);
         List<FieldSerializer> GetAffiliateFields(String deviceName);
+        String UpdateField(int id, FieldSerializer fieldSerializer);
+        String DeleteField(int id);
     }
 }

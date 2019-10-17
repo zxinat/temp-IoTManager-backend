@@ -9,7 +9,7 @@ using IoTManager.Utility;
 
 namespace IoTManager.Dao
 {
-    public sealed class FieldDao: IFieldDao
+    public sealed class FieldDao
     {
         public List<FieldModel> Get()
         {

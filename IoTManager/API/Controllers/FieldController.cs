@@ -43,5 +43,23 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._fieldBus.GetAffiliateFields(deviceName));
         }
+
+        [HttpPut("{id}")]
+        public ResponseSerializer UpdateField(int id, [FromBody] FieldSerializer fieldSerializer)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._fieldBus.UpdateField(id, fieldSerializer));
+        }
+
+        [HttpDelete("{id}")]
+        public ResponseSerializer DeleteField(int id)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._fieldBus.DeleteField(id));
+        }
     }
 }
