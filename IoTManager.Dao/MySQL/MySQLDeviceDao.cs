@@ -588,5 +588,14 @@ namespace IoTManager.Dao
                 return result == 1 ? "success" : "error";
             }
         }
+
+        public String DeleteTag(String tagName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                var result = connection.Execute("delete from tag where tagName=@tn", new {tn = tagName});
+                return result == 1 ? "success" : "error";
+            }
+        }
     }
 }

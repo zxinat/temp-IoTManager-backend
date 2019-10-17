@@ -286,5 +286,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.AddTag(tagName));
         }
+
+        [HttpDelete("tag")]
+        public ResponseSerializer DeleteTag(String tagName)
+        {
+            return new ResponseSerializer(
+                200,
+                 "success",
+                this._deviceBus.DeleteTag(tagName));
+        }
     }
 }

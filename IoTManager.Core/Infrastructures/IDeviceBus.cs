@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Text;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
@@ -31,5 +32,6 @@ namespace IoTManager.Core.Infrastructures
         Object SetDeviceTag(int deviceId, List<String> tagId);
         List<String> GetDeviceTag(int id);
         String AddTag(String tagName);
+        String DeleteTag(String tagName);
     }
 }
