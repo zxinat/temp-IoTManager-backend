@@ -34,5 +34,6 @@ namespace IoTManager.Core.Infrastructures
         String AddTag(String tagName);
         String DeleteTag(String tagName);
         int FindTagAffiliate(String tagName);
+        int FindDeviceIdExist(String deviceId);
     }
 }

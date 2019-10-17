@@ -277,5 +277,10 @@ namespace IoTManager.Core
         {
             return this._deviceDao.FindTagAffiliate(tagName);
         }
+
+        public int FindDeviceIdExist(String deviceId)
+        {
+            return this._deviceDao.FindDeviceIdExist(deviceId);
+        }
     }
 }

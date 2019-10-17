@@ -609,5 +609,18 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public int FindDeviceIdExist(String deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>(
+                    "select count(*) num from (select * from device where hardwareDeviceID=@did) tmp", new
+                    {
+                        did = deviceId
+                    }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

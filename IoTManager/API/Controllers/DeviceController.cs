@@ -304,5 +304,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.FindTagAffiliate(tagName));
         }
+
+        [HttpGet("exist/{deviceId}")]
+        public ResponseSerializer FindDeviceIdExist(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.FindDeviceIdExist(deviceId));
+        }
     }
 }
