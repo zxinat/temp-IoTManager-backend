@@ -297,5 +297,18 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public int FindGatewayIdExist(String gatewayId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Query<int>(
+                    "select count(*) num from (select * from gateway where hardwareGatewayID=@gid) tmp", new
+                    {
+                        gid = gatewayId
+                    }).FirstOrDefault();
+                return result;
+            }
+        }
     }
 }

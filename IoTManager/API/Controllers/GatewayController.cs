@@ -123,5 +123,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._gatewayBus.GetAffiliateDeviceNumber(id));
         }
+
+        [HttpGet("exist/{gatewayId}")]
+        public ResponseSerializer FindGatewayIdExist(String gatewayId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._gatewayBus.FindGatewayIdExist(gatewayId));
+        }
     }
 }

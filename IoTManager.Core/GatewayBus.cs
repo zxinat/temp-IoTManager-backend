@@ -106,5 +106,10 @@ namespace IoTManager.Core
         {
             return this._gatewayDao.GetAffiliateDeviceNumber(id);
         }
+
+        public int FindGatewayIdExist(String gatewayId)
+        {
+            return this._gatewayDao.FindGatewayIdExist(gatewayId);
+        }
     }
 }

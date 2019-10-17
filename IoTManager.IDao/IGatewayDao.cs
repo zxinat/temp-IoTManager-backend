@@ -17,5 +17,6 @@ namespace IoTManager.IDao
         String CreateGatewayType(String gatewayType);
         long GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all");
         int GetAffiliateDeviceNumber(int id);
+        int FindGatewayIdExist(String gatewayId);
     }
 }
