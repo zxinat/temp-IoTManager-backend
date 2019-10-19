@@ -3,6 +3,7 @@ using IoTManager.Core.Infrastructures;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Remotion.Linq.Clauses;
 
 namespace IoTManager.API.Controllers
 {
@@ -21,12 +22,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet]
-        public ResponseSerializer GetAllFields()
+        public ResponseSerializer GetAllFields(int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._fieldBus.GetAllFields());
+                this._fieldBus.GetAllFields(page, sortColumn, order));
         }
 
         [HttpPost]

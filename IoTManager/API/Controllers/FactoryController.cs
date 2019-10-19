@@ -20,12 +20,12 @@ namespace IoTManager.API.Controllers
         }
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._factoryBus.GetAllFactories());
+                this._factoryBus.GetAllFactories(page, sortColumn, order));
         }
 
         // GET api/values/{id}

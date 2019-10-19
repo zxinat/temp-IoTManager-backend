@@ -13,21 +13,30 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLFactoryDao : IFactoryDao
     {
-        public List<FactoryModel> Get()
+        public List<FactoryModel> Get(int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
+                String s = "SELECT factory.id, " +
+                           "factoryName, " +
+                           "factoryPhoneNumber, " +
+                           "factoryAddress, " +
+                           "factory.remark, " +
+                           "factory.createTime," +
+                           " factory.updateTime, " +
+                           "city.cityName AS city " +
+                           "FROM factory " +
+                           "JOIN city ON factory.city=city.id ";
+                if (order != "no" && sortColumn != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
                 List<FactoryModel> factoryModels = connection
-                    .Query<FactoryModel>("SELECT factory.id, " +
-                                         "factoryName, " +
-                                         "factoryPhoneNumber, " +
-                                         "factoryAddress, " +
-                                         "factory.remark, " +
-                                         "factory.createTime,"+
-                                         " factory.updateTime, " +
-                                         "city.cityName AS city " +
-                                         "FROM factory " +
-                                         "JOIN city ON factory.city=city.id")
+                    .Query<FactoryModel>(s)
                     .ToList();
                 return factoryModels;
             }

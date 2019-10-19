@@ -32,12 +32,12 @@ namespace IoTManager.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get()
+        public ResponseSerializer Get(int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._cityBus.GetAllCities()
+                this._cityBus.GetAllCities(page, sortColumn, order)
                 );
         }
 

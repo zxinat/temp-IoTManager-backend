@@ -12,12 +12,23 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLFieldDao : IFieldDao
     {
-        public List<FieldModel> Get()
+        public List<FieldModel> Get(int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
+                String s =
+                    "select field.id, fieldName, fieldId, deviceName device, field.updateTime, field.createTime from field join device on field.device=device.id ";
+                if (order != "no" && sortColumn != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
+                
                 List<FieldModel> fields = connection.Query<FieldModel>(
-                    "select field.id, fieldName, fieldId, deviceName device, field.updateTime, field.createTime from field join device on field.device=device.id").ToList();
+                    s).ToList();
                 return fields;
             }
         }

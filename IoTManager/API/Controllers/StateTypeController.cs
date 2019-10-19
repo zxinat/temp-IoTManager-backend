@@ -57,12 +57,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet("detailedDeviceType")]
-        public ResponseSerializer GetDetailedDeviceTypes()
+        public ResponseSerializer GetDetailedDeviceTypes(int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._stateTypeBus.GetDetailedDeviceTypes());
+                this._stateTypeBus.GetDetailedDeviceTypes(page, sortColumn, order));
         }
 
         [HttpPost("deviceType")]

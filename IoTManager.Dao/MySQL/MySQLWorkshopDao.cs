@@ -12,21 +12,31 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLWorkshopDao : IWorkshopDao
     {
-        public List<WorkshopModel> Get()
+        public List<WorkshopModel> Get(int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
+                String s = "SELECT workshop.id, " +
+                           "workshopName, " +
+                           "workshopPhoneNumber, " +
+                           "workshopAddress, " +
+                           "workshop.remark, " +
+                           "workshop.createTime, " +
+                           "workshop.updateTime, " +
+                           "factory.factoryName AS factory " +
+                           "FROM workshop JOIN factory " +
+                           "ON workshop.factory=factory.id ";
+                if (order != "no" && sortColumn != "no")
+                {
+                    String orderBySubsentence = "order by " + sortColumn + " " + order;
+                    s += orderBySubsentence;
+                }
+
+                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                s += limitSubsentence;
+                
                 List<WorkshopModel> workshopModels = connection
-                    .Query<WorkshopModel>("SELECT workshop.id, " +
-                                          "workshopName, " +
-                                          "workshopPhoneNumber, " +
-                                          "workshopAddress, " +
-                                          "workshop.remark, " +
-                                          "workshop.createTime, " +
-                                          "workshop.updateTime, " +
-                                          "factory.factoryName AS factory " +
-                                          "FROM workshop JOIN factory " +
-                                          "ON workshop.factory=factory.id")
+                    .Query<WorkshopModel>(s)
                     .ToList();
                 return workshopModels;
             }

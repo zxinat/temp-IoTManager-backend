@@ -8,7 +8,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface ICityBus
     {
-        List<CitySerializer> GetAllCities();
+        List<CitySerializer> GetAllCities(int page = 1, String sortColumn = "id", String order = "asc");
         CitySerializer GetCityById(int id);
         String CreateNewCity(CitySerializer citySerializer);
         String UpdateCity(int id, CitySerializer citySerializer);
