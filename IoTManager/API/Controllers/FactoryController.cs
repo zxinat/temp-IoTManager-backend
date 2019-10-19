@@ -112,5 +112,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._factoryBus.GetFactoryAffiliateGateway(id));
         }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetFactoryNumbet()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._factoryBus.GetFactoryNumber());
+        }
     }
 }

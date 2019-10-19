@@ -111,5 +111,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._workshopBus.GetWorkshopAffiliateGateway(id));
         }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetWorkshopNumber()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._workshopBus.GetWorkshopNumber());
+        }
     }
 }

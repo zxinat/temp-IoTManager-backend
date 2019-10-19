@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
+using Org.BouncyCastle.Crypto.Digests;
 
 namespace IoTManager.Core.Infrastructures
 {
@@ -24,5 +25,6 @@ namespace IoTManager.Core.Infrastructures
         int GetCityAffiliateGateway(int id);
         object GetCityFactoryTree();
         CitySerializer GetOneCityByName(String cityName);
+        long GetCityNumber();
     }
 }

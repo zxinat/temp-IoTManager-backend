@@ -87,5 +87,10 @@ namespace IoTManager.Core
         {
             return this._fieldDao.Delete(id);
         }
+
+        public long GetFieldNumber()
+        {
+            return this._fieldDao.GetFieldNumber();
+        }
     }
 }

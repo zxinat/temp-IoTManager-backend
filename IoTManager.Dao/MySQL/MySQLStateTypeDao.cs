@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
@@ -118,6 +119,17 @@ namespace IoTManager.Dao
                 System.Console.WriteLine(id);
                 var result = connection.Query<int>("select count(*) num from (select * from device where deviceType=@dt) tmp", new {dt = id}).FirstOrDefault();
                 return result;
+            }
+        }
+
+        public long GetDetailedDeviceTypeNumber()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<long>("select count(*) from config where configTag=@cn", new
+                {
+                    cn = "deviceType"
+                }).FirstOrDefault();
             }
         }
     }

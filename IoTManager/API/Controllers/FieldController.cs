@@ -74,5 +74,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetFieldAffiliateData(fieldId));
         }
+
+        [HttpGet("number")]
+        public ResponseSerializer GetFieldNumber()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._fieldBus.GetFieldNumber());
+        }
     }
 }

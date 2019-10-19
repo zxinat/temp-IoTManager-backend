@@ -100,5 +100,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._stateTypeBus.GetDeviceTypeAffiliateDevice(id));
         }
+
+        [HttpGet("detailedDeviceType/number")]
+        public ResponseSerializer GetDetailedDeviceTypeNumber()
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._stateTypeBus.GetDetailedDeviceTypeNumber());
+        }
     }
 }

@@ -104,5 +104,10 @@ namespace IoTManager.Core
         {
             return this._factoryDao.GetFactoryAffiliateGateway(id);
         }
+
+        public long GetFactoryNumber()
+        {
+            return this._factoryDao.GetFactoryNumber();
+        }
     }
 }

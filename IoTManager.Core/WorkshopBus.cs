@@ -99,5 +99,10 @@ namespace IoTManager.Core
         {
             return this._workshopDao.GetWorkshopAffiliateGateway(id);
         }
+
+        public long GetWorkshopNumber()
+        {
+            return this._workshopDao.GetWorkshopNumber();
+        }
     }
 }

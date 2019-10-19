@@ -190,5 +190,13 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public long GetFactoryNumber()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<long>("select count(*) from factory").FirstOrDefault();
+            }
+        }
     }
 }

@@ -222,5 +222,10 @@ namespace IoTManager.Core
             CitySerializer result = new CitySerializer(city);
             return result;
         }
+
+        public long GetCityNumber()
+        {
+            return this._cityDao.GetCityNumber();
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace IoTManager.Core.Infrastructures
         int GetFactoryAffiliateWorkshop(int id);
         int GetFactoryAffiliateDevice(int id);
         int GetFactoryAffiliateGateway(int id);
+        long GetFactoryNumber();
     }
 }

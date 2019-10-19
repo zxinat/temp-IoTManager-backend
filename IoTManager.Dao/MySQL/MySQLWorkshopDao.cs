@@ -182,5 +182,13 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public long GetWorkshopNumber()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<long>("select count(*) from workshop").FirstOrDefault();
+            }
+        }
     }
 }

@@ -16,5 +16,6 @@ namespace IoTManager.IDao
         List<WorkshopModel> GetByWorkshopName(String workshopName);
         int GetWorkshopAffiliateDevice(int id);
         int GetWorkshopAffiliateGateway(int id);
+        long GetWorkshopNumber();
     }
 }

@@ -113,5 +113,13 @@ namespace IoTManager.Dao
                 return result == 1 ? "success" : "error";
             }
         }
+
+        public long GetFieldNumber()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<long>("select count(*) from field join device on field.device=device.id").FirstOrDefault();
+            }
+        }
     }
 }

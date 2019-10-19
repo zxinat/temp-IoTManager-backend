@@ -10,5 +10,6 @@ namespace IoTManager.IDao
         String Create(FieldModel field);
         String Update(int id, FieldModel field);
         String Delete(int id);
+        long GetFieldNumber();
     }
 }
