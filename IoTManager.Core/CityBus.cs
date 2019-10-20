@@ -32,8 +32,8 @@ namespace IoTManager.Core
 
         public List<CitySerializer> GetAllCities(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
-            int offset = (page - 1) * 12;
-            int limit = 12;
+            int offset = (page - 1) * 6;
+            int limit = 6;
             List<CityModel> cities =  this._cityDao.Get(pageMode, offset, limit, sortColumn, order);
             List<CitySerializer> result = new List<CitySerializer>();
             foreach (CityModel city in cities)

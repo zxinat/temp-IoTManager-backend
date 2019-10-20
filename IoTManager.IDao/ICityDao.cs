@@ -8,7 +8,7 @@ namespace IoTManager.IDao
     public interface ICityDao
     {
         String Create(CityModel cityModel);
-        List<CityModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc");
+        List<CityModel> Get(int pageMode = 0, int offset = 0, int limit = 6, String sortColumn = "id", String order = "asc");
         CityModel GetById(int id);
         String Update(int id, CityModel cityModel);
         String Delete(int id);

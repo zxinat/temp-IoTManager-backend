@@ -7,7 +7,7 @@ namespace IoTManager.IDao
 {
     public interface IFactoryDao
     {
-        List<FactoryModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc");
+        List<FactoryModel> Get(int pageMode = 0, int offset = 0, int limit = 6, String sortColumn = "id", String order = "asc");
         FactoryModel GetById(int id);
         String Create(FactoryModel factoryModel);
         String Update(int id, FactoryModel factoryModel);

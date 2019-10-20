@@ -21,8 +21,8 @@ namespace IoTManager.Core
         
         public List<FactorySerializer> GetAllFactories(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
-            int offset = (page - 1) * 12;
-            int limit = 12;
+            int offset = (page - 1) * 6;
+            int limit = 6;
             List<FactoryModel> factories = this._factoryDao.Get(pageMode, offset, limit, sortColumn, order);
             List<FactorySerializer> result = new List<FactorySerializer>();
             foreach (FactoryModel factory in factories)
