@@ -20,5 +20,6 @@ namespace IoTManager.Core.Infrastructures
         long GetAlarmInfoNumber(String searchType, String deviceId = "all");
         String DeleteAlarmInfo(String id);
         int GetDeviceAffiliateAlarmInfo(String deviceId);
+        int BatchDelete(List<String> ids);
     }
 }
