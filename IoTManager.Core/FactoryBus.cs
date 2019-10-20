@@ -19,11 +19,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
         
-        public List<FactorySerializer> GetAllFactories(int page = 1, String sortColumn = "id", String order = "asc")
+        public List<FactorySerializer> GetAllFactories(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<FactoryModel> factories = this._factoryDao.Get(offset, limit, sortColumn, order);
+            List<FactoryModel> factories = this._factoryDao.Get(pageMode, offset, limit, sortColumn, order);
             List<FactorySerializer> result = new List<FactorySerializer>();
             foreach (FactoryModel factory in factories)
             {

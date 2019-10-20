@@ -7,7 +7,7 @@ namespace IoTManager.IDao
 {
     public interface IWorkshopDao
     {
-        List<WorkshopModel> Get(int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc");
+        List<WorkshopModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc");
         WorkshopModel GetById(int id);
         String Create(WorkshopModel workshopModel);
         String Update(int id, WorkshopModel workshopModel);

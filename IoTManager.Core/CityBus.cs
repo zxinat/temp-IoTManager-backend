@@ -30,11 +30,11 @@ namespace IoTManager.Core
             this._deviceDao = deviceDao;
         }
 
-        public List<CitySerializer> GetAllCities(int page = 1, String sortColumn = "id", String order = "asc")
+        public List<CitySerializer> GetAllCities(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<CityModel> cities =  this._cityDao.Get(offset, limit, sortColumn, order);
+            List<CityModel> cities =  this._cityDao.Get(pageMode, offset, limit, sortColumn, order);
             List<CitySerializer> result = new List<CitySerializer>();
             foreach (CityModel city in cities)
             {

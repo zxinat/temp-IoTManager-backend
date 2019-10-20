@@ -19,11 +19,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
         
-        public List<WorkshopSerializer> GetAllWorkshops(int page = 1, String sortColumn = "id", String order = "asc")
+        public List<WorkshopSerializer> GetAllWorkshops(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<WorkshopModel> workshops = this._workshopDao.Get(offset, limit, sortColumn, order);
+            List<WorkshopModel> workshops = this._workshopDao.Get(pageMode, offset, limit, sortColumn, order);
             List<WorkshopSerializer> result = new List<WorkshopSerializer>();
             foreach (WorkshopModel workshop in workshops)
             {

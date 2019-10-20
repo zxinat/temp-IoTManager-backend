@@ -28,12 +28,12 @@ namespace IoTManager.API.Controllers
         }
         // GET api/values
         [HttpGet]
-        public ResponseSerializer Get(int page = 1, String sortColumn = "id", String order = "asc")
+        public ResponseSerializer Get(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._workshopBus.GetAllWorkshops(page, sortColumn, order));
+                this._workshopBus.GetAllWorkshops(pageMode, page, sortColumn, order));
         }
 
         // GET api/values/{id}

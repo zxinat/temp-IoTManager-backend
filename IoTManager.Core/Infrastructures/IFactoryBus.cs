@@ -6,7 +6,7 @@ namespace IoTManager.Core.Infrastructures
 {
     public interface IFactoryBus
     {
-        List<FactorySerializer> GetAllFactories(int page = 1, String sortColumn = "id", String order = "asc");
+        List<FactorySerializer> GetAllFactories(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc");
         FactorySerializer GetFactoryById(int id);
         String CreateNewFactory(FactorySerializer factorySerializer);
         String UpdateFactory(int id, FactorySerializer factorySerializer);

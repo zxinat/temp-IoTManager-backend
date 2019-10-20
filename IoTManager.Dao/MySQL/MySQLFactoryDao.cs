@@ -13,7 +13,7 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLFactoryDao : IFactoryDao
     {
-        public List<FactoryModel> Get(int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
+        public List<FactoryModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -27,14 +27,18 @@ namespace IoTManager.Dao
                            "city.cityName AS city " +
                            "FROM factory " +
                            "JOIN city ON factory.city=city.id ";
-                if (order != "no" && sortColumn != "no")
+                if (pageMode == 1)
                 {
-                    String orderBySubsentence = "order by " + sortColumn + " " + order;
-                    s += orderBySubsentence;
+                    if (order != "no" && sortColumn != "no")
+                    {
+                        String orderBySubsentence = "order by " + sortColumn + " " + order;
+                        s += orderBySubsentence;
+                    }
+
+                    String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                    s += limitSubsentence;
                 }
 
-                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
-                s += limitSubsentence;
                 List<FactoryModel> factoryModels = connection
                     .Query<FactoryModel>(s)
                     .ToList();
