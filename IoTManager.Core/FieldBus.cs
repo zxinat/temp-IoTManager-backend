@@ -22,11 +22,11 @@ namespace IoTManager.Core
             this._logger = logger;
         }
         
-        public List<FieldSerializer> GetAllFields(int page = 1, String sortColumn = "id", String order = "asc")
+        public List<FieldSerializer> GetAllFields(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<FieldModel> fields = this._fieldDao.Get(offset, limit, sortColumn, order);
+            List<FieldModel> fields = this._fieldDao.Get(pageMode, offset, limit, sortColumn, order);
             List<FieldSerializer> result = new List<FieldSerializer>();
 
             foreach (FieldModel f in fields)

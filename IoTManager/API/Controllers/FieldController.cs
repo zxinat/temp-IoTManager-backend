@@ -22,12 +22,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet]
-        public ResponseSerializer GetAllFields(int page = 1, String sortColumn = "id", String order = "asc")
+        public ResponseSerializer GetAllFields(int pageMode = 0,int page = 1, String sortColumn = "id", String order = "asc")
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._fieldBus.GetAllFields(page, sortColumn, order));
+                this._fieldBus.GetAllFields(pageMode,page, sortColumn, order));
         }
 
         [HttpPost]

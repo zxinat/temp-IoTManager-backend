@@ -64,11 +64,11 @@ namespace IoTManager.Core
             return result;
         }
 
-        public List<DeviceTypeSerializer> GetDetailedDeviceTypes(int page = 1, String sortColumn = "id", String order = "asc")
+        public List<DeviceTypeSerializer> GetDetailedDeviceTypes(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
             int offset = (page - 1) * 12;
             int limit = 12;
-            List<DeviceTypeModel> deviceTypes = this._stateTypeDao.GetDetailedDeviceType(offset, limit, sortColumn, order);
+            List<DeviceTypeModel> deviceTypes = this._stateTypeDao.GetDetailedDeviceType(pageMode, offset, limit, sortColumn, order);
             List<DeviceTypeSerializer> result = new List<DeviceTypeSerializer>();
             foreach (DeviceTypeModel dtm in deviceTypes)
             {

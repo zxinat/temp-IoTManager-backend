@@ -53,19 +53,23 @@ namespace IoTManager.Dao
             }
         }
 
-        public List<DeviceTypeModel> GetDetailedDeviceType(int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
+        public List<DeviceTypeModel> GetDetailedDeviceType(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 String s = "select config.id, configValue deviceTypeName, offlineTime from config where configTag=@ct ";
-                if (order != "no" && sortColumn != "no")
+                if (pageMode == 1)
                 {
-                    String orderBySubsentence = "order by " + sortColumn + " " + order;
-                    s += orderBySubsentence;
+                    if (order != "no" && sortColumn != "no")
+                    {
+                        String orderBySubsentence = "order by " + sortColumn + " " + order;
+                        s += orderBySubsentence;
+                    }
+
+                    String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
+                    s += limitSubsentence;
                 }
 
-                String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
-                s += limitSubsentence;
                 List<DeviceTypeModel> deviceTypes = connection.Query<DeviceTypeModel>(
                     s, new
                     {
