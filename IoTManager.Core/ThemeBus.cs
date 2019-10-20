@@ -10,10 +10,12 @@ namespace IoTManager.Core
     public sealed class ThemeBus : IThemeBus
     {
         private readonly IThemeDao _themeDao;
+        private readonly IUserDao _userDao;
 
-        public ThemeBus(IThemeDao themeDao)
+        public ThemeBus(IThemeDao themeDao, IUserDao userDao)
         {
             this._themeDao = themeDao;
+            this._userDao = userDao;
         }
         public List<ThemeSerializer> GetAllThemes()
         {
@@ -61,6 +63,18 @@ namespace IoTManager.Core
         public ThemeSerializer GetThemeByUserId(int userId)
         {
             return new ThemeSerializer(this._themeDao.GetByUserId(userId));
+        }
+
+        public String UpdateAllUserTheme(int themeId)
+        {
+            List<UserModel> users = this._userDao.Get();
+            foreach (var user in users)
+            {
+                user.Theme = themeId;
+                this._userDao.Update(user.Id, user);
+            }
+
+            return "success";
         }
     }
 }

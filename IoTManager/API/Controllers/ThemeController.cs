@@ -71,5 +71,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._themeBus.GetThemeByUserId(userId));
         }
+
+        [HttpPut("allUserTheme/{themeId}")]
+        public ResponseSerializer UpdateAllUserTheme(int themeId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._themeBus.UpdateAllUserTheme(themeId));
+        }
     }
 }

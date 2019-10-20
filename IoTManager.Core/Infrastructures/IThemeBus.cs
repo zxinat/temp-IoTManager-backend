@@ -12,6 +12,6 @@ namespace IoTManager.Core.Infrastructures
         String UpdateTheme(int id, ThemeSerializer themeSerializer);
         String DeleteTheme(int id);
         ThemeSerializer GetThemeByUserId(int userId);
-
+        String UpdateAllUserTheme(int themeId);
     }
 }
