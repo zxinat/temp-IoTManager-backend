@@ -127,5 +127,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._alarmInfoBus.DeleteAlarmInfo(id));
         }
+
+        [HttpPost("batchDelete")]
+        public ResponseSerializer BatchDelete([FromBody] BatchString bs)
+        {
+            return new ResponseSerializer(200,
+                "success",
+                this._alarmInfoBus.BatchDelete(bs.str));
+        }
+        
     }
 }

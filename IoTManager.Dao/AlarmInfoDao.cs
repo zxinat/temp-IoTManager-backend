@@ -152,5 +152,16 @@ namespace IoTManager.Dao
                 .Where(ai => ai.DeviceId == deviceId)
                 .ToList().Count;
         }
+
+        public int BatchDelete(List<String> ids)
+        {
+            foreach (String id in ids)
+            {
+                var filter = Builders<AlarmInfoModel>.Filter.Eq("_id", new ObjectId(id));
+                var result = this._alarmInfo.DeleteOne(filter);
+            }
+
+            return ids.Count;
+        }
     }
 }
