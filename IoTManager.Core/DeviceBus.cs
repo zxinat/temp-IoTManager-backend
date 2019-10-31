@@ -221,19 +221,45 @@ namespace IoTManager.Core
             }
         }
 
-        public List<DeviceSerializer> GetDeviceByCity(String cityName)
+        public List<DeviceSerializer> GetDeviceByCity(String cityName, String factoryName, String workshopName)
         {
             List<DeviceModel> devices = this._deviceDao.Get("all");
-            List<DeviceModel> query = devices.AsQueryable()
-                .Where(d => d.City == cityName)
-                .ToList();
-            List<DeviceSerializer> result = new List<DeviceSerializer>();
-            foreach (DeviceModel d in query)
+            var query = devices.AsQueryable();
+            if (factoryName == "all" && workshopName == "all")
             {
-                result.Add(new DeviceSerializer(d));
+                var r = query.Where(d => d.City == cityName).ToList();
+                List<DeviceSerializer> result = new List<DeviceSerializer>();
+                foreach (DeviceModel d in r)
+                {
+                    result.Add(new DeviceSerializer(d));
+                }
+
+                return result;
+            }
+            if (factoryName != "all" && workshopName == "all")
+            {
+                var r = query.Where(d => d.City == cityName && d.Factory == factoryName).ToList();
+                List<DeviceSerializer> result = new List<DeviceSerializer>();
+                foreach (DeviceModel d in r)
+                {
+                    result.Add(new DeviceSerializer(d));
+                }
+
+                return result;
+            }
+            if (factoryName != "all" && workshopName != "all")
+            {
+                var r = query.Where(d => d.City == cityName && d.Factory == factoryName && d.Workshop == workshopName).ToList();
+                List<DeviceSerializer> result = new List<DeviceSerializer>();
+                foreach (DeviceModel d in r)
+                {
+                    result.Add(new DeviceSerializer(d));
+                }
+
+                return result;
             }
 
-            return result;
+            return null;
         }
         
         public List<DeviceSerializer> GetDeviceByTag(String tag)

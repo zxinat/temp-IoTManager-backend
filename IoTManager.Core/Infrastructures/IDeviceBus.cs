@@ -26,7 +26,7 @@ namespace IoTManager.Core.Infrastructures
         List<object> GetFieldOptions();
         String UploadPicture(PictureUploadSerializer pic);
         String GetPicture(String deviceId);
-        List<DeviceSerializer> GetDeviceByCity(String cityName);
+        List<DeviceSerializer> GetDeviceByCity(String cityName, String factoryName, String workshopName);
         List<DeviceSerializer> GetDeviceByTag(String tag);
         List<String> GetAllTag();
         Object SetDeviceTag(int deviceId, List<String> tagId);

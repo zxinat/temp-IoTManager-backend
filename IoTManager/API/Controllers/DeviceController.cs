@@ -198,12 +198,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpGet("getByCity")]
-        public ResponseSerializer GetDeviceByCity(String cityName)
+        public ResponseSerializer GetDeviceByCity(String cityName, String factoryName, String workshopName)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceBus.GetDeviceByCity(cityName));
+                this._deviceBus.GetDeviceByCity(cityName, factoryName, workshopName));
         }
 
         [HttpGet("dashboardStatus")]
