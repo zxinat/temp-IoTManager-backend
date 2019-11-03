@@ -260,7 +260,7 @@ namespace IoTManager.Dao
                     .Take(100)
                     .ToList();
                 hundredData.Reverse();
-                resultHundredData.Add(f.FieldName, hundredData);
+                resultHundredData.Add(f.FieldId, hundredData);
             }
 
             return new
