@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
+using IoTManager.Utility.Serializers;
 using Microsoft.Extensions.Logging;
 using Pomelo.AspNetCore.TimedJob;
 
@@ -15,6 +17,7 @@ namespace IoTManager.Core.Jobs
         private readonly IThresholdDao _thresholdDao;
         private readonly ISeverityDao _severityDao;
         private readonly IDeviceDao _deviceDao;
+        private readonly IFieldBus _fieldBus;
         private readonly ILogger _logger;
 
         public AlarmInfoJob(IDeviceDataDao deviceDataDao, 
@@ -22,6 +25,7 @@ namespace IoTManager.Core.Jobs
             IThresholdDao thresholdDao, 
             ISeverityDao severityDao, 
             IDeviceDao deviceDao,
+            IFieldBus fieldBus,
             ILogger<AlarmInfoJob> logger)
         {
             this._deviceDataDao = deviceDataDao;
@@ -29,10 +33,11 @@ namespace IoTManager.Core.Jobs
             this._thresholdDao = thresholdDao;
             this._severityDao = severityDao;
             this._deviceDao = deviceDao;
+            this._fieldBus = fieldBus;
             this._logger = logger;
         }
 
-        [Invoke(Begin = "2019-6-16 16:20", Interval = 1000 * 30, SkipWhileExecuting = true)]
+        [Invoke(Begin = "2019-6-16 16:20", Interval = 1000 * 60, SkipWhileExecuting = true)]
         public void Run()
         {
             
@@ -44,7 +49,9 @@ namespace IoTManager.Core.Jobs
             
             List<DeviceDataModel> dataNotInspected = _deviceDataDao.GetNotInspected();
             Dictionary<String, List<DeviceDataModel>> sortedData = new Dictionary<string, List<DeviceDataModel>>();
+            Dictionary<String, List<String>> fieldMap = new Dictionary<string, List<string>>();
             List<String> deviceIds = new List<string>();
+            System.Console.WriteLine(dataNotInspected.Count.ToString());
             foreach (DeviceDataModel d in dataNotInspected)
             {
                 if (!sortedData.ContainsKey(d.DeviceId))
@@ -56,8 +63,43 @@ namespace IoTManager.Core.Jobs
                 {
                     sortedData[d.DeviceId].Add(d);
                 }
+
+                if (!fieldMap.ContainsKey(d.DeviceId))
+                {
+                    fieldMap.Add(d.DeviceId, new List<string>());
+                    fieldMap[d.DeviceId].Add(d.IndexId);
+                }
+                else
+                {
+                    fieldMap[d.DeviceId].Add(d.IndexId);
+                }
+                
                 deviceIds.Add(d.DeviceId);
             }
+
+            foreach (String did in fieldMap.Keys)
+            {
+                List<FieldSerializer> affiliateFields = _fieldBus.GetAffiliateFields(did);
+                List<String> affiliateFieldsId = new List<string>();
+                foreach (var field in affiliateFields)
+                {
+                    affiliateFieldsId.Add(field.fieldId);
+                }
+
+                foreach (String fid in fieldMap[did])
+                {
+                    if (!affiliateFieldsId.Contains(fid))
+                    {
+                        FieldSerializer tmpField = new FieldSerializer();
+                        tmpField.fieldName = fid;
+                        tmpField.fieldId = fid;
+                        DeviceModel tmpDevice = this._deviceDao.GetByDeviceId(did);
+                        tmpField.device = tmpDevice.DeviceName;
+                        this._fieldBus.CreateNewField(tmpField);
+                    }
+                }
+            }
+            
             deviceIds = deviceIds.Distinct().ToList();
 
             foreach (String did in deviceIds)
