@@ -16,5 +16,6 @@ namespace IoTManager.Core.Infrastructures
         String DeleteDeviceType(int id);
         int GetDeviceTypeAffiliateDevice(int id);
         long GetDetailedDeviceTypeNumber();
+        DeviceTypeSerializer GetDeviceTypeByName(String name);
     }
 }

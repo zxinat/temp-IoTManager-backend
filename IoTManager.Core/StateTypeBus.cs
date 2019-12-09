@@ -110,5 +110,12 @@ namespace IoTManager.Core
         {
             return this._stateTypeDao.GetDetailedDeviceTypeNumber();
         }
+
+        public DeviceTypeSerializer GetDeviceTypeByName(String name)
+        {
+            DeviceTypeModel tmp = this._stateTypeDao.GetDeviceTypeByName(name);
+            DeviceTypeSerializer result = new DeviceTypeSerializer(tmp);
+            return result;
+        }
     }
 }

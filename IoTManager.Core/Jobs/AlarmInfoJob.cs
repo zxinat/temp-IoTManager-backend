@@ -17,6 +17,7 @@ namespace IoTManager.Core.Jobs
         private readonly IThresholdDao _thresholdDao;
         private readonly ISeverityDao _severityDao;
         private readonly IDeviceDao _deviceDao;
+        private readonly IStateTypeDao _stateTypeDao;
         private readonly IFieldBus _fieldBus;
         private readonly ILogger _logger;
 
@@ -25,6 +26,7 @@ namespace IoTManager.Core.Jobs
             IThresholdDao thresholdDao, 
             ISeverityDao severityDao, 
             IDeviceDao deviceDao,
+            IStateTypeDao stateTypeDao,
             IFieldBus fieldBus,
             ILogger<AlarmInfoJob> logger)
         {
@@ -33,6 +35,7 @@ namespace IoTManager.Core.Jobs
             this._thresholdDao = thresholdDao;
             this._severityDao = severityDao;
             this._deviceDao = deviceDao;
+            this._stateTypeDao = stateTypeDao;
             this._fieldBus = fieldBus;
             this._logger = logger;
         }
@@ -44,14 +47,13 @@ namespace IoTManager.Core.Jobs
             List<DeviceModel> devices = this._deviceDao.Get("all");
             foreach (DeviceModel device in devices)
             {
-                this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "no");
+                this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "yes");
             }
             
             List<DeviceDataModel> dataNotInspected = _deviceDataDao.GetNotInspected();
             Dictionary<String, List<DeviceDataModel>> sortedData = new Dictionary<string, List<DeviceDataModel>>();
             Dictionary<String, List<String>> fieldMap = new Dictionary<string, List<string>>();
             List<String> deviceIds = new List<string>();
-            System.Console.WriteLine(dataNotInspected.Count.ToString());
             foreach (DeviceDataModel d in dataNotInspected)
             {
                 if (!sortedData.ContainsKey(d.DeviceId))
@@ -77,6 +79,7 @@ namespace IoTManager.Core.Jobs
                 deviceIds.Add(d.DeviceId);
             }
 
+            //Automatically add fields from device data
             foreach (String did in fieldMap.Keys)
             {
                 List<FieldSerializer> affiliateFields = _fieldBus.GetAffiliateFields(did);
@@ -104,7 +107,18 @@ namespace IoTManager.Core.Jobs
 
             foreach (String did in deviceIds)
             {
-                this._deviceDao.SetDeviceOnlineStatus(did, "yes");
+                this._deviceDao.UpdateLastConnectionTimeByDeviceId(did);
+            }
+
+            foreach (DeviceModel d in devices)
+            {
+                DeviceTypeModel tmpDeviceType = this._stateTypeDao.GetDeviceTypeByName(d.DeviceType);
+                Double tmpOfflineTime = tmpDeviceType.OfflineTime;
+                TimeSpan passTime = DateTime.Now - d.LastConnectionTime.ToLocalTime();
+                if (passTime.TotalMinutes > tmpOfflineTime)
+                {
+                    this._deviceDao.SetDeviceOnlineStatus(d.HardwareDeviceId, "no");
+                }
             }
             
             Dictionary<String, String> operatorName = new Dictionary<string, string>();

@@ -16,5 +16,6 @@ namespace IoTManager.IDao
         String DeleteDeviceType(int id);
         int GetDeviceTypeAffiliateDevice(int id);
         long GetDetailedDeviceTypeNumber();
+        DeviceTypeModel GetDeviceTypeByName(String name);
     }
 }

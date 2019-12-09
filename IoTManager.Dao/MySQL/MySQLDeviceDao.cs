@@ -622,5 +622,18 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+
+        public int UpdateLastConnectionTimeByDeviceId(String deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int result = connection.Execute(
+                    "update device set lastConnectionTime=current_timestamp where hardwareDeviceID=@did", new
+                    {
+                        did = deviceId
+                    });
+                return result;
+            }
+        }
     }
 }

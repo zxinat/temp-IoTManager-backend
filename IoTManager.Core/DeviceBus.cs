@@ -308,5 +308,10 @@ namespace IoTManager.Core
         {
             return this._deviceDao.FindDeviceIdExist(deviceId);
         }
+
+        public int UpdateLastConnectionTimeByDeviceId(String deviceId)
+        {
+            return this._deviceDao.UpdateLastConnectionTimeByDeviceId(deviceId);
+        }
     }
 }

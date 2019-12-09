@@ -136,5 +136,18 @@ namespace IoTManager.Dao
                 }).FirstOrDefault();
             }
         }
+
+        public DeviceTypeModel GetDeviceTypeByName(String name)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<DeviceTypeModel>(
+                    "select config.id id, configValue deviceTypeName, offlineTime from config where configValue=@cv",
+                    new
+                    {
+                        cv = name
+                    }).FirstOrDefault();
+            }
+        }
     }
 }

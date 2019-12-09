@@ -313,5 +313,14 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.FindDeviceIdExist(deviceId));
         }
+
+        [HttpPost("updateConnectionTime/{deviceId}")]
+        public ResponseSerializer UpdateLastConnectionTimeByDeviceId(String deviceId)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.UpdateLastConnectionTimeByDeviceId(deviceId));
+        }
     }
 }
