@@ -418,6 +418,7 @@ namespace IoTManager.Dao
                     result.Add(new
                     {
                         time = t,
+                        index = indexId,
                         max = max[i].max,
                         min = min[i].min,
                         avg = avg[i].avg
@@ -481,6 +482,7 @@ namespace IoTManager.Dao
                     result.Add(new
                     {
                         time = t,
+                        index = indexId,
                         max = max[i].max,
                         min = min[i].min,
                         avg = avg[i].avg
@@ -552,6 +554,7 @@ namespace IoTManager.Dao
                     result.Add(new
                     {
                         time = t,
+                        index = indexId,
                         max = max[i].max,
                         min = min[i].min,
                         avg = avg[i].avg
