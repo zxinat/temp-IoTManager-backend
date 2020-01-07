@@ -1,3 +1,8 @@
+/*
+ * DeviceDataBus.cs
+ * 设备数据管理的业务逻辑层
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +26,10 @@ namespace IoTManager.Core
         private readonly IStateTypeDao _stateTypeDao;
         private readonly ILogger _logger;
 
+        /*
+         * 构造函数
+         * 需要注入DeviceDataDao, AlarmInfoDao, DeviceDao, WorkshopDao, StateTypeDao
+         */
         public DeviceDataBus(IDeviceDataDao deviceDataDao, 
             IAlarmInfoDao alarmInfoDao, 
             ILogger<DeviceDataBus> logger, 
@@ -36,6 +45,19 @@ namespace IoTManager.Core
             this._stateTypeDao = stateTypeDao;
         }
 
+        /*
+         * 获取所有设备数据，带分页功能
+         *
+         * 输入：
+         * 搜索类型
+         * 设备编号
+         * 页码
+         * 排序列
+         * 升序或降序
+         *
+         * 输出：
+         * 设备数据列表
+         */
         public List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
         {
             int offset = (page - 1) * 12;
@@ -49,6 +71,15 @@ namespace IoTManager.Core
             return result;
         }
 
+        /*
+         * 根据数据ID（数据库ID）获取数据
+         *
+         * 输入：
+         * ID
+         *
+         * 输出：
+         * 该ID的设备数据
+         */
         public DeviceDataSerializer GetDeviceDataById(String Id)
         {
             DeviceDataModel deviceData = this._deviceDataDao.GetById(Id);
@@ -56,6 +87,15 @@ namespace IoTManager.Core
             return result;
         }
 
+        /*
+         * 根据设备编号获取下属所有设备数据
+         *
+         * 输入：
+         * 设备编号
+         *
+         * 输出：
+         * 该设备下的所有设备数据
+         */
         public List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId)
         {
             List<DeviceDataModel> deviceData = this._deviceDataDao.GetByDeviceId(DeviceId);
@@ -67,36 +107,77 @@ namespace IoTManager.Core
             return result;
         }
 
+        /*
+         * 根据设备编号和属性获取仪表板折线图格式数据
+         *
+         * 输入：
+         * 设备编号
+         * 设备属性
+         *
+         * 输出：
+         * 折线图格式数据
+         */
         public Object GetLineChartData(String deviceId, String indexId)
         {
             return this._deviceDataDao.GetLineChartData(deviceId, indexId);
         }
 
+        /*
+         * 获取设备数据总数
+         */
         public int GetDeviceDataAmount()
         {
             return this._deviceDataDao.GetDeviceDataAmount();
         }
 
+        /*
+         * 根据获取设备概况，此数据用于监控配置页面显示设备概况
+         */
         public object GetDeviceStatusById(int id, DateTime sTime, DateTime eTime)
         {
             return this._deviceDataDao.GetDeviceStatusById(id, sTime, eTime);
         }
 
+        /*
+         * 获取特定分页条件下的设备数据总数
+         *
+         * 输入：
+         * 搜索类型
+         * 设备编号
+         *
+         * 输出：
+         * 设备数据总数
+         */
         public long GetDeviceDataNumber(String searchType, String deviceId = "all")
         {
             return this._deviceDataDao.GetDeviceDataNumber(searchType, deviceId);
         }
 
+        /*
+         * 根据设备数据ID（数据库ID）删除数据
+         *
+         * 输入：
+         * ID
+         *
+         * 输出：
+         * 无
+         */
         public String DeleteDeviceData(String id)
         {
             return this._deviceDataDao.Delete(id);
         }
 
+        /*
+         * 批量删除
+         */
         public int BatchDeleteDeviceData(List<String> ids)
         {
             return this._deviceDataDao.BatchDelete(ids);
         }
 
+        /*
+         * 更新设备数据
+         */
         public String UpdateDeviceData(String id, DeviceDataSerializer deviceDataSerializer)
         {
             DeviceDataModel deviceDataModel = new DeviceDataModel();
@@ -110,11 +191,34 @@ namespace IoTManager.Core
             return this._deviceDataDao.Update(id, deviceDataModel);
         }
 
+        /*
+         * 根据设备编号和属性获取统计信息，此数据主要用于监控配置页面设备数据导出
+         *
+         * 输入：
+         * 设备编号
+         * 属性编号
+         * 起始时间
+         * 结束时间
+         * 统计粒度（小时、日、月）
+         *
+         * 输出：
+         * 统计信息
+         */
         public object GetDayAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime, String scale)
         {
             return this._deviceDataDao.GetDayAggregateData(deviceId, indexId, startTime, endTime, scale);
         }
 
+        /*
+         * 根据设备编号和属性获取多组仪表板折线图格式数据
+         *
+         * 输入：
+         * 设备编号
+         * 设备属性
+         *
+         * 输出：
+         * 折线图格式数据（多组）
+         */
         public object GetMultipleLineChartData(String deviceId, List<String> fields)
         {
             List<object> data = new List<object>();
@@ -126,6 +230,9 @@ namespace IoTManager.Core
             return data;
         }
 
+        /*
+         * 获取仪表板告警信息
+         */
         public object GetDashboardDeviceStatus()
         {
             var query = this._alarmInfoDao.Get("all");
@@ -169,11 +276,23 @@ namespace IoTManager.Core
             };
         }
 
+        /*
+         * 根据设备编号获取设备数据数量
+         *
+         * 输入：
+         * 设备编号
+         *
+         * 输出：
+         * 该设备下的设备数据数量
+         */
         public int GetDeviceAffiliateData(String deviceId)
         {
             return this._deviceDataDao.GetDeviceAffiliateData(deviceId);
         }
 
+        /*
+         * 地域纬度报表
+         */
         public object GetReportByRegion(String factoryName, DateTime startTime, DateTime endTime)
         {
             List<WorkshopModel> affiliateWorkshop = this._workshopDao.GetAffiliateWorkshop(factoryName);
@@ -231,6 +350,9 @@ namespace IoTManager.Core
             };
         }
 
+        /*
+         * 时间维度报表
+         */
         public object GetReportByTime(DateTime startTime, DateTime endTime)
         {
             List<DeviceModel> devices = this._deviceDao.Get("all");
@@ -300,6 +422,9 @@ namespace IoTManager.Core
             };
         }
 
+        /*
+         * 设备类型纬度报表
+         */
         public object GetReportByType(DateTime startTime, DateTime endTime)
         {
             List<String> deviceTypes = this._stateTypeDao.GetDeviceType();
@@ -385,6 +510,9 @@ namespace IoTManager.Core
             };
         }
 
+        /*
+         * 标签维度报表
+         */
         public object GetReportByTag(DateTime startTime, DateTime endTime)
         {
             List<String> tags = this._deviceDao.GetAllTag();
@@ -445,6 +573,15 @@ namespace IoTManager.Core
             };
         }
 
+        /*
+         * 根据属性获取下属数据数量
+         *
+         * 输入：
+         * 属性编号
+         *
+         * 输出：
+         * 该属性下设备数据的数量
+         */
         public int GetFieldAffiliateData(String fieldId)
         {
             return this._deviceDataDao.GetFieldAffiliateData(fieldId);
