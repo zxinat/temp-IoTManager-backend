@@ -260,6 +260,11 @@ namespace IoTManager.Dao
                     .OrderByDescending(dd => dd.Timestamp)
                     .Take(100)
                     .ToList();
+                foreach (var d in hundredData)
+                {
+                    d.Timestamp = DateTime.Parse(d.Timestamp.ToString())
+                        .ToLocalTime();
+                }
                 hundredData.Reverse();
                 resultHundredData.Add(f.FieldId, hundredData);
             }
@@ -547,10 +552,17 @@ namespace IoTManager.Dao
                 List<object> result = new List<object>();
                 for (int i = 0; i < avg.Count; i++)
                 {
+                    var tmpt = avg[i].time.hour + 8;
+                    var tmpd = avg[i].time.day;
+                    if (tmpt > 24)
+                    {
+                        tmpt = tmpt % 24;
+                        tmpd = tmpd + 1;
+                    }
                     String t = avg[i].time.year + "-" +
                                avg[i].time.month + "-" +
-                               avg[i].time.day + " " +
-                               avg[i].time.hour;
+                               tmpd.ToString() + " " +
+                               tmpt.ToString() ;
                     result.Add(new
                     {
                         time = t,
