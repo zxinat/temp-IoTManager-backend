@@ -31,7 +31,8 @@ namespace IoTManager.Utility.Serializers
             this.indexUnit = deviceDataModel.IndexUnit;
             this.indexType = deviceDataModel.IndexType;
             this.indexValue = deviceDataModel.IndexValue;
-            this.timestamp = deviceDataModel.Timestamp.ToString(Constant.getDateFormatString());
+            this.timestamp = DateTime.Parse(deviceDataModel.Timestamp.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
             this.gatewayId = deviceDataModel.GatewayId;
             this.deviceType = deviceDataModel.DeviceType;
             this.mark = deviceDataModel.Mark;
