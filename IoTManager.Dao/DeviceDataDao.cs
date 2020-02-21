@@ -738,5 +738,14 @@ namespace IoTManager.Dao
                 .Where(dd => dd.IndexId == fieldId)
                 .ToList().Count;
         }
+
+        public List<DeviceDataModel> GetByDate(DateTime date)
+        {
+            DateTime startTime = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => dd.Timestamp >= startTime)
+                .ToList();
+            return query;
+        }
     }
 }

@@ -18,6 +18,7 @@
             <e p="AlarmInfoController.cs" t="Include" />
             <e p="CityController.cs" t="Include" />
             <e p="DeviceController.cs" t="Include" />
+            <e p="DeviceDailyOnlineTimeController.cs" t="Include" />
             <e p="DeviceDataController.cs" t="Include" />
             <e p="FactoryController.cs" t="Include" />
             <e p="FieldController.cs" t="Include" />
@@ -128,6 +129,7 @@
         <e p="CityBus.cs" t="Include" />
         <e p="DepartmentBus.cs" t="Include" />
         <e p="DeviceBus.cs" t="Include" />
+        <e p="DeviceDailyOnlineTimeBus.cs" t="Include" />
         <e p="DeviceDataBus.cs" t="Include" />
         <e p="FactoryBus.cs" t="Include" />
         <e p="FieldBus.cs" t="Include" />
@@ -137,6 +139,7 @@
           <e p="ICityBus.cs" t="Include" />
           <e p="IDepartmentBus.cs" t="Include" />
           <e p="IDeviceBus.cs" t="Include" />
+          <e p="IDeviceDailyOnlineTimeBus.cs" t="Include" />
           <e p="IDeviceDataBus.cs" t="Include" />
           <e p="IFactoryBus.cs" t="Include" />
           <e p="IFieldBus.cs" t="Include" />
@@ -153,6 +156,7 @@
         <e p="IoTManager.Core.csproj" t="IncludeRecursive" />
         <e p="Jobs" t="Include">
           <e p="AlarmInfoJob.cs" t="Include" />
+          <e p="ReportJob.cs" t="Include" />
         </e>
         <e p="LoginBus.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
@@ -185,6 +189,7 @@
           <e p="MySQLAuthDao.cs" t="Include" />
           <e p="MySQLCityDao.cs" t="Include" />
           <e p="MySQLDepartmentDao.cs" t="Include" />
+          <e p="MySQLDeviceDailyOnlineTimeDao.cs" t="Include" />
           <e p="MySQLDeviceDao.cs" t="Include" />
           <e p="MySQLFactoryDao.cs" t="Include" />
           <e p="MySQLFieldDao.cs" t="Include" />
@@ -254,6 +259,7 @@
         <e p="IAuthDao.cs" t="Include" />
         <e p="ICityDao.cs" t="Include" />
         <e p="IDepartmentDao.cs" t="Include" />
+        <e p="IDeviceDailyOnlineTimeDao.cs" t="Include" />
         <e p="IDeviceDao.cs" t="Include" />
         <e p="IDeviceDataDao.cs" t="Include" />
         <e p="IFactoryDao.cs" t="Include" />
@@ -302,6 +308,7 @@
         </e>
         <e p="DataStatisticRequestModel.cs" t="Include" />
         <e p="DepartmentModel.cs" t="Include" />
+        <e p="DeviceDailyOnlineTimeModel.cs" t="Include" />
         <e p="DeviceDataModel.cs" t="Include" />
         <e p="DeviceModel.cs" t="Include" />
         <e p="DeviceTypeModel.cs" t="Include" />

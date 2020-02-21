@@ -1,0 +1,27 @@
+using System.Collections.Generic;
+using IoTManager.Core.Infrastructures;
+using IoTManager.IDao;
+using IoTManager.Model;
+using Microsoft.Extensions.Logging;
+
+namespace IoTManager.Core
+{
+    public class DeviceDailyOnlineTimeBus: IDeviceDailyOnlineTimeBus
+    {
+        private readonly IDeviceDailyOnlineTimeDao _deviceDailyOnlineTimeDao;
+        private readonly ILogger _logger;
+
+        public DeviceDailyOnlineTimeBus(IDeviceDailyOnlineTimeDao deviceDailyOnlineTimeDao,
+            ILogger<DeviceDailyOnlineTimeBus> logger)
+        {
+            this._deviceDailyOnlineTimeDao = deviceDailyOnlineTimeDao;
+            this._logger = logger;
+        }
+
+        public List<DeviceDailyOnlineTimeModel> GetAll()
+        {
+            return this._deviceDailyOnlineTimeDao.GetAll();
+        }
+
+    }
+}
