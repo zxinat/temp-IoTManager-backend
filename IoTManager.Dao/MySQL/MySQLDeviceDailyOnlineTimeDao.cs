@@ -15,7 +15,7 @@ namespace IoTManager.Dao
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                String sql = "select o.id, deviceName, hardwareDeviceID, onlineTime, date, o.createTime timestamp from online_time_daily o inner join device on o.device = device.id;";
+                String sql = "select o.id, deviceName, hardwareDeviceID, onlineTime, date, o.createTime timestamp from online_time_daily o inner join device on o.device = device.id";
                 var result = connection.Query<DeviceDailyOnlineTimeModel>(sql).ToList();
                 return result;
             }
@@ -34,6 +34,16 @@ namespace IoTManager.Dao
                 });
                 return rows == 1 ? "success" : "error";
             }
+        }
+
+        public List<DeviceDailyOnlineTimeModel> GetOnlineTimeByDevice(String deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                String sql = "select o.id, deviceName, hardwareDeviceID, onlineTime, date, o.createTime timestamp from online_time_daily o inner join device on o.device = device.id where hardwareDeviceId = @d";
+                var result = connection.Query<DeviceDailyOnlineTimeModel>(sql, new {d = deviceId}).ToList();
+                return result;
+            } 
         }
     }
 }

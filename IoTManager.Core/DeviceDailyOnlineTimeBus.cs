@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
@@ -21,6 +22,20 @@ namespace IoTManager.Core
         public List<DeviceDailyOnlineTimeModel> GetAll()
         {
             return this._deviceDailyOnlineTimeDao.GetAll();
+        }
+
+        public Double GetAverageOnlineTimeByDevice(String deviceId)
+        {
+            List<DeviceDailyOnlineTimeModel>
+                onlineTime = this._deviceDailyOnlineTimeDao.GetOnlineTimeByDevice(deviceId);
+            Double total = 0.0;
+            foreach (var dm in onlineTime)
+            {
+                total += dm.OnlineTime;
+            }
+
+            total /= onlineTime.Count;
+            return total;
         }
 
     }

@@ -8,5 +8,6 @@ namespace IoTManager.IDao
     {
         List<DeviceDailyOnlineTimeModel> GetAll();
         String InsertData(DeviceModel device, Double onlineTime);
+        List<DeviceDailyOnlineTimeModel> GetOnlineTimeByDevice(String deviceId);
     }
 }
