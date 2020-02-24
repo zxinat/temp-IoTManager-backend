@@ -1,5 +1,6 @@
 using System;
 using IoTManager.Core.Infrastructures;
+using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,15 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDailyOnlineTimeBus.GetAverageOnlineTimeByDevice(deviceId)
                 );
+        }
+
+        [HttpPost("summaryOnlineTime")]
+        public ResponseSerializer SummaryAllDeviceOnlineTime([FromBody] DataStatisticRequestModel date)
+        {
+            return new ResponseSerializer(
+                200, 
+                "success",
+                this._deviceDailyOnlineTimeBus.SummaryAllDeviceOnlineTime(date.StartTime, date.EndTime));
         }
     }
 }

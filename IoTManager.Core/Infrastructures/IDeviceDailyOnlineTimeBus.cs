@@ -8,5 +8,6 @@ namespace IoTManager.Core.Infrastructures
     {
         List<DeviceDailyOnlineTimeModel> GetAll();
         Double GetAverageOnlineTimeByDevice(String deviceId);
+        List<DeviceDailyOnlineTimeModel> SummaryAllDeviceOnlineTime(DateTime startTime, DateTime endTime);
     }
 }
