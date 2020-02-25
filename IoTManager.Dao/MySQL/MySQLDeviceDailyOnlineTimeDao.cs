@@ -46,15 +46,14 @@ namespace IoTManager.Dao
             } 
         }
 
-        public List<DeviceDailyOnlineTimeModel> SummaryAllDeviceOnlineTime(DateTime startTime, DateTime endTime)
+        public List<DeviceDailyOnlineTimeModel> GetDeviceOnlineTimeByTime(DateTime startTime, DateTime endTime)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                String sql = "select device.deviceName, avg(onlineTime) onlineTime " +
+                String sql = "select o.id, device.hardwareDeviceID, device.deviceName, onlineTime, date, o.createTime timestamp " +
                              "from online_time_daily o " +
                              "inner join device on o.device = device.id " +
-                             "where date between @stt and @edt " +
-                             "group by device.deviceName";
+                             "where date between @stt and @edt ";
                 var result = connection.Query<DeviceDailyOnlineTimeModel>(sql, new
                 {
                     stt = startTime,

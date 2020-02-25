@@ -26,7 +26,7 @@ namespace IoTManager.Core.Jobs
             this._logger = logger;
         }
 
-        [Invoke(Begin = "2019-6-16 00:05", Interval = 1000 * 86400, SkipWhileExecuting = true)]
+        [Invoke(Begin = "2019-6-16 23:58", Interval = 1000 * 86400, SkipWhileExecuting = true)]
         public void Run()
         {
             List<DeviceDataModel> todayData = this._deviceDataDao.GetByDate(DateTime.Now);

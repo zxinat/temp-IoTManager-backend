@@ -24,6 +24,7 @@ namespace IoTManager.Core
         private readonly IDeviceDao _deviceDao;
         private readonly IWorkshopDao _workshopDao;
         private readonly IStateTypeDao _stateTypeDao;
+        private readonly IDeviceDailyOnlineTimeDao _deviceDailyOnlineTimeDao;
         private readonly ILogger _logger;
 
         /*
@@ -35,7 +36,8 @@ namespace IoTManager.Core
             ILogger<DeviceDataBus> logger, 
             IDeviceDao deviceDao, 
             IWorkshopDao workshopDao,
-            IStateTypeDao stateTypeDao)
+            IStateTypeDao stateTypeDao,
+            IDeviceDailyOnlineTimeDao deviceDailyOnlineTimeDao)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
@@ -43,6 +45,7 @@ namespace IoTManager.Core
             this._deviceDao = deviceDao;
             this._workshopDao = workshopDao;
             this._stateTypeDao = stateTypeDao;
+            this._deviceDailyOnlineTimeDao = deviceDailyOnlineTimeDao;
         }
 
         /*
@@ -360,7 +363,49 @@ namespace IoTManager.Core
             List<Double> averageOnlineTime = new List<Double>();
             List<int> alarmTimes = new List<int>();
             List<int> deviceAmount = new List<int>();
+            
+            /*new*/
+            List<DeviceDailyOnlineTimeModel> dailyOnlineTime =
+                this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
+            //在这里使用ValueTuple存储年-月组合，Item1为年份，Item2为月份
+            List<ValueTuple<int, int>> yearMonth = new List<ValueTuple<int, int>>();
+            foreach (DeviceDailyOnlineTimeModel d in dailyOnlineTime)
+            {
+                var tmp = new ValueTuple<int, int>(d.Date.Year, d.Date.Month);
+                if (!yearMonth.Contains(tmp))
+                {
+                    yearMonth.Add(tmp);
+                }
+            }
+            
+            yearMonth.Sort();
 
+            foreach (var ym in yearMonth)
+            {
+                String t = ym.Item1.ToString() + "-" + ym.Item2.ToString();
+                xAxis.Add(t);
+
+                deviceAmount.Add(devices.Count);
+
+                List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
+                List<AlarmInfoModel> selectedAlarmInfo = alarmInfos.AsQueryable()
+                    .Where(ai => ai.Timestamp.Year == ym.Item1 && ai.Timestamp.Month == ym.Item2)
+                    .ToList();
+                alarmTimes.Add(selectedAlarmInfo.Count);
+
+                Double total = 0;
+                List<DeviceDailyOnlineTimeModel> deviceDataByYearMonth = dailyOnlineTime.AsQueryable()
+                    .Where(dot => dot.Date.Year == ym.Item1 && dot.Date.Month == ym.Item2)
+                    .ToList();
+                foreach (var d in deviceDataByYearMonth)
+                {
+                    total += d.OnlineTime;
+                }
+                averageOnlineTime.Add(Math.Round(total / deviceDataByYearMonth.Count, 2));
+            }
+            /*new*/
+
+            /* old
             List<DeviceDataModel> deviceData = this._deviceDataDao.Get("all");
             List<DeviceDataModel> filteredDeviceData = deviceData.AsQueryable()
                 .Where(dd => dd.Timestamp >= startTime && dd.Timestamp <= endTime)
@@ -409,6 +454,7 @@ namespace IoTManager.Core
                 }
                 averageOnlineTime.Add(t.TotalMinutes / devices.Count);
             }
+            */
             
             List<object> result = new List<object>();
             result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});

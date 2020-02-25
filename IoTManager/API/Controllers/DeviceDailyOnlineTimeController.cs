@@ -41,13 +41,13 @@ namespace IoTManager.API.Controllers
                 );
         }
 
-        [HttpPost("summaryOnlineTime")]
-        public ResponseSerializer SummaryAllDeviceOnlineTime([FromBody] DataStatisticRequestModel date)
+        [HttpPost("byTime")]
+        public ResponseSerializer GetDeviceOnlineTimeByTime([FromBody] DataStatisticRequestModel date)
         {
             return new ResponseSerializer(
                 200, 
                 "success",
-                this._deviceDailyOnlineTimeBus.SummaryAllDeviceOnlineTime(date.StartTime, date.EndTime));
+                this._deviceDailyOnlineTimeBus.GetDeviceOnlineTimeByTime(date.StartTime, date.EndTime));
         }
     }
 }

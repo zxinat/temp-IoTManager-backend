@@ -38,9 +38,9 @@ namespace IoTManager.Core
             return total;
         }
 
-        public List<DeviceDailyOnlineTimeModel> SummaryAllDeviceOnlineTime(DateTime startTime, DateTime endTime)
+        public List<DeviceDailyOnlineTimeModel> GetDeviceOnlineTimeByTime(DateTime startTime, DateTime endTime)
         {
-            return this._deviceDailyOnlineTimeDao.SummaryAllDeviceOnlineTime(startTime, endTime);
+            return this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
         }
 
     }
