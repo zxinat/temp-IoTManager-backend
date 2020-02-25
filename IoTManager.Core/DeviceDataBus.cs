@@ -303,28 +303,54 @@ namespace IoTManager.Core
             List<Double> averageOnlineTime = new List<Double>();
             List<int> alarmTimes = new List<int>();
             List<int> deviceAmount = new List<int>();
+            
+            List<DeviceModel> allDevices = this._deviceDao.Get("all");
+            List<AlarmInfoModel> allAlarmInfo = this._alarmInfoDao.Get("all");
+            
+            /*new*/
+            List<DeviceDailyOnlineTimeModel> dailyOnlineTime =
+                this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
+            /*new*/
+            
             foreach (WorkshopModel w in affiliateWorkshop)
             {
                 xAxis.Add(w.WorkshopName);
                 
-                List<DeviceModel> allDevices = this._deviceDao.Get("all");
                 List<DeviceModel> relatedDevices = allDevices.AsQueryable()
                     .Where(d => d.Workshop == w.WorkshopName)
                     .ToList();
                 deviceAmount.Add(relatedDevices.Count);
                 
-                List<String> relatedDevicesId = new List<string>();
+                List<String> relatedDevicesId = new List<String>();
                 foreach (DeviceModel d in relatedDevices)
                 {
                     relatedDevicesId.Add(d.HardwareDeviceId);
                 }
 
-                List<AlarmInfoModel> allAlarmInfo = this._alarmInfoDao.Get("all");
                 List<AlarmInfoModel> relatedAlarmInfo = allAlarmInfo.AsQueryable()
                     .Where(ai => relatedDevicesId.Contains(ai.DeviceId) && ai.Timestamp >= startTime && ai.Timestamp <= endTime)
                     .ToList();
                 alarmTimes.Add(relatedAlarmInfo.Count);
-                
+
+                Double total = 0;
+                List<DeviceDailyOnlineTimeModel> deviceDataByWorkshop = dailyOnlineTime.AsQueryable()
+                    .Where(dot => relatedDevicesId.Contains(dot.HardwareDeviceId))
+                    .ToList();
+                foreach (var d in deviceDataByWorkshop)
+                {
+                    total += d.OnlineTime;
+                }
+
+                if (deviceDataByWorkshop.Count != 0)
+                {
+                    averageOnlineTime.Add(Math.Round(total / deviceDataByWorkshop.Count, 2));
+                }
+                else
+                {
+                    averageOnlineTime.Add(0);
+                }
+
+                /* old
                 TimeSpan t = TimeSpan.Zero;
                 foreach (String did in relatedDevicesId)
                 {
@@ -340,6 +366,7 @@ namespace IoTManager.Core
                     }
                 }
                 averageOnlineTime.Add(t.TotalMinutes / relatedDevices.Count);
+                */
             }
             
             List<object> result = new List<object>();
@@ -401,7 +428,15 @@ namespace IoTManager.Core
                 {
                     total += d.OnlineTime;
                 }
-                averageOnlineTime.Add(Math.Round(total / deviceDataByYearMonth.Count, 2));
+
+                if (deviceDataByYearMonth.Count != 0)
+                {
+                    averageOnlineTime.Add(Math.Round(total / deviceDataByYearMonth.Count, 2));
+                }
+                else
+                {
+                    averageOnlineTime.Add(0);
+                }
             }
             /*new*/
 
