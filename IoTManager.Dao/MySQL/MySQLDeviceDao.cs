@@ -136,6 +136,40 @@ namespace IoTManager.Dao
             }
         }
 
+        public DeviceModel GetByDeviceNamePrecise(String deviceName)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<DeviceModel>("select device.id, " +
+                                                     "hardwareDeviceID, " +
+                                                     "deviceName, " +
+                                                     "city.cityName as city, " +
+                                                     "factory.factoryName as factory, " +
+                                                     "workshop.workshopName as workshop, " +
+                                                     "deviceState, " +
+                                                     "imageUrl, " +
+                                                     "gatewayID, " +
+                                                     "mac, " +
+                                                     "deviceType, " +
+                                                     "device.remark, " +
+                                                     "lastConnectionTime, " +
+                                                     "device.createTime, " +
+                                                     "device.updateTime, " +
+                                                     "device.pictureRoute, " +
+                                                     "isOnline, " + 
+                                                     "base64Image " +
+                                                     "from device " +
+                                                     "join city on city.id=device.city " +
+                                                     "join factory on factory.id=device.factory " +
+                                                     "join workshop on workshop.id=device.workshop " +
+                                                     "where device.deviceName=@dn", new
+                    {
+                        dn = deviceName
+                    })
+                    .FirstOrDefault();
+            }
+        }
+
         public List<DeviceModel> GetByFuzzyDeviceId(String deviceId)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))

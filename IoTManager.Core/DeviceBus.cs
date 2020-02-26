@@ -29,6 +29,7 @@ namespace IoTManager.Core
     {
         private readonly IDeviceDao _deviceDao;
         private readonly IFieldDao _fieldDao;
+        private readonly ICityDao _cityDao;
         private readonly IoTHub _iotHub;
         private readonly ILogger _logger;
         
@@ -36,10 +37,15 @@ namespace IoTManager.Core
          * 构造函数
          * 需要注入DeviceDao, FieldDao, Logger
          */
-        public DeviceBus(IDeviceDao deviceDao, IFieldDao fieldDao, IoTHub iotHub,ILogger<DeviceBus> logger)
+        public DeviceBus(IDeviceDao deviceDao, 
+            IFieldDao fieldDao, 
+            ICityDao cityDao,
+            IoTHub iotHub,
+            ILogger<DeviceBus> logger)
         {
             this._deviceDao = deviceDao;
             this._fieldDao = fieldDao;
+            this._cityDao = cityDao;
             this._iotHub = iotHub;
             this._logger = logger;
         }
@@ -527,6 +533,27 @@ namespace IoTManager.Core
         public int UpdateLastConnectionTimeByDeviceId(String deviceId)
         {
             return this._deviceDao.UpdateLastConnectionTimeByDeviceId(deviceId);
+        }
+
+        /*
+         * 根据设备名称查询设备（所属的城市的）位置（精确查询）
+         *
+         * 输入：
+         * 设备名称
+         *
+         * 输出：
+         * 设备城市位置
+         * 
+         */
+        public Object GetDeviceLocationByDeviceName(String deviceName)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            CityModel city = this._cityDao.GetOneCityByName(device.City);
+            return new
+            {
+                longitude = city.longitude,
+                latitude = city.latitude
+            };
         }
     }
 }

@@ -322,5 +322,15 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.UpdateLastConnectionTimeByDeviceId(deviceId));
         }
+
+        [HttpGet("deviceLocation")]
+        public ResponseSerializer GetDeviceLocationByName(String deviceName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceBus.GetDeviceLocationByDeviceName(deviceName)
+                );
+        }
     }
 }

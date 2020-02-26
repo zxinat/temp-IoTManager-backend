@@ -36,5 +36,6 @@ namespace IoTManager.Core.Infrastructures
         int FindTagAffiliate(String tagName);
         int FindDeviceIdExist(String deviceId);
         int UpdateLastConnectionTimeByDeviceId(String deviceId);
+        Object GetDeviceLocationByDeviceName(String deviceName);
     }
 }

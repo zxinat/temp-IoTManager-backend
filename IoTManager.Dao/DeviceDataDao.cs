@@ -125,6 +125,7 @@ namespace IoTManager.Dao
 
         public object GetDeviceStatusById(int id, DateTime sTime, DateTime eTime)
         {
+            //TODO: Optimize this function
             String deviceId = "";
             DeviceModel device = new DeviceModel();
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
