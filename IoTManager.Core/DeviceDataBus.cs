@@ -597,12 +597,19 @@ namespace IoTManager.Core
         public object GetReportByTag(DateTime startTime, DateTime endTime)
         {
             List<String> tags = this._deviceDao.GetAllTag();
-            List<DeviceDataModel> deviceData = this._deviceDataDao.Get("all");
+            //List<DeviceDataModel> deviceData = this._deviceDataDao.Get("all");
             
             List<String> xAxis = new List<string>();
             List<Double> averageOnlineTime = new List<Double>();
             List<int> alarmTimes = new List<int>();
             List<int> deviceAmount = new List<int>();
+            
+            List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
+
+            /*new*/
+            List<DeviceDailyOnlineTimeModel> dailyOnlineTime =
+                this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
+            /*new*/
 
             foreach (String tag in tags)
             {
@@ -617,13 +624,33 @@ namespace IoTManager.Core
                     relatedDevicesId.Add(d.HardwareDeviceId);
                 }
 
-                List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
                 List<AlarmInfoModel> relatedAlarmInfos = alarmInfos.AsQueryable()
                     .Where(ai =>
                         relatedDevicesId.Contains(ai.DeviceId) && ai.Timestamp >= startTime && ai.Timestamp <= endTime)
                     .ToList();
                 alarmTimes.Add(relatedAlarmInfos.Count);
+                
+                /*new*/
+                Double total = 0;
+                List<DeviceDailyOnlineTimeModel> deviceDataByTag = dailyOnlineTime.AsQueryable()
+                    .Where(dot => relatedDevicesId.Contains(dot.HardwareDeviceId))
+                    .ToList();
+                foreach (var d in deviceDataByTag)
+                {
+                    total += d.OnlineTime;
+                }
 
+                if (deviceDataByTag.Count != 0)
+                {
+                    averageOnlineTime.Add(Math.Round(total / deviceDataByTag.Count, 2));
+                }
+                else
+                {
+                    averageOnlineTime.Add(0);
+                }
+                /*new*/
+
+                /* old
                 TimeSpan t = TimeSpan.Zero;
                 foreach (DeviceModel device in relatedDevices)
                 {
@@ -639,7 +666,7 @@ namespace IoTManager.Core
                         t += tmpTime;
                     }
                 }
-                averageOnlineTime.Add(t.TotalMinutes / relatedDevices.Count);
+                */
             }
             
             List<object> result = new List<object>();
