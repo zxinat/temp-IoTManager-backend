@@ -728,6 +728,11 @@ namespace IoTManager.Core
             return this._deviceDataDao.GetFieldAffiliateData(fieldId);
         }
 
+        /*
+         *
+         * 获取监控配置Device Card（设备概况）中数据的接口
+         * 
+         */
         public Object GetDeviceDataInDeviceCardByName(String deviceName)
         {
             //获取设备基本信息
@@ -794,6 +799,21 @@ namespace IoTManager.Core
                 recentAlarmTime = recentAlarmTime == 
                                   DateTime.MinValue ? "未收到数据" : recentAlarmTime.ToString(Constant.getDateFormatString())
             };
+        }
+
+        public Object GetDeviceDataInDevicePropertyByName(String deviceName)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            List<DeviceDataModel> deviceData = this._deviceDataDao.GetByDeviceId(device.HardwareDeviceId);
+            List<DeviceDataModel> result = deviceData.AsQueryable()
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(10)
+                .ToList();
+            foreach (var dd in result)
+            {
+                dd.DeviceId = dd.Timestamp.ToString(Constant.getDateFormatString());
+            }
+            return result;
         }
     }
 }

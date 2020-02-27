@@ -27,5 +27,6 @@ namespace IoTManager.Core.Infrastructures
         object GetReportByTag(DateTime startTime, DateTime endTime);
         int GetFieldAffiliateData(String fieldId);
         Object GetDeviceDataInDeviceCardByName(String deviceName);
+        Object GetDeviceDataInDevicePropertyByName(String deviceName);
     }
 }

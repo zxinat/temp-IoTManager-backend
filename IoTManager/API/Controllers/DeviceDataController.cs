@@ -149,5 +149,15 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.GetDeviceDataInDeviceCardByName(deviceName)
                 );
         }
+
+        [HttpGet("dataInDeviceProperty")]
+        public ResponseSerializer GetDeviceDataInDevicePropertyByName(String deviceName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDeviceDataInDevicePropertyByName(deviceName)
+                );
+        }
     }
 }
