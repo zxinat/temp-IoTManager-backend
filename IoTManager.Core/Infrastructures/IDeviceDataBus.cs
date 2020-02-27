@@ -28,5 +28,6 @@ namespace IoTManager.Core.Infrastructures
         int GetFieldAffiliateData(String fieldId);
         Object GetDeviceDataInDeviceCardByName(String deviceName);
         Object GetDeviceDataInDevicePropertyByName(String deviceName);
+        Object GetAlarmInfoInAlarmRecordByName(String deviceName);
     }
 }

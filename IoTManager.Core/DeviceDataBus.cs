@@ -801,6 +801,11 @@ namespace IoTManager.Core
             };
         }
 
+        /*
+         *
+         * 获取监控配置Device Property（设备数据）中数据的接口
+         * 
+         */
         public Object GetDeviceDataInDevicePropertyByName(String deviceName)
         {
             DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
@@ -812,6 +817,21 @@ namespace IoTManager.Core
             foreach (var dd in result)
             {
                 dd.DeviceId = dd.Timestamp.ToString(Constant.getDateFormatString());
+            }
+            return result;
+        }
+
+        public Object GetAlarmInfoInAlarmRecordByName(String deviceName)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            List<AlarmInfoModel> alarmInfo = this._alarmInfoDao.GetByDeviceId(device.HardwareDeviceId);
+            List<AlarmInfoModel> result = alarmInfo.AsQueryable()
+                .OrderByDescending(ai => ai.Timestamp)
+                .Take(10)
+                .ToList();
+            foreach (var ai in result)
+            {
+                ai.DeviceId = ai.Timestamp.ToString(Constant.getDateFormatString());
             }
             return result;
         }

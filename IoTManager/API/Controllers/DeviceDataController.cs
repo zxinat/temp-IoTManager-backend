@@ -159,5 +159,14 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.GetDeviceDataInDevicePropertyByName(deviceName)
                 );
         }
+
+        [HttpGet("dataInAlarmRecord")]
+        public ResponseSerializer GetAlarmInfoInAlarmRecord(String deviceName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetAlarmInfoInAlarmRecordByName(deviceName));
+        }
     }
 }
