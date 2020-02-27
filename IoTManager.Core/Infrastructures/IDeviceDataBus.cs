@@ -29,5 +29,6 @@ namespace IoTManager.Core.Infrastructures
         Object GetDeviceDataInDeviceCardByName(String deviceName);
         Object GetDeviceDataInDevicePropertyByName(String deviceName);
         Object GetAlarmInfoInAlarmRecordByName(String deviceName);
+        Object GetRuleInDeviceAlarmingRuleByName(String deviceName);
     }
 }

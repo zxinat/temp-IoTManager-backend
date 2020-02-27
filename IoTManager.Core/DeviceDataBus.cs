@@ -27,6 +27,7 @@ namespace IoTManager.Core
         private readonly IWorkshopDao _workshopDao;
         private readonly IStateTypeDao _stateTypeDao;
         private readonly IDeviceDailyOnlineTimeDao _deviceDailyOnlineTimeDao;
+        private readonly IThresholdDao _thresholdDao;
         private readonly ILogger _logger;
 
         /*
@@ -39,7 +40,9 @@ namespace IoTManager.Core
             IDeviceDao deviceDao, 
             IWorkshopDao workshopDao,
             IStateTypeDao stateTypeDao,
-            IDeviceDailyOnlineTimeDao deviceDailyOnlineTimeDao)
+            IDeviceDailyOnlineTimeDao deviceDailyOnlineTimeDao,
+            IThresholdDao thresholdDao
+            )
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
@@ -48,6 +51,7 @@ namespace IoTManager.Core
             this._workshopDao = workshopDao;
             this._stateTypeDao = stateTypeDao;
             this._deviceDailyOnlineTimeDao = deviceDailyOnlineTimeDao;
+            this._thresholdDao = thresholdDao;
         }
 
         /*
@@ -821,6 +825,11 @@ namespace IoTManager.Core
             return result;
         }
 
+        /*
+         *
+         * 获取监控配置Alarm Info（报警记录）中数据的接口
+         * 
+         */
         public Object GetAlarmInfoInAlarmRecordByName(String deviceName)
         {
             DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
@@ -834,6 +843,28 @@ namespace IoTManager.Core
                 ai.DeviceId = ai.Timestamp.ToString(Constant.getDateFormatString());
             }
             return result;
+        }
+
+        public Object GetRuleInDeviceAlarmingRuleByName(String deviceName)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            List<ThresholdModel> thresholdModels = this._thresholdDao.GetByDeviceId(device.HardwareDeviceId);
+            List<Object> ruleResult = new List<object>();
+            Dictionary<String, String> opDict = new Dictionary<string, string>();
+            opDict.Add("greater", ">");
+            opDict.Add("equal", "=");
+            opDict.Add("less", "<");
+            foreach (ThresholdModel t in thresholdModels)
+            {
+                ruleResult.Add(new
+                {
+                    name = t.RuleName,
+                    description = t.Description,
+                    conditionString = t.IndexId + opDict[t.Operator.ToString()] + t.ThresholdValue.ToString(),
+                    severity = t.Severity
+                });
+            }
+            return ruleResult;
         }
     }
 }
