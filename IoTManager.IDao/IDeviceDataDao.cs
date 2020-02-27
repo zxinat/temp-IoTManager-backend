@@ -8,7 +8,8 @@ namespace IoTManager.IDao
     {
         List<DeviceDataModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc");
         DeviceDataModel GetById(String Id);
-        List<DeviceDataModel> GetByDeviceId(String DeviceId);
+        List<DeviceDataModel> GetByDeviceId(String deviceId);
+        List<DeviceDataModel> GetByDeviceId20(String DeviceId);
         List<DeviceDataModel> GetNotInspected();
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();

@@ -8,7 +8,8 @@ namespace IoTManager.IDao
     {
         List<AlarmInfoModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc");
         AlarmInfoModel GetById(String Id);
-        List<AlarmInfoModel> GetByDeviceId(String DeviceId);
+        List<AlarmInfoModel> GetByDeviceId(String deviceId);
+        List<AlarmInfoModel> GetByDeviceId20(String DeviceId);
         List<AlarmInfoModel> GetByIndexId(String IndexId);
         String Create(AlarmInfoModel alarmInfoModel);
         List<AlarmInfoModel> GetFiveInfo();

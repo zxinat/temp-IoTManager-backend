@@ -44,7 +44,7 @@ namespace IoTManager.API.Controllers
             return new ResponseSerializer(
                 200,
                 "success",
-                _alarmInfoBus.GetAlarmInfoByDeviceId(DeviceId));
+                _alarmInfoBus.GetAlarmInfoByDeviceId20(DeviceId));
         }
 
         [HttpGet("indexId/{IndexId}")]

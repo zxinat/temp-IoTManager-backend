@@ -65,7 +65,15 @@ namespace IoTManager.Dao
             return _deviceData.Find<DeviceDataModel>(dd => dd.Id == Id).FirstOrDefault();
         }
 
-        public List<DeviceDataModel> GetByDeviceId(String DeviceId)
+        public List<DeviceDataModel> GetByDeviceId(String deviceId)
+        {
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId)
+                .ToList();
+            return query;
+        }
+
+        public List<DeviceDataModel> GetByDeviceId20(String DeviceId)
         {
             var query = this._deviceData.AsQueryable()
                 .Where(dd => dd.DeviceId == DeviceId)

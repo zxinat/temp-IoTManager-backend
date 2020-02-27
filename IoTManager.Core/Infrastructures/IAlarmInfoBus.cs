@@ -9,7 +9,7 @@ namespace IoTManager.Core.Infrastructures
     {
         List<AlarmInfoSerializer> GetAllAlarmInfo(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc");
         AlarmInfoSerializer GetAlarmInfoById(String Id);
-        List<AlarmInfoSerializer> GetAlarmInfoByDeviceId(String DeviceId);
+        List<AlarmInfoSerializer> GetAlarmInfoByDeviceId20(String DeviceId);
         List<AlarmInfoSerializer> GetAlarmInfoByIndexId(String IndexId);
         String InspectAlarmInfo();
         List<AlarmInfoSerializer> GetFiveInfo();

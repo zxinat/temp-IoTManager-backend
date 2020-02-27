@@ -52,7 +52,15 @@ namespace IoTManager.Dao
             return _alarmInfo.Find<AlarmInfoModel>(a => a.Id == Id).FirstOrDefault();
         }
 
-        public List<AlarmInfoModel> GetByDeviceId(String DeviceId)
+        public List<AlarmInfoModel> GetByDeviceId(String deviceId)
+        {
+            var query = this._alarmInfo.AsQueryable()
+                .Where(ai => ai.DeviceId == deviceId)
+                .ToList();
+            return query;
+        }
+
+        public List<AlarmInfoModel> GetByDeviceId20(String DeviceId)
         {
             var query = this._alarmInfo.AsQueryable()
                 .Where(ai => ai.DeviceId == DeviceId)

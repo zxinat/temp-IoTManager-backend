@@ -7,9 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
+using Google.Protobuf.WellKnownTypes;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
+using IoTManager.Utility;
 using IoTManager.Utility.Serializers;
 using Microsoft.Azure.Devices;
 using Microsoft.Extensions.Logging;
@@ -99,9 +101,9 @@ namespace IoTManager.Core
          * 输出：
          * 该设备下的所有设备数据
          */
-        public List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId)
+        public List<DeviceDataSerializer> GetDeviceDataByDeviceId20(String DeviceId)
         {
-            List<DeviceDataModel> deviceData = this._deviceDataDao.GetByDeviceId(DeviceId);
+            List<DeviceDataModel> deviceData = this._deviceDataDao.GetByDeviceId20(DeviceId);
             List<DeviceDataSerializer> result = new List<DeviceDataSerializer>();
             foreach (DeviceDataModel dd in deviceData)
             {
@@ -724,6 +726,74 @@ namespace IoTManager.Core
         public int GetFieldAffiliateData(String fieldId)
         {
             return this._deviceDataDao.GetFieldAffiliateData(fieldId);
+        }
+
+        public Object GetDeviceDataInDeviceCardByName(String deviceName)
+        {
+            //获取设备基本信息
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            
+            //获取设备的数据
+            List<DeviceDataModel> deviceData = this._deviceDataDao.GetByDeviceId(device.HardwareDeviceId);
+            
+            //将设备数据时间加入List
+            List<DateTime> deviceDataTimeList = new List<DateTime>();
+            foreach (var dd in deviceData)
+            {
+                deviceDataTimeList.Add(dd.Timestamp);
+            }
+            deviceDataTimeList.Sort();
+            
+            //获取设备的告警信息
+            List<AlarmInfoModel> alarmInfo = this._alarmInfoDao.GetByDeviceId(deviceName);
+            
+            //将告警信息时间加入List
+            List<DateTime> alarmInfoTimeList = new List<DateTime>();
+            foreach (var ai in alarmInfo)
+            {
+                alarmInfoTimeList.Add(ai.Timestamp);
+            }
+            alarmInfoTimeList.Sort();
+            
+            //计算启动时间
+            DateTime startTime = DateTime.MinValue;
+            if (deviceData.Count > 0)
+            {
+                startTime = deviceDataTimeList[0];
+            }
+            
+            //计算运行时间
+            TimeSpan runningTime = TimeSpan.Zero;
+            if (deviceData.Count > 0)
+            {
+                runningTime = deviceDataTimeList[deviceDataTimeList.Count - 1] - deviceDataTimeList[0];
+            }
+            
+            //获取告警次数
+            String alarmTimes = alarmInfo.Count.ToString();
+            
+            //获取最近报警时间
+            DateTime recentAlarmTime = DateTime.MinValue;
+            if (alarmInfo.Count > 0)
+            {
+                recentAlarmTime = alarmInfoTimeList[0];
+            }
+            return new
+            {
+                hardwareDeviceID = device.HardwareDeviceId,
+                deviceName = device.DeviceName,
+                deviceType = device.DeviceType,
+                deviceState = device.DeviceState,
+                base64Image = device.Base64Image,
+                startTime = startTime == DateTime.MinValue ? "未收到数据" : startTime.ToString(Constant.getDateFormatString()),
+                runningTime = runningTime == TimeSpan.Zero ? "未收到数据" : runningTime.ToString("%d") + "天" +
+                                                                       runningTime.ToString("%h") + "小时" + 
+                                                                       runningTime.ToString("%m") + "分钟" + 
+                                                                       runningTime.ToString("%s") + "秒",
+                alarmTimes = alarmTimes,
+                recentAlarmTime = recentAlarmTime == 
+                                  DateTime.MinValue ? "未收到数据" : recentAlarmTime.ToString(Constant.getDateFormatString())
+            };
         }
     }
 }

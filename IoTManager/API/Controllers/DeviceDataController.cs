@@ -46,7 +46,7 @@ namespace IoTManager.API.Controllers
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetDeviceDataByDeviceId(DeviceId));
+                this._deviceDataBus.GetDeviceDataByDeviceId20(DeviceId));
         }
 
         [HttpGet("{deviceId}/{indexId}")]
@@ -134,11 +134,20 @@ namespace IoTManager.API.Controllers
         [HttpPost("statistic/{deviceId}")]
         public ResponseSerializer GetDataStatistic(String deviceId, [FromBody] DataStatisticRequestModel request)
         {
-            System.Console.WriteLine(request);
             return new ResponseSerializer(
                 200,
                 "success",
                 request);
+        }
+
+        [HttpGet("dataInDeviceCard")]
+        public ResponseSerializer GetDeviceDataInDeviceCardByName(String deviceName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDeviceDataInDeviceCardByName(deviceName)
+                );
         }
     }
 }

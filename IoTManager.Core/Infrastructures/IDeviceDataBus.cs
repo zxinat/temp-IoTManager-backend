@@ -9,7 +9,7 @@ namespace IoTManager.Core.Infrastructures
     {
         List<DeviceDataSerializer> GetAllDeviceData(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc");
         DeviceDataSerializer GetDeviceDataById(String Id);
-        List<DeviceDataSerializer> GetDeviceDataByDeviceId(String DeviceId);
+        List<DeviceDataSerializer> GetDeviceDataByDeviceId20(String DeviceId);
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();
         object GetDeviceStatusById(int id, DateTime sTime, DateTime eTime);
@@ -26,5 +26,6 @@ namespace IoTManager.Core.Infrastructures
         object GetReportByType(DateTime startTime, DateTime endTime);
         object GetReportByTag(DateTime startTime, DateTime endTime);
         int GetFieldAffiliateData(String fieldId);
+        Object GetDeviceDataInDeviceCardByName(String deviceName);
     }
 }

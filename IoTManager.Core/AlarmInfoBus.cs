@@ -81,9 +81,9 @@ namespace IoTManager.Core
          * 输出：
          * 该设备下的所有告警信息
          */
-        public List<AlarmInfoSerializer> GetAlarmInfoByDeviceId(String DeviceId)
+        public List<AlarmInfoSerializer> GetAlarmInfoByDeviceId20(String DeviceId)
         {
-            List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.GetByDeviceId(DeviceId);
+            List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.GetByDeviceId20(DeviceId);
             List<AlarmInfoSerializer> result = new List<AlarmInfoSerializer>();
             foreach (AlarmInfoModel alarmInfo in alarmInfos)
             {
