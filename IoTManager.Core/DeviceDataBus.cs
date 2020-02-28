@@ -866,5 +866,100 @@ namespace IoTManager.Core
             }
             return ruleResult;
         }
+
+        public Object Get100DataInDataStatisticByName(String deviceName)
+        {
+            String tmpTimeSerializeStr = "MM-dd HH:mm:ss";
+            
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            List<DeviceDataModel> deviceData = this._deviceDataDao.GetByDeviceId100(device.HardwareDeviceId);
+            List<ValueTuple<DateTime, String, DeviceDataModel>> dataTuple = new List<(DateTime, string, DeviceDataModel)>();
+            List<String> affiliateFields = new List<string>();
+            List<String> xAxis = new List<string>();
+            foreach (var dd in deviceData)
+            {
+                if (!affiliateFields.Contains(dd.IndexName))
+                {
+                    affiliateFields.Add(dd.IndexName);
+                }
+                
+                DateTime tmp = dd.Timestamp;
+                dd.Timestamp = new DateTime(tmp.Year, tmp.Month, tmp.Day, tmp.Hour, tmp.Minute, tmp.Second);
+
+                String formalizedTime = dd.Timestamp.ToString(tmpTimeSerializeStr);
+                if (!xAxis.Contains(formalizedTime))
+                {
+                    xAxis.Add(formalizedTime);
+                }
+                
+                dataTuple.Add((dd.Timestamp, dd.IndexName, dd));
+            }
+            
+            Dictionary<String, bool> check = new Dictionary<string, bool>();
+            foreach (var f in affiliateFields)
+            {
+               check.Add(f, false);
+            }
+
+            Dictionary<String, List<String>> result = new Dictionary<String, List<String>>();
+            foreach (var f in affiliateFields)
+            {
+                result.Add(f, new List<string>());
+            }
+            
+            foreach (var t in xAxis)
+            {
+                foreach (var f in affiliateFields)
+                {
+                    check[f] = false;
+                }
+                
+                var selectedTuple = dataTuple.AsQueryable()
+                    .Where(dt => dt.Item1.ToString(tmpTimeSerializeStr) == t)
+                    .ToList();
+
+                foreach (var st in selectedTuple)
+                {
+                    check[st.Item2] = true;
+                    result[st.Item2].Add(st.Item3.IndexValue.ToString());
+                }
+
+                foreach (var f in affiliateFields)
+                {
+                    if (check[f] == false)
+                    {
+                        result[f].Add(null);
+                    }
+                }
+            }
+
+            foreach (var f in result.Keys)
+            {
+                result[f].Reverse();
+            }
+
+            xAxis.Reverse();
+            
+            List<Object> seriesResult = new List<object>();
+            List<String> legendResult = new List<string>();
+            foreach (var f in result.Keys)
+            {
+                seriesResult.Add(new
+                {
+                    type = "line",
+                    name = f,
+                    data = result[f],
+                    connectNulls = true
+                });
+                legendResult.Add(f);
+            }
+            
+            return new
+            {
+                xAxis = xAxis,
+                series = seriesResult,
+                legend = legendResult
+            };
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace IoTManager.IDao
         DeviceDataModel GetById(String Id);
         List<DeviceDataModel> GetByDeviceId(String deviceId);
         List<DeviceDataModel> GetByDeviceId20(String DeviceId);
+        List<DeviceDataModel> GetByDeviceId100(String deviceId);
         List<DeviceDataModel> GetNotInspected();
         Object GetLineChartData(String deviceId, String indexId);
         int GetDeviceDataAmount();

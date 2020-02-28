@@ -178,5 +178,15 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.GetRuleInDeviceAlarmingRuleByName(deviceName)
                 );
         }
+
+        [HttpGet("100DataInDataStatistic")]
+        public ResponseSerializer Get100DataInDataStatisticByName(String deviceName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.Get100DataInDataStatisticByName(deviceName)
+                );
+        }
     }
 }

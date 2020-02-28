@@ -83,6 +83,16 @@ namespace IoTManager.Dao
             return query;
         }
 
+        public List<DeviceDataModel> GetByDeviceId100(String deviceId)
+        {
+            var query = this._deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(100)
+                .ToList();
+            return query;
+        }
+
         public List<DeviceDataModel> GetAllDataByDeviceId(String DeviceId)
         {
             var query = this._deviceData.AsQueryable()
