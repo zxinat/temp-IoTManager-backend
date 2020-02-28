@@ -31,5 +31,9 @@ namespace IoTManager.Core.Infrastructures
         Object GetAlarmInfoInAlarmRecordByName(String deviceName);
         Object GetRuleInDeviceAlarmingRuleByName(String deviceName);
         Object Get100DataInDataStatisticByName(String deviceName);
+        List<FieldModel> GetFieldByDeviceName(String deviceName);
+        Object GetHourAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime);
+        Object GetDayAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime);
+        Object GetMonthAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime);
     }
 }

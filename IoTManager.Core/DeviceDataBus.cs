@@ -28,6 +28,7 @@ namespace IoTManager.Core
         private readonly IStateTypeDao _stateTypeDao;
         private readonly IDeviceDailyOnlineTimeDao _deviceDailyOnlineTimeDao;
         private readonly IThresholdDao _thresholdDao;
+        private readonly IFieldDao _fieldDao;
         private readonly ILogger _logger;
 
         /*
@@ -41,7 +42,8 @@ namespace IoTManager.Core
             IWorkshopDao workshopDao,
             IStateTypeDao stateTypeDao,
             IDeviceDailyOnlineTimeDao deviceDailyOnlineTimeDao,
-            IThresholdDao thresholdDao
+            IThresholdDao thresholdDao,
+            IFieldDao fieldDao
             )
         {
             this._deviceDataDao = deviceDataDao;
@@ -52,6 +54,7 @@ namespace IoTManager.Core
             this._stateTypeDao = stateTypeDao;
             this._deviceDailyOnlineTimeDao = deviceDailyOnlineTimeDao;
             this._thresholdDao = thresholdDao;
+            this._fieldDao = fieldDao;
         }
 
         /*
@@ -960,6 +963,38 @@ namespace IoTManager.Core
                 series = seriesResult,
                 legend = legendResult
             };
+        }
+
+        public List<FieldModel> GetFieldByDeviceName(String deviceName)
+        {
+            List<FieldModel> fields = this._fieldDao.Get();
+            List<FieldModel> result = fields.AsQueryable()
+                .Where(f => f.Device == deviceName)
+                .ToList();
+            return result;
+        }
+
+        public Object GetHourAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            var result = this._deviceDataDao.GetHourAggregateData(device.HardwareDeviceId, fieldId, startTime, endTime);
+            return result;
+        }
+
+        public Object GetDayAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            var result =
+                this._deviceDataDao.GetDayStatisticAggregateData(device.HardwareDeviceId, fieldId, startTime, endTime);
+            return result;
+        }
+
+        public Object GetMonthAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime)
+        {
+            DeviceModel device = this._deviceDao.GetByDeviceNamePrecise(deviceName);
+            var result =
+                this._deviceDataDao.GetMonthAggregateData(device.HardwareDeviceId, fieldId, startTime, endTime);
+            return result;
         }
     }
 }

@@ -645,7 +645,7 @@ namespace IoTManager.Dao
                     g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
                 .ToList();
 
-            return new {index = indexId, avg = avg};
+            return new {index = indexId, min = min, avg = avg, max = max};
             ;
         }
         
@@ -696,7 +696,7 @@ namespace IoTManager.Dao
                 .Group(x => new {year = x.year, month = x.month, day = x.day, hour = x.hour},
                     g => new {time = g.Key, min = g.Min(x => x.IndexValue)})
                 .ToList();
-            return new {index = indexId, avg = avg};
+            return new {index = indexId, min = min, avg = avg, max = max};
         }
         
         public object GetMonthAggregateData(String deviceId, String indexId, DateTime startTime, DateTime endTime)

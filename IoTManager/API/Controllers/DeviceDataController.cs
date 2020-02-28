@@ -188,5 +188,48 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.Get100DataInDataStatisticByName(deviceName)
                 );
         }
+
+        [HttpGet("affiliateField")]
+        public ResponseSerializer GetFieldByDeviceName(String deviceName)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetFieldByDeviceName(deviceName));
+        }
+
+        [HttpPost("hourAggregateData")]
+        public ResponseSerializer GetHourAggregateDataByDeviceNameAndField(String deviceName, String fieldId,
+            [FromBody] DataStatisticRequestModel request)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetHourAggregateDataByDeviceNameAndField(deviceName, fieldId, request.StartTime,
+                    request.EndTime)
+            );
+        }
+
+        [HttpPost("dayAggregateData")]
+        public ResponseSerializer GetDayAggregateDataByDeviceNameAndField(String deviceName, String fieldId,
+            [FromBody] DataStatisticRequestModel request)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetDayAggregateDataByDeviceNameAndField(deviceName, fieldId, request.StartTime, request.EndTime)
+                );
+        }
+
+        [HttpPost("monthAggregateData")]
+        public ResponseSerializer GetMonthAggregateDataByDeviceNameAndField(String deviceName, String fieldId,
+            [FromBody] DataStatisticRequestModel request)
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                this._deviceDataBus.GetMonthAggregateDataByDeviceNameAndField(deviceName, fieldId, request.StartTime, request.EndTime)
+                );
+        }
     }
 }
