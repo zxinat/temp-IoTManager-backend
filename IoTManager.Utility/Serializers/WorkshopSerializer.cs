@@ -15,6 +15,7 @@ namespace IoTManager.Utility.Serializers
             this.createTime = null;
             this.updateTime = null;
             this.factory = null;
+            this.city = null;
         }
 
         public WorkshopSerializer(WorkshopModel workshopModel)
@@ -29,6 +30,7 @@ namespace IoTManager.Utility.Serializers
             this.updateTime = DateTime.Parse(workshopModel.UpdateTime.ToString())
                 .ToLocalTime().ToString(Constant.getDateFormatString());
             this.factory = workshopModel.Factory;
+            this.city = workshopModel.City;
         }
         
         public int id { get; set; }
@@ -39,5 +41,6 @@ namespace IoTManager.Utility.Serializers
         public String createTime { get; set; }
         public String updateTime { get; set; }
         public String factory { get; set; }
+        public String city { get; set; }
     }
 }

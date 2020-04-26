@@ -3,5 +3,9 @@
   <PropertyGroup>
     <ShowAllFiles>false</ShowAllFiles>
     <NameOfLastUsedPublishProfile>CustomProfile</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>IoTManager</ActiveDebugProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

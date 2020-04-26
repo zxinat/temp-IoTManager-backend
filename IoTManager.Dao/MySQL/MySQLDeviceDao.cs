@@ -150,7 +150,7 @@ namespace IoTManager.Dao
                                                      "imageUrl, " +
                                                      "gatewayID, " +
                                                      "mac, " +
-                                                     "deviceType, " +
+                                                     "config.configValue as deviceType, " +
                                                      "device.remark, " +
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
@@ -162,6 +162,7 @@ namespace IoTManager.Dao
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
                                                      "join workshop on workshop.id=device.workshop " +
+                                                     "join config on config.id=device.deviceType "+
                                                      "where device.deviceName=@dn", new
                     {
                         dn = deviceName
@@ -223,7 +224,8 @@ namespace IoTManager.Dao
                                                      "device.updateTime, " +
                                                      "device.pictureRoute, " +
                                                      "isOnline, " + 
-                                                     "base64Image " +
+                                                     "base64Image, " +
+                                                     "totalAlarmInfo "+
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -327,7 +329,8 @@ namespace IoTManager.Dao
                         "remark=@r, " +
                         "updateTime=CURRENT_TIMESTAMP, " +
                         "pictureRoute=@pr, " +
-                        "base64Image=@bi " +
+                        "base64Image=@bi, " +
+                        "totalAlarmInfo=@tai "+
                         "WHERE device.id=@deviceId",
                         new
                         {
@@ -344,7 +347,8 @@ namespace IoTManager.Dao
                             dt = deviceType,
                             r = deviceModel.Remark,
                             pr = deviceModel.PictureRoute,
-                            bi = deviceModel.Base64Image
+                            bi = deviceModel.Base64Image,
+                            tai=deviceModel.totalAlarmInfo,
                         });
                 return rows == 1 ? "success" : "error";
             }
@@ -416,6 +420,36 @@ namespace IoTManager.Dao
                     .ToList();
             }
         }
+        public List<DeviceModel> ListByCity(String city)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<DeviceModel>("select device.id, " +
+                                                     "hardwareDeviceID, " +
+                                                     "deviceName, " +
+                                                     "city.cityName as city, " +
+                                                     "factory.factoryName as factory, " +
+                                                     "workshop.workshopName as workshop, " +
+                                                     "deviceState, " +
+                                                     "imageUrl, " +
+                                                     "gatewayID, " +
+                                                     "mac, " +
+                                                     "deviceType, " +
+                                                     "device.remark, " +
+                                                     "lastConnectionTime, " +
+                                                     "device.createTime, " +
+                                                     "device.updateTime, " +
+                                                     "device.isOnline "+
+                                                     "from device " +
+                                                     "join city on city.id=device.city " +
+                                                     "join factory on factory.id=device.factory " +
+                                                     "join workshop on workshop.id=device.workshop " +
+                                                     "where device.city in (select id from city where cityName=@cn)", new
+                                                     {
+                                                         cn = city,
+                                                     }).ToList();
+            }
+        }
         public int GetDeviceAmount()
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
@@ -445,7 +479,7 @@ namespace IoTManager.Dao
                     List<object> deviceResult = new List<object>();
                     foreach (DeviceModel d in devices)
                     {
-                        deviceResult.Add(new { label = d.DeviceName, id = d.Id });
+                        deviceResult.Add(new { label = d.DeviceName, id = d.Id ,deviceId=d.HardwareDeviceId});
                     }
                     result.Add(new { label = w.WorkshopName, children = deviceResult });
                 }
@@ -631,7 +665,6 @@ namespace IoTManager.Dao
                 return result == 1 ? "success" : "error";
             }
         }
-
         public int FindTagAffiliate(String tagName)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
@@ -669,5 +702,6 @@ namespace IoTManager.Dao
                 return result;
             }
         }
+        
     }
 }

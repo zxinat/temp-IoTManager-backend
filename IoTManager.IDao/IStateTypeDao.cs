@@ -17,5 +17,6 @@ namespace IoTManager.IDao
         int GetDeviceTypeAffiliateDevice(int id);
         long GetDetailedDeviceTypeNumber();
         DeviceTypeModel GetDeviceTypeByName(String name);
+        List<DeviceTypeModel> ListAllDeviceType();
     }
 }

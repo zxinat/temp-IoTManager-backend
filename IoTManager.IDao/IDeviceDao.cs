@@ -19,6 +19,7 @@ namespace IoTManager.IDao
         String Delete(int id);
         int BatchDelete(int[] ids);
         List<DeviceModel> GetByWorkshop(String city, String factory, String workshop);
+        List<DeviceModel> ListByCity(String city);
         int GetDeviceAmount();
         List<object> GetDeviceTree(String city, String factory);
         String CreateDeviceType(String deviceType);

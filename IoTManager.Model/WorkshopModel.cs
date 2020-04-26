@@ -12,5 +12,6 @@ namespace IoTManager.Model
         public DateTime CreateTime { get; set; }
         public DateTime UpdateTime { get; set; }
         public String Factory { get; set; }
+        public String City { get; set; }
     }
 }

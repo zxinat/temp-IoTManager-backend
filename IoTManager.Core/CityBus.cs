@@ -11,6 +11,7 @@ using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using MongoDB.Bson;
 using Newtonsoft.Json;
+using IoTManager.Model.DataReceiver;
 
 namespace IoTManager.Core
 {
@@ -98,7 +99,7 @@ namespace IoTManager.Core
                 foreach (FactoryModel f in factories)
                 {
                     List<object> subchildren = new List<object>();
-                    List<WorkshopModel> workshops = this._workshopDao.GetAffiliateWorkshop(f.FactoryName);
+                    List<WorkshopModel> workshops = this._workshopDao.GetAffiliateWorkshop(c.CityName,f.FactoryName);
                     subchildren.Add(new {value="全部", label="全部"});
                     foreach(WorkshopModel w in workshops)
                     {
@@ -109,6 +110,34 @@ namespace IoTManager.Core
                 result.Add(new {value=c.CityName, label=c.CityName, children=children});
             }
 
+            return result;
+        }
+        /*  改进GetCityCascaderOptions函数
+         *  获取实验室所属地，返回名称树结构
+         */
+        public List<object> tempName()
+        {
+            List<object> result = new List<object>();
+            result.Add(new { value = "全部", label = "全部" });
+            List<string> cityNames = _cityDao.ListCityName();
+            List<WorkshopTreeModel> workshopTree = _workshopDao.ListWorkshopLoaction();
+            foreach(string cityName in cityNames)
+            {
+                List<object> children = new List<object>();
+                children.Add(new { value = "全部", label = "全部" });
+                foreach( var w in workshopTree)
+                {
+                    List<object> subchildren = new List<object>();
+                    subchildren.Add(new { value = "全部", label = "全部" });
+                    if (w.cityName==cityName)
+                    {
+                        subchildren.Add(new { value = w.workshopName, label = w.workshopName });
+                        children.Add(new { value = w.factoryName, label = w.factoryName, children = subchildren });
+                    }
+                    
+                }
+                result.Add(new { value = cityName, label = cityName, children = children });
+            }
             return result;
         }
         public List<object> GetCityOptions()
@@ -143,7 +172,7 @@ namespace IoTManager.Core
 
             return result;
         }
-
+        /*
         public List<object> GetCityMapInfo(String cityName)
         {
             CityModel city = this._cityDao.GetOneCityByName(cityName);
@@ -162,6 +191,26 @@ namespace IoTManager.Core
             result.Add(new {name=cityName, value=info});
             return result;
         }
+        */
+        public List<object> GetCityMapInfo(String cityName)
+        {
+            CityModel city = this._cityDao.GetOneCityByName(cityName);
+            List<DeviceModel> devices = this._deviceDao.ListByCity(cityName);
+            var offlineQuery = devices.AsQueryable()
+                .Where(d => d.IsOnline == "no")
+                .ToList().Count;
+            var onlineQuery = devices.AsQueryable()
+                .Where(d => d.IsOnline == "yes")
+                .ToList().Count;
+            List<object> result = new List<object>();
+            List<object> info = new List<object>();
+            info.Add(city.longitude);
+            info.Add(city.latitude);
+            info.Add("在线: " + onlineQuery.ToString() + "; 离线: " + offlineQuery.ToString());
+            result.Add(new { name = cityName, value = info });
+            return result;
+        }
+
 
         public List<CitySerializer> GetByCityName(String cityName)
         {
@@ -208,7 +257,7 @@ namespace IoTManager.Core
                 List<object> children = new List<object>();
                 foreach (FactoryModel f in relatedFactories)
                 {
-                    children.Add(new {value = f.FactoryName, label = f.FactoryName, id = f.Id, factoryName = f.FactoryName});
+                    children.Add(new {value = f.FactoryName, label = f.FactoryName, id = f.Id, factoryName = f.FactoryName,cityName=c.CityName});
                 }
                 result.Add(new {value = c.CityName, label = c.CityName, children = children});
             }

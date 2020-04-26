@@ -75,7 +75,7 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetDeviceDataAmount());
         }
-
+        /*√ª”√…œ*/
         [HttpPost("status/{id}")]
         public ResponseSerializer GetDeviceStatusById(int id, [FromBody] DataStatisticRequestModel date)
         {

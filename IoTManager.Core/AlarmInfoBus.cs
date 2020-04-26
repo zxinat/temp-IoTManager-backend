@@ -16,6 +16,7 @@ namespace IoTManager.Core
     public sealed class AlarmInfoBus: IAlarmInfoBus
     {
         private readonly IDeviceDataDao _deviceDataDao;
+        private readonly IDeviceBus _deviceBus;
         private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly ILogger _logger;
 
@@ -23,10 +24,13 @@ namespace IoTManager.Core
          * 构造函数
          * 需要注入DeviceDataDao, AlarmInfoDao, Logger
          */
-        public AlarmInfoBus(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, ILogger<AlarmInfoBus> logger)
+        public AlarmInfoBus(IDeviceDataDao deviceDataDao, IAlarmInfoDao alarmInfoDao, 
+            ILogger<AlarmInfoBus> logger,
+            IDeviceBus deviceBus)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
+            this._deviceBus = deviceBus;
             this._logger = logger;
         }
 
@@ -228,9 +232,11 @@ namespace IoTManager.Core
          * 输出：
          * 该设备下告警信息的数量
          */
-        public int GetDeviceAffiliateAlarmInfo(String deviceId)
+        public int GetDeviceAffiliateAlarmInfoNumber(String deviceId)
         {
-            return this._alarmInfoDao.GetDeviceAffiliateAlarmInfo(deviceId);
+
+            //return this._alarmInfoDao.GetDeviceAffiliateAlarmInfoNumber(deviceId);
+            return _deviceBus.GetTotalAlarmInfo(deviceId);
         }
 
         /*

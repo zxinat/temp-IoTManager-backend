@@ -8,7 +8,7 @@ namespace IoTManager.IDao
     {
         List<AlarmInfoModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc");
         AlarmInfoModel GetById(String Id);
-        List<AlarmInfoModel> GetByDeviceId(String deviceId);
+        List<AlarmInfoModel> GetByDeviceId(String deviceId,int count);
         List<AlarmInfoModel> GetByDeviceId20(String DeviceId);
         List<AlarmInfoModel> GetByIndexId(String IndexId);
         String Create(AlarmInfoModel alarmInfoModel);
@@ -19,7 +19,8 @@ namespace IoTManager.IDao
         String UpdateProcessed(String id);
         long GetAlarmInfoNumber(String searchType, String deviceId = "all");
         String Delete(String id);
-        int GetDeviceAffiliateAlarmInfo(String deviceId);
+        int GetDeviceAffiliateAlarmInfoNumber(String deviceId, DateTime startTime, DateTime endTime);
+        int GetDeviceAlarmInfoNumberByTime(DateTime startTime, DateTime endTime);
         int BatchDelete(List<String> ids);
     }
 }

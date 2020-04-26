@@ -13,6 +13,6 @@ namespace IoTManager.IDao
         String Delete(int id);
         String Update(int id, ThresholdModel thresholdModel);
         int BatchDelete(int[] ids);
-        int GetDeviceAffiliateThreshold(String deviceId);
+        int GetDeviceAffiliateThresholdNumber(String deviceId);
     }
 }

@@ -230,7 +230,7 @@ namespace IoTManager.API.Controllers
             return new ResponseSerializer(
                 200,
                 "success",
-                this._alarmInfoBus.GetDeviceAffiliateAlarmInfo(deviceId));
+                this._alarmInfoBus.GetDeviceAffiliateAlarmInfoNumber(deviceId));
         }
 
         [HttpGet("affiliateThreshold/{deviceId}")]
@@ -268,7 +268,6 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.SetDeviceTag(deviceId, str.str));
         }
-
         [HttpGet("deviceTag/{deviceId}")]
         public ResponseSerializer GetDeviceTag(int deviceId)
         {

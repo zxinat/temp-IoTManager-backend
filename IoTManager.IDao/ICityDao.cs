@@ -19,5 +19,6 @@ namespace IoTManager.IDao
         int GetCityAffiliateDevice(int id);
         int GetCityAffiliateGateway(int id);
         long GetCityNumber();
+        List<string> ListCityName();
     }
 }

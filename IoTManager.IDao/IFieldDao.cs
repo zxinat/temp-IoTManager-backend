@@ -11,5 +11,7 @@ namespace IoTManager.IDao
         String Update(int id, FieldModel field);
         String Delete(int id);
         long GetFieldNumber();
+        List<FieldModel> ListFieldsByDeviceId(string deviceId);
+        List<string> ListFieldIdsByDeviceId(string deviceId);
     }
 }

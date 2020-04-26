@@ -149,5 +149,13 @@ namespace IoTManager.Dao
                     }).FirstOrDefault();
             }
         }
+        /*zxin-Ìí¼Ó*/
+        public List<DeviceTypeModel> ListAllDeviceType()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<DeviceTypeModel>("select id Id ,configValue DeviceTypeName,offlineTime OfflineTime from config where configTag=@ct", new { ct = "deviceType" }).ToList();
+            }
+        }
     }
 }

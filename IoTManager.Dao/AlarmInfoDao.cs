@@ -51,15 +51,16 @@ namespace IoTManager.Dao
         {
             return _alarmInfo.Find<AlarmInfoModel>(a => a.Id == Id).FirstOrDefault();
         }
-
-        public List<AlarmInfoModel> GetByDeviceId(String deviceId)
+        /*zxin-修改：获取最新指定数量的告警信息*/
+        public List<AlarmInfoModel> GetByDeviceId(String deviceId,int count)
         {
             var query = this._alarmInfo.AsQueryable()
                 .Where(ai => ai.DeviceId == deviceId)
+                .OrderByDescending(ai => ai.Timestamp)
+                .Take(count)
                 .ToList();
             return query;
         }
-
         public List<AlarmInfoModel> GetByDeviceId20(String DeviceId)
         {
             var query = this._alarmInfo.AsQueryable()
@@ -93,20 +94,32 @@ namespace IoTManager.Dao
 
         public int GetNoticeAlarmInfoAmount()
         {
+            /*
             List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="Info").ToList();
             return alarmInfos.Count;
+            */
+            FilterDefinition<AlarmInfoModel> filter = Builders<AlarmInfoModel>.Filter.Eq("Severity", "Info");
+            return (int)_alarmInfo.Find(filter).CountDocuments();
         }
 
         public int GetSeriousAlarmInfoAmount()
         {
+            /*
             List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="Warning").ToList();
             return alarmInfos.Count;
+            */
+            FilterDefinition<AlarmInfoModel> filter = Builders<AlarmInfoModel>.Filter.Eq("Severity", "Warning");
+            return (int)_alarmInfo.Find(filter).CountDocuments();
         }
 
         public int GetVerySeriousAlarmInfoAmount()
         {
+            /*
             List<AlarmInfoModel> alarmInfos = _alarmInfo.Find<AlarmInfoModel>(a => a.Severity=="Critical").ToList();
             return alarmInfos.Count;
+            */
+            FilterDefinition<AlarmInfoModel> filter = Builders<AlarmInfoModel>.Filter.Eq("Severity", "Critical");
+            return (int)_alarmInfo.Find(filter).CountDocuments();
         }
 
         public String UpdateProcessed(String id)
@@ -119,46 +132,78 @@ namespace IoTManager.Dao
 
         public long GetAlarmInfoNumber(String searchType, String deviceId = "all")
         {
+            FilterDefinition<AlarmInfoModel> filter;
             if (searchType == "search")
             {
                 if (deviceId != "all")
                 {
+                    /*
                     var query = this._alarmInfo.AsQueryable()
                         .Where(ai => ai.DeviceId == deviceId)
                         .Take(60)
                         .ToList();
-                    return query.Count;
+                    */
+                    /*zxin-修改查询方式*/
+                    filter = Builders<AlarmInfoModel>.Filter.Eq("DeviceId", deviceId);
+                    
                 }
                 else
                 {
+                    /*
                     var query = this._alarmInfo.AsQueryable()
                         .Where(ai => true)
                         .Take(60)
                         .ToList();
                     return query.Count;
+                    */
+                    filter = Builders<AlarmInfoModel>.Filter.Empty;
                 }
             }
             else
             {
+                /*
                 var query = this._alarmInfo.AsQueryable()
                     .Where(ai => true)
                     .ToList();
                 return query.Count;
+                */
+                filter = Builders<AlarmInfoModel>.Filter.Empty;
             }
+            return this._alarmInfo.Find(filter).CountDocuments();
         }
-
         public String Delete(String id)
         {
             var filter = Builders<AlarmInfoModel>.Filter.Eq("_id", new ObjectId(id));
             var result = this._alarmInfo.DeleteOne(filter);
             return result.DeletedCount == 1 ? "success" : "error";
         }
-
-        public int GetDeviceAffiliateAlarmInfo(String deviceId)
+        /* 输入：设备Id、起止时间
+         * 输出：总告警次数
+         */
+        public int GetDeviceAffiliateAlarmInfoNumber(String deviceId,DateTime startTime,DateTime endTime)
         {
+            FilterDefinitionBuilder<AlarmInfoModel> builderFilter = Builders<AlarmInfoModel>.Filter;
+            FilterDefinition<AlarmInfoModel> filter = builderFilter.And(builderFilter.Eq("DeviceId", deviceId),
+                builderFilter.Gt("Timestamp", startTime),
+                builderFilter.Lt("Timestamp", endTime));
+            return (int)_alarmInfo.Find(filter).CountDocuments();
+            /*
             return _alarmInfo.AsQueryable()
-                .Where(ai => ai.DeviceId == deviceId)
+                .Where(ai => ai.DeviceId == deviceId & ai.Timestamp>=startTime &ai.Timestamp<=endTime)
                 .ToList().Count;
+             */
+        }
+        /* 输入：起止时间
+         * 输出：时间段内数据总数
+         * 
+         */
+        public int GetDeviceAlarmInfoNumberByTime(DateTime startTime,DateTime endTime)
+        {
+            FilterDefinitionBuilder<AlarmInfoModel> builderFilter = Builders<AlarmInfoModel>.Filter;
+            FilterDefinition<AlarmInfoModel> filter = builderFilter.And(
+                builderFilter.Gt("Timestamp", startTime),
+                builderFilter.Lt("Timestamp", endTime));
+            return (int)_alarmInfo.Find(filter).CountDocuments();
         }
 
         public int BatchDelete(List<String> ids)

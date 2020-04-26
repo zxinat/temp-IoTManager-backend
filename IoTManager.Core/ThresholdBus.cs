@@ -74,6 +74,11 @@ namespace IoTManager.Core
 
         public String DeleteThreshold(int id)
         {
+            /*zxin-删除告警规则同时要删除相应的告警信息*/
+            /* 1、获取告警规则
+             * 2、问题：无法通过告警规则找到相应的告警信息
+             * 3、批量删除
+             */
             return this._thresholdDao.Delete(id);
         }
 
@@ -84,7 +89,7 @@ namespace IoTManager.Core
 
         public int GetDeviceAffiliateThreshold(String deviceId)
         {
-            return this._thresholdDao.GetDeviceAffiliateThreshold(deviceId);
+            return this._thresholdDao.GetDeviceAffiliateThresholdNumber(deviceId);
         }
     }
 }

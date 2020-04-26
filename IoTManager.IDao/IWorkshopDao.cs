@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using IoTManager.Model;
+using IoTManager.Model.DataReceiver;
 
 namespace IoTManager.IDao
 {
@@ -12,7 +13,9 @@ namespace IoTManager.IDao
         String Create(WorkshopModel workshopModel);
         String Update(int id, WorkshopModel workshopModel);
         String Delete(int id);
-        List<WorkshopModel> GetAffiliateWorkshop(String fName);
+        List<WorkshopModel> GetAffiliateWorkshop(String cName,String fName);
+        List<WorkshopTreeModel> ListWorkshopLoaction();
+        List<string> ListWorkshopNames(string cName, string fName);
         List<WorkshopModel> GetByWorkshopName(String workshopName);
         int GetWorkshopAffiliateDevice(int id);
         int GetWorkshopAffiliateGateway(int id);

@@ -46,13 +46,14 @@ namespace IoTManager.Core
             return this._fieldDao.Create(fieldModel);
         }
 
-        public List<FieldSerializer> GetAffiliateFields(String deviceName)
+        public List<FieldSerializer> GetAffiliateFields(String deviceId)
         {
+            /*
             List<FieldModel> fields = this._fieldDao.Get();
             List<FieldSerializer> result = new List<FieldSerializer>();
             List<DeviceModel> devices = this._deviceDao.Get("all");
             var selectedDevice = devices.AsQueryable()
-                .Where(sd => sd.HardwareDeviceId == deviceName)
+                .Where(sd => sd.HardwareDeviceId == deviceId)
                 .FirstOrDefault(d => d.Id != 0);
             if (selectedDevice != null)
             {
@@ -70,6 +71,15 @@ namespace IoTManager.Core
             {
                 return new List<FieldSerializer>();
             }
+            */
+            /*zxin-ÐÞ¸Ä*/
+            List<FieldSerializer> result = new List<FieldSerializer>();
+            List<FieldModel> fields = this._fieldDao.ListFieldsByDeviceId(deviceId);
+            foreach(var f in fields)
+            {
+                result.Add(new FieldSerializer(f));
+            }
+            return result;
         }
 
         public String UpdateField(int id, FieldSerializer fieldSerializer)

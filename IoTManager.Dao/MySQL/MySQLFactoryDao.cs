@@ -129,11 +129,17 @@ namespace IoTManager.Dao
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
+                /*
                 CityModel city = connection.Query<CityModel>("select * from city where cityName=@cName", new { cName = cName })
                     .FirstOrDefault();
                 int cityId = city.Id;
                 List<FactoryModel> factories = connection
                     .Query<FactoryModel>("select * from factory where city=@cid", new { cid = cityId }).ToList();
+                */
+                /*zxin-修改查询方式，减少查表次数*/
+                List<FactoryModel> factories = connection
+                    .Query<FactoryModel>("select * from factory WHERE factory.city IN (SELECT city.id FROM city WHERE city.cityName=@cn)", new
+                    { cn = cName }).ToList();
                 return factories;
             }
         }

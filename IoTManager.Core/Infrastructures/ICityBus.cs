@@ -15,6 +15,7 @@ namespace IoTManager.Core.Infrastructures
         String UpdateCity(int id, CitySerializer citySerializer);
         String DeleteCity(int id);
         List<object> GetCityCascaderOptions();
+        List<object> tempName();
         List<object> GetCityOptions();
         List<object> GetMapInfo();
         List<CitySerializer> GetByCityName(String cityName);

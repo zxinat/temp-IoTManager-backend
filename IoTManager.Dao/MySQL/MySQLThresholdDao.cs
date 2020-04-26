@@ -149,11 +149,11 @@ namespace IoTManager.Dao
             }
         }
 
-        public int GetDeviceAffiliateThreshold(String deviceId)
+        public int GetDeviceAffiliateThresholdNumber(String deviceId)
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                int result = connection.Query<int>("select count(*) number from threshold where deviceId=@did", new
+                int result = connection.Query<int>("select count(id) number from threshold where deviceId=@did", new
                 {
                     did = deviceId
                 }).FirstOrDefault();

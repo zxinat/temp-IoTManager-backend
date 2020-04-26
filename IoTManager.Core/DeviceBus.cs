@@ -195,6 +195,7 @@ namespace IoTManager.Core
             deviceModel.PictureRoute = deviceSerializer.pictureRoute;
             deviceModel.IsOnline = deviceSerializer.isOnline;
             deviceModel.Base64Image = deviceSerializer.base64Image;
+            deviceModel.totalAlarmInfo = deviceSerializer.totalAlarmInfo;
             return this._deviceDao.Update(id, deviceModel);
         }
 
@@ -554,6 +555,19 @@ namespace IoTManager.Core
                 longitude = city.longitude,
                 latitude = city.latitude
             };
+        }
+        /*获取MySQL中设备告警信息总数*/
+        public int GetTotalAlarmInfo(string deviceId)
+        {
+            DeviceModel device = _deviceDao.GetByDeviceId(deviceId);
+            return device.totalAlarmInfo;
+        }
+        /*更新设备告警信息总数*/
+        public string UpdateTotalAlarmInfo(string deviceId,int count)
+        {
+            DeviceModel device = _deviceDao.GetByDeviceId(deviceId);
+            device.totalAlarmInfo = count;
+            return _deviceDao.Update(device.Id, device);
         }
     }
 }

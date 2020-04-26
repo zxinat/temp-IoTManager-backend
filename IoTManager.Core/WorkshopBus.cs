@@ -47,6 +47,7 @@ namespace IoTManager.Core
             workshopModel.WorkshopAddress = workshopSerializer.workshopAddress;
             workshopModel.Remark = workshopSerializer.remark;
             workshopModel.Factory = workshopSerializer.factory;
+            workshopModel.City = workshopSerializer.city;
             return this._workshopDao.Create(workshopModel);
         }
 
@@ -67,15 +68,37 @@ namespace IoTManager.Core
             return this._workshopDao.Delete(id);
         }
 
-        public List<object> GetAffiliateWorkshop(String fName)
+        public List<object> GetAffiliateWorkshop(String cName,String fName)
         {
-            List<WorkshopModel> workshops = this._workshopDao.GetAffiliateWorkshop(fName);
+            List<WorkshopModel> workshops = this._workshopDao.GetAffiliateWorkshop(cName,fName);
             List<object> result = new List<object>();
             foreach (WorkshopModel w in workshops)
             {
                 result.Add(new {value=w.WorkshopName, label=w.WorkshopName});
             }
 
+            return result;
+        }
+        /* 获取实验室列表*/
+        public List<object> ListWorkshopName(string cName,string fName)
+        {
+            List<string> names= this._workshopDao.ListWorkshopNames(cName, fName);
+            List<object> result = new List<object>();
+            if(names.Count!=0)
+            {
+                foreach (string name in names)
+                {
+                    result.Add(new
+                    {
+                        label = name,
+                        value = name
+                    });
+                }
+            }
+            else
+            {
+                result = null;
+            }
             return result;
         }
 

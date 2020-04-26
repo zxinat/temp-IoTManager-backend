@@ -39,13 +39,13 @@ namespace IoTManager.API.Controllers
                 this._fieldBus.CreateNewField(fieldSerializer));
         }
 
-        [HttpGet("affiliate/{deviceName}")]
-        public ResponseSerializer GetAffiliateField(string deviceName)
+        [HttpGet("affiliate/{deviceId}")]
+        public ResponseSerializer GetAffiliateField(string deviceId)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._fieldBus.GetAffiliateFields(deviceName));
+                this._fieldBus.GetAffiliateFields(deviceId));
         }
 
         [HttpPut("{id}")]

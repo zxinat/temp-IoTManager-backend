@@ -17,8 +17,10 @@ namespace IoTManager.Core.Jobs
         private readonly IThresholdDao _thresholdDao;
         private readonly ISeverityDao _severityDao;
         private readonly IDeviceDao _deviceDao;
+        private readonly IDeviceBus _deviceBus;
         private readonly IStateTypeDao _stateTypeDao;
         private readonly IFieldBus _fieldBus;
+        private readonly IFieldDao _fieldDao;
         private readonly ILogger _logger;
 
         public AlarmInfoJob(IDeviceDataDao deviceDataDao, 
@@ -26,8 +28,10 @@ namespace IoTManager.Core.Jobs
             IThresholdDao thresholdDao, 
             ISeverityDao severityDao, 
             IDeviceDao deviceDao,
+            IDeviceBus deviceBus,
             IStateTypeDao stateTypeDao,
             IFieldBus fieldBus,
+            IFieldDao fieldDao,
             ILogger<AlarmInfoJob> logger)
         {
             this._deviceDataDao = deviceDataDao;
@@ -35,25 +39,31 @@ namespace IoTManager.Core.Jobs
             this._thresholdDao = thresholdDao;
             this._severityDao = severityDao;
             this._deviceDao = deviceDao;
+            this._deviceBus = deviceBus;
             this._stateTypeDao = stateTypeDao;
             this._fieldBus = fieldBus;
+            this._fieldDao = fieldDao;
             this._logger = logger;
         }
-
-        [Invoke(Begin = "2019-6-16 16:20", Interval = 1000 * 60, SkipWhileExecuting = true)]
+        /*定时器任务：（1）判断设备属性值是否超出阈值；（2）判断设备是否离线*/
+        [Invoke(Begin = "2020-4-26 11:00", Interval = 1000 * 60, SkipWhileExecuting = true)]
         public void Run()
         {
-            
+            /*
+            this._logger.LogInformation("AlarmInfoJob Run ...");
             List<DeviceModel> devices = this._deviceDao.Get("all");
+            //将所有设备置为在线状态
             foreach (DeviceModel device in devices)
             {
                 this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "yes");
             }
-            
+            //获取设备数据中"IsScam"="false"的所有数据，并置为"true"
             List<DeviceDataModel> dataNotInspected = _deviceDataDao.GetNotInspected();
             Dictionary<String, List<DeviceDataModel>> sortedData = new Dictionary<string, List<DeviceDataModel>>();
             Dictionary<String, List<String>> fieldMap = new Dictionary<string, List<string>>();
             List<String> deviceIds = new List<string>();
+            //将deviceId相同的数据整合成sortedData,key存放deviceId,value存放相应的数据列表
+            //将deviceId相同的属性Id整合成fieldMap,key存放deviceId,value存放属性Id的列表
             foreach (DeviceDataModel d in dataNotInspected)
             {
                 if (!sortedData.ContainsKey(d.DeviceId))
@@ -179,7 +189,130 @@ namespace IoTManager.Core.Jobs
                         }
                     }
                 }
+            }*/
+            /* zxin-告警信息处理和离线判断方法的理解：
+             * 告警信息处理：告警判断频率 1min
+             * 1、从threshold表中获取所有告警规则
+             * 2、按deviceId、MonitoringId获取前1min的数据，判断是否超过阈值，超过阈值的则向alarmInfo集合中插入告警信息
+             * 设备离线判断：频率 1min
+             * 1、从MySQL获取所有注册设备信息以及设备类型数据
+             * 2、根据deviceId从MongoDB中获取最新一条数据，如果与当前时间差值大于超时告警时间则为离线状态（设备状态更新）
+             */
+            _logger.LogInformation("AlarmInfoJob Run...");
+            _logger.LogInformation("告警判断...");
+            /*告警判断*/
+            //获取所有告警规则，插入告警信息到MongoDB
+            List<ThresholdModel> alarmRules = this._thresholdDao.Get("all");
+            foreach(var rule in alarmRules )
+            {
+                //获取具有告警规则的最新60秒的设备数据
+                List<DeviceDataModel> deviceDatas = this._deviceDataDao.ListNewData(rule.DeviceId,60, rule.IndexId);
+                //var isAlarmInfo=deviceDatas.AsQueryable()
+                //    .Where(dd=>dd.IndexValue>rule.ThresholdValue)
+                foreach(var dd in deviceDatas)
+                {
+                    AlarmInfoModel alarmInfo = AlarmInfoGenerator(dd, rule);
+                    if(alarmInfo!=null)
+                    {
+                        _alarmInfoDao.Create(alarmInfo);
+                    }
+                    
+                }
             }
+            
+
+            _logger.LogInformation("设备离线判断...");
+            /*设备离线判断*/
+            List<DeviceModel> devices = this._deviceDao.Get("all");
+            List<DeviceTypeModel> deviceTypes = this._stateTypeDao.ListAllDeviceType();
+            Dictionary<String, List<String>> fieldMap = new Dictionary<string, List<string>>();
+            foreach (var device in devices)
+            {
+                //获取超时告警时间（分钟）
+                double offlinetime = deviceTypes.AsQueryable().Where(dt => dt.DeviceTypeName == device.DeviceType).FirstOrDefault().OfflineTime;
+                DateTime date = DateTime.UtcNow - TimeSpan.FromMinutes(offlinetime);
+                //获取最新一条设备数据
+                DeviceDataModel deviceData = this._deviceDataDao.GetByDeviceName(device.DeviceName, 1).FirstOrDefault();
+                if(deviceData!=null)
+                {
+                    if(deviceData.Timestamp>=date)
+                    {
+                        this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "yes");//设备在线
+                    }
+                    else
+                    {
+                        this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "no");
+                    }
+                }
+                else
+                {
+                    this._deviceDao.SetDeviceOnlineStatus(device.HardwareDeviceId, "no");
+                }
+
+                /* 更新设备属性：
+                 * 1、列出MySQL中现有属性
+                 * 2、获取MongoDB中最新数据中的属性
+                 * 3、比对并创建新属性
+                 */
+                List<string> existedFieldIds = this._fieldDao.ListFieldIdsByDeviceId(device.HardwareDeviceId);
+                List<DeviceDataModel> deviceDatas= this._deviceDataDao.ListNewData(device.HardwareDeviceId, 60);
+                foreach(var dd in deviceDatas)
+                {
+                    if(!existedFieldIds.Contains(dd.IndexId))
+                    {
+                        FieldModel field = new FieldModel
+                        {
+                            FieldId = dd.IndexId,
+                            FieldName = dd.IndexName,
+                            Device = dd.DeviceName
+                        };
+                        this._fieldDao.Create(field);
+                    }
+                }
+                /*更新设备的总告警次数*/
+                //获取设备当前总的告警次数
+                //int totalInfo = _alarmInfoDao.GetDeviceAffiliateAlarmInfoNumber(device.HardwareDeviceId);
+                //int totalInfo = 0;
+                //更新MySQL中的设备的告警总次数
+                //_deviceBus.UpdateTotalAlarmInfo(device.HardwareDeviceId, totalInfo);
+            }
+        }
+        public AlarmInfoModel AlarmInfoGenerator(DeviceDataModel deviceData, ThresholdModel threshold)
+        {
+            AlarmInfoModel alarmInfo = new AlarmInfoModel
+            {
+                AlarmInfo = threshold.Description,
+                DeviceId = deviceData.DeviceId,
+                IndexId = deviceData.IndexId,
+                IndexName = deviceData.IndexName,
+                IndexValue = deviceData.IndexValue,
+                ThresholdValue = threshold.ThresholdValue,
+                Timestamp = DateTime.Now,
+                Severity = threshold.Severity,
+                Processed = "No"
+            };
+            if(threshold.Operator== "equal")
+            {
+                if(deviceData.IndexValue!=threshold.ThresholdValue)
+                {
+                    return alarmInfo;
+                }
+            }
+            else if(threshold.Operator=="less")
+            {
+                if(deviceData.IndexValue>threshold.ThresholdValue)
+                {
+                    return alarmInfo;
+                }
+            }
+            else
+            {
+                if(deviceData.IndexValue<threshold.ThresholdValue)
+                {
+                    return alarmInfo;
+                }
+            }
+            return null;
         }
     }
 }

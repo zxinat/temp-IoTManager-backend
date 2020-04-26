@@ -21,12 +21,12 @@ namespace IoTManager.API.Controllers
         }
 
         [HttpPost("byRegion")]
-        public ResponseSerializer GetReportByRegion(String factoryName, [FromBody] DataStatisticRequestModel date)
+        public ResponseSerializer GetReportByRegion(String cityName,String factoryName, [FromBody] DataStatisticRequestModel date)
         {
             return new ResponseSerializer(
                 200,
                 "success",
-                this._deviceDataBus.GetReportByRegion(factoryName, date.StartTime, date.EndTime));
+                this._deviceDataBus.GetReportByRegion(cityName,factoryName, date.StartTime, date.EndTime));
         }
 
         [HttpPost("byTime")]

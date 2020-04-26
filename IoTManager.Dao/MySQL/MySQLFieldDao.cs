@@ -124,5 +124,23 @@ namespace IoTManager.Dao
                 return connection.Query<long>("select count(*) from field join device on field.device=device.id").FirstOrDefault();
             }
         }
+        /*zxin-添加  通过deviceId获取所有属性*/
+        public List<FieldModel> ListFieldsByDeviceId(string deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                string s = "SELECT * FROM field WHERE field.device IN (SELECT id FROM device WHERE device.hardwareDeviceID=@hid)";
+                return connection.Query<FieldModel>(s, new { hid = deviceId }).ToList();
+            }
+        }
+        public List<string> ListFieldIdsByDeviceId(string deviceId)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                string s = "SELECT fieldId FROM field WHERE field.device IN (SELECT id FROM device WHERE device.hardwareDeviceID=@hid)";
+                return connection.Query<string>(s, new { hid = deviceId }).ToList();
+            }
+                
+        }
     }
 }

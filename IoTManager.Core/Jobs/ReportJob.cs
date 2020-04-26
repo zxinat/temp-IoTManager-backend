@@ -25,8 +25,10 @@ namespace IoTManager.Core.Jobs
             this._deviceDailyOnlineTimeDao = deviceDailyOnlineTimeDao;
             this._logger = logger;
         }
-
-        [Invoke(Begin = "2019-6-16 23:58", Interval = 1000 * 86400, SkipWhileExecuting = true)]
+        /* 定时器任务：统计每个设备每天的在线时长
+         * 问题：如果设备一天只上报一条数据，则判断在线时长为0
+         */
+        [Invoke(Begin = "2019-6-16 23:58", Interval = 1000*3600*24,SkipWhileExecuting = true)]
         public void Run()
         {
             List<DeviceDataModel> todayData = this._deviceDataDao.GetByDate(DateTime.Now);

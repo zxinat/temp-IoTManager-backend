@@ -29,8 +29,8 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
-
-        public List<CityModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
+        //获取城市信息List
+        public List<CityModel> Get(int pageMode = 0, int offset = 0, int limit = 6, String sortColumn = "id", String order = "asc")
         {
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -46,8 +46,9 @@ namespace IoTManager.Dao
                     String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
                     s += limitSubsentence;
                 }
-
-//                Console.WriteLine(s);
+                //select * from city order by id asc limit 0,6 
+                //按字段id 将结果排序 asc升序/desc降序，limit 后面是限制条件，（0表示忽略开始的0个，6表示查询数据条数）表示从第0条数据往后查6条
+                //Console.WriteLine(s);
                 return connection
                     .Query<CityModel>(s)
                     .ToList();
@@ -167,6 +168,14 @@ namespace IoTManager.Dao
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<long>("select count(*) from city").FirstOrDefault();
+            }
+        }
+        /*获取城市名称列表*/
+        public List<string> ListCityName()
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                return connection.Query<string>("select city.cityName from city").ToList();
             }
         }
     }
