@@ -46,7 +46,7 @@ namespace IoTManager.Core.Jobs
             this._logger = logger;
         }
         /*定时器任务：（1）判断设备属性值是否超出阈值；（2）判断设备是否离线*/
-        [Invoke(Begin = "2020-4-26 11:00", Interval = 1000 * 60, SkipWhileExecuting = true)]
+        [Invoke(Begin = "2020-4-26 11:48", Interval = 1000 * 60, SkipWhileExecuting = true)]
         public void Run()
         {
             /*
@@ -230,7 +230,7 @@ namespace IoTManager.Core.Jobs
             {
                 //获取超时告警时间（分钟）
                 double offlinetime = deviceTypes.AsQueryable().Where(dt => dt.DeviceTypeName == device.DeviceType).FirstOrDefault().OfflineTime;
-                DateTime date = DateTime.UtcNow - TimeSpan.FromMinutes(offlinetime);
+                DateTime date = DateTime.Now - TimeSpan.FromMinutes(offlinetime);
                 //获取最新一条设备数据
                 DeviceDataModel deviceData = this._deviceDataDao.GetByDeviceName(device.DeviceName, 1).FirstOrDefault();
                 if(deviceData!=null)

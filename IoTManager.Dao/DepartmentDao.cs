@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IoTManager.Dao
 {
-    public sealed class DepartmentDao:IDepartmentDao
+    public sealed class DepartmentDao
     {
     }
 }

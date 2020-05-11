@@ -93,6 +93,7 @@ namespace IoTManager.Dao
         {
             var query = this._deviceData.AsQueryable()
                 .Where(dd => dd.DeviceId == deviceId)
+                .OrderBy(dd=>dd.Timestamp)
                 .ToList();
             if (query.Count != 0)
             {
@@ -137,6 +138,40 @@ namespace IoTManager.Dao
             }
             return query;
         }
+        /*获取一段时间内的最早count条设备数据*/
+        public List<DeviceDataModel> ListByNameTimeASC(string deviceName,DateTime startTime,DateTime endTime,int count)
+        {
+            var query = _deviceData.AsQueryable()
+                .Where(dd => dd.DeviceName == deviceName & dd.Timestamp > startTime & dd.Timestamp < endTime)
+                .OrderBy(dd => dd.Timestamp)
+                .Take(count)
+                .ToList();
+            if(query.Count!=0)
+            {
+                foreach (var d in query)
+                {
+                    d.Timestamp += TimeSpan.FromHours(8);
+                }
+            }
+            return query;
+        }
+        /*获取一段时间内的最新count条设备数据*/
+        public List<DeviceDataModel> ListByNameTimeDSC(string deviceName, DateTime startTime, DateTime endTime, int count)
+        {
+            var query = _deviceData.AsQueryable()
+                .Where(dd => dd.DeviceName == deviceName & dd.Timestamp > startTime & dd.Timestamp < endTime)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(count)
+                .ToList();
+            if (query.Count != 0)
+            {
+                foreach (var d in query)
+                {
+                    d.Timestamp += TimeSpan.FromHours(8);
+                }
+            }
+            return query;
+        }
         /*通过deviceId获取最新一条数据*/
         public DeviceDataModel GetLastDataByDeviceId(string deviceId)
         {
@@ -147,7 +182,23 @@ namespace IoTManager.Dao
             query.Timestamp += TimeSpan.FromHours(8);
             return query;      
         }
-
+        /*通过deviceId获取一段时间内最新一条数据*/
+        public List<DeviceDataModel> ListByIdTimeDSC(string deviceId, DateTime startTime, DateTime endTime, int count)
+        {
+            var query = _deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId & dd.Timestamp > startTime & dd.Timestamp < endTime)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(count)
+                .ToList();
+            if (query.Count != 0)
+            {
+                foreach (var d in query)
+                {
+                    d.Timestamp += TimeSpan.FromHours(8);
+                }
+            }
+            return query;
+        }
         public List<DeviceDataModel> GetByDeviceId20(String DeviceId)
         {
             
@@ -1014,6 +1065,61 @@ namespace IoTManager.Dao
                 critical = criticalResult!=null? criticalResult.count:0
             };
             return res;
+        }
+        /*创建设备数据：用于模拟设备*/
+        public string Create(DeviceDataModel deviceData)
+        {
+            try
+            {
+                _deviceData.InsertOne(deviceData);
+                return "success";
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+        }
+        /*获取一段时间内设备Id下属性Id的最新数据数据*/
+        /*
+         * 输入：deviceId,staffId,startTime,endTime，count
+         * 【注】：count可以统计员工进出次数
+         * 输出：设备数据List
+         */
+        public List<DeviceDataModel> ListByDeviceIdAndIndexId(string deviceId,string indexId,DateTime startTime,DateTime endTime,int count=0)
+        {
+            var query = count != 0 ? _deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId & dd.IndexId == indexId & dd.Timestamp > startTime & dd.Timestamp < endTime)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(count)
+                .ToList() : _deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId & dd.IndexId == indexId & dd.Timestamp > startTime & dd.Timestamp < endTime)
+                .OrderByDescending(dd => dd.Timestamp)
+                .ToList();
+
+            if (query.Count != 0)
+            {
+                foreach (var d in query)
+                {
+                    d.Timestamp += TimeSpan.FromHours(8);
+                }
+            }
+            return query;
+        }
+        /*获取deviceId的value=indexValue最新count条数据*/
+        public List<DeviceDataModel> ListByDeviceIdAndValue(string deviceId,int indexValue,int count)
+        {
+            var query = _deviceData.AsQueryable()
+                .Where(dd => dd.DeviceId == deviceId & dd.IndexValue == indexValue)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(count).ToList();
+            if(query.Count!=0)
+            {
+                foreach (var d in query)
+                {
+                    d.Timestamp += TimeSpan.FromHours(8);
+                }
+            }
+            return query;
         }
     }
 }

@@ -39,5 +39,6 @@ namespace IoTManager.Core.Infrastructures
         Object GetDeviceLocationByDeviceName(String deviceName);
         int GetTotalAlarmInfo(string deviceId);
         string UpdateTotalAlarmInfo(string deviceId, int count);
+        List<DeviceModel> ListExistDevices(DateTime startTime, DateTime endTime);
     }
 }

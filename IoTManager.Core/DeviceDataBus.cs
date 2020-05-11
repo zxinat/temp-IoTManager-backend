@@ -330,39 +330,51 @@ namespace IoTManager.Core
              */
             List<WorkshopModel> affiliateWorkshop = this._workshopDao.GetAffiliateWorkshop(cityName,factoryName);
             List<String> xAxis = new List<string>();
-            List<float> averageOnlineTime = new List<float>();
+            List<double> averageOnlineTime = new List<double>();
             List<int> alarmTimes = new List<int>();
             List<int> deviceAmount = new List<int>();
+            List<double> oee = new List<double>();
+            double totalMinutes = (endTime - startTime).TotalMinutes;
             /*
             List<DeviceModel> allDevices = this._deviceDao.Get("all");
             List<AlarmInfoModel> allAlarmInfo = this._alarmInfoDao.Get("all");
             */
             /*new*/
-            //List<DeviceDailyOnlineTimeModel> dailyOnlineTime =
-            //    this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
+            List<DeviceDailyOnlineTimeModel> dailyOnlineTime =
+                this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
             /*new*/
             
             foreach (WorkshopModel w in affiliateWorkshop)
             {
-                /*
-                xAxis.Add(w.WorkshopName);
                 
+                xAxis.Add(w.WorkshopName);
+
+                //获取实验室中的所有设备
+                List<DeviceModel> devices = _deviceDao.GetByWorkshop(cityName, factoryName, w.WorkshopName);
+                //获取选定时间内的所有设备
+                List<DeviceModel> relatedDevices = devices.AsQueryable().Where(d => d.CreateTime < endTime).ToList();
+                /*
                 List<DeviceModel> relatedDevices = allDevices.AsQueryable()
                     .Where(d => d.Workshop == w.WorkshopName)
                     .ToList();
                 deviceAmount.Add(relatedDevices.Count);
-                
+                */
+                deviceAmount.Add(relatedDevices.Count);
                 List<String> relatedDevicesId = new List<String>();
+                int totalAlarmInfo = 0;
                 foreach (DeviceModel d in relatedDevices)
                 {
                     relatedDevicesId.Add(d.HardwareDeviceId);
+                    int alarmInfoNumber = _alarmInfoDao.GetDeviceAffiliateAlarmInfoNumber(d.HardwareDeviceId, startTime, endTime);
+                    totalAlarmInfo += alarmInfoNumber;
                 }
-
+                /*
                 List<AlarmInfoModel> relatedAlarmInfo = allAlarmInfo.AsQueryable()
                     .Where(ai => relatedDevicesId.Contains(ai.DeviceId) && ai.Timestamp >= startTime && ai.Timestamp <= endTime)
                     .ToList();
                 alarmTimes.Add(relatedAlarmInfo.Count);
-
+                */
+                alarmTimes.Add(totalAlarmInfo);
                 Double total = 0;
                 List<DeviceDailyOnlineTimeModel> deviceDataByWorkshop = dailyOnlineTime.AsQueryable()
                     .Where(dot => relatedDevicesId.Contains(dot.HardwareDeviceId))
@@ -374,13 +386,16 @@ namespace IoTManager.Core
 
                 if (deviceDataByWorkshop.Count != 0)
                 {
-                    averageOnlineTime.Add(Math.Round(total / deviceDataByWorkshop.Count, 2));
+                    double average = Math.Round(total / relatedDevices.Count, 2);
+                    averageOnlineTime.Add(average);
+                    oee.Add(Math.Round(average / totalMinutes, 4));
                 }
                 else
                 {
                     averageOnlineTime.Add(0);
+                    oee.Add(0);
                 }
-                */
+                
                 /* old
                 TimeSpan t = TimeSpan.Zero;
                 foreach (String did in relatedDevicesId)
@@ -399,17 +414,26 @@ namespace IoTManager.Core
                 averageOnlineTime.Add(t.TotalMinutes / relatedDevices.Count);
                 */
                 /*zxin-修改*/
+                /*
                 xAxis.Add(w.WorkshopName);
                 float totalOnlineTime = 0.0F;
                 int totalAlarmInfo = 0;
+                //获取实验室中的所有设备
                 List<DeviceModel> devices = _deviceDao.GetByWorkshop(cityName, factoryName, w.WorkshopName);
-                if(devices!=null)
+                //获取选定时间内的所有设备
+                List<DeviceModel> existDevices = devices.AsQueryable().Where(d => d.CreateTime < endTime).ToList();
+                //获取所有在线时间
+                List<DeviceDailyOnlineTimeModel> onlineTimes = _deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
+
+                if(existDevices != null)
                 {
-                    deviceAmount.Add(devices.Count());
-                    foreach(DeviceModel device in devices)
+                    deviceAmount.Add(existDevices.Count());
+                    foreach(DeviceModel device in existDevices)
                     {
-                        DeviceDataModel earliestData = this._deviceDataDao.ListByDeviceNameASC(device.DeviceName, 1).FirstOrDefault();
-                        DeviceDataModel latestData = this._deviceDataDao.GetByDeviceName(device.DeviceName, 1).FirstOrDefault();
+                        //DeviceDataModel earliestData = this._deviceDataDao.ListByDeviceNameASC(device.DeviceName, 1).FirstOrDefault();
+                        DeviceDataModel earliestData = _deviceDataDao.ListByNameTimeASC(device.DeviceName, startTime, endTime, 1).FirstOrDefault();
+                        //DeviceDataModel latestData = this._deviceDataDao.GetByDeviceName(device.DeviceName, 1).FirstOrDefault();
+                        DeviceDataModel latestData= _deviceDataDao.ListByNameTimeDSC(device.DeviceName, startTime, endTime, 1).FirstOrDefault();
                         TimeSpan onlineTime = (earliestData != null & latestData != null)
                             ? latestData.Timestamp - earliestData.Timestamp
                             : TimeSpan.MinValue;
@@ -421,9 +445,10 @@ namespace IoTManager.Core
                     }
                 }
                 alarmTimes.Add(totalAlarmInfo);
-                averageOnlineTime.Add(totalOnlineTime / devices.Count());
-
-
+                double average = Math.Round(totalOnlineTime / existDevices.Count(), 4);
+                averageOnlineTime.Add(average);
+                oee.Add(Math.Round(average / totalHours, 4));
+                */
 
             }
             /***************************************************************/
@@ -435,6 +460,7 @@ namespace IoTManager.Core
             result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
             result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
             result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
+            result.Add(new { name = "设备综合效率", data = oee, type = "bar", barWidth = 20 });
             return new
             {
                 xAxis = xAxis,
@@ -450,18 +476,54 @@ namespace IoTManager.Core
             /* zxin:时间维度报表理解
              * 返回数据：每个月的告警次数，设备总数，平均在线时间（设备总数、设备平均在线时间暂不考虑起止时间）
              * step:
-             * 1、获取所有设备list，输出设备总数
+             * 1、将输入的时间段拆分成月份list，放入xAxis中
+             * 1、获取时间段内所有设备list，输出设备总数
              * 2、foreach获取每个设备的在线时间，输出平均时间（总在线时间/设备总数）
-             * 3、从输入的时间获取月份，按月份获取告警信息总数
+             * 3、从输入的时间获取月份数，按月份获取告警信息总数
              *
              */
-            List<DeviceModel> devices = this._deviceDao.Get("all");
+            //List<DeviceModel> devices = this._deviceDao.Get("all");
             List<String> xAxis = new List<string>();
-            List<float> averageOnlineTime = new List<float>();
+            List<double> averageOnlineTime = new List<double>();
             List<int> alarmTimes = new List<int>();
             List<int> deviceAmount = new List<int>();
+            List<double> oee = new List<double>();
+            /*
+            int totalMonths = (endTime.Year - startTime.Year) * 12 + (endTime.Month - startTime.Month)+1;
+            for(int i=0;i<totalMonths;i++)
+            {
+                DateTime start = new DateTime(startTime.Year, startTime.Month, 1).AddMonths(i);
+                DateTime end = start.AddMonths(1);
+                String t = start.Year.ToString() + "-" + start.Month.ToString();
+                double totalOnlineTime = 0;
+                List<DeviceModel> existDevices = _deviceBus.ListExistDevices(start, end);
+                if(existDevices.Count!=0)
+                {
+                    xAxis.Add(t);
+                    deviceAmount.Add(existDevices.Count());
+                    foreach(var d in existDevices)
+                    {
+                        DeviceDataModel earliestData = _deviceDataDao.ListByNameTimeASC(d.DeviceName, start, end, 1).FirstOrDefault();
+                        DeviceDataModel latestData = _deviceDataDao.ListByNameTimeDSC(d.DeviceName, start, end, 1).FirstOrDefault();
+                        TimeSpan onlineTime = (earliestData != null & latestData != null)
+                            ? latestData.Timestamp - earliestData.Timestamp
+                            : TimeSpan.MinValue;
+                        totalOnlineTime = (float)(onlineTime != TimeSpan.MinValue
+                            ? totalOnlineTime + onlineTime.TotalHours
+                            : totalOnlineTime + 0.0);
+                    }
+                    double average = Math.Round(totalOnlineTime / existDevices.Count(), 2);
+                    averageOnlineTime.Add(average);
+                    oee.Add(Math.Round(average / (end - start).TotalHours, 4));
+                    int count = _alarmInfoDao.GetDeviceAlarmInfoNumberByTime(start, end);
+                    alarmTimes.Add(count);
+                }
+            }*/
+            //List<DeviceModel> devices = _deviceBus.ListExistDevices(startTime, endTime);
+            
             
             /*new*/
+            
             List<DeviceDailyOnlineTimeModel> dailyOnlineTime =
                 this._deviceDailyOnlineTimeDao.GetDeviceOnlineTimeByTime(startTime, endTime);
             //在这里使用ValueTuple存储年-月组合，Item1为年份，Item2为月份
@@ -476,13 +538,14 @@ namespace IoTManager.Core
             }
             
             yearMonth.Sort();
-
+            
+            
             foreach (var ym in yearMonth)
             {
                 String t = ym.Item1.ToString() + "-" + ym.Item2.ToString();
                 xAxis.Add(t);
 
-                deviceAmount.Add(devices.Count);
+                
 
                 /*
                 List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
@@ -490,7 +553,13 @@ namespace IoTManager.Core
                     .Where(ai => ai.Timestamp.Year == ym.Item1 && ai.Timestamp.Month == ym.Item2)
                     .ToList();
                     */
+                
                 DateTime startMonthTime = new DateTime(ym.Item1, ym.Item2,1);
+                DateTime endMonthTime = startMonthTime.AddMonths(1);
+                List<DeviceModel> devices = _deviceBus.ListExistDevices(startMonthTime, endMonthTime);
+                int deviceCount = devices != null ? devices.Count() : 0;
+                deviceAmount.Add(deviceCount);
+                double totalMinutes = (endMonthTime - startMonthTime).TotalMinutes;
                 int count = _alarmInfoDao.GetDeviceAlarmInfoNumberByTime(startMonthTime, startMonthTime.AddMonths(1));
                 alarmTimes.Add(count);
 
@@ -505,11 +574,14 @@ namespace IoTManager.Core
 
                 if (deviceDataByYearMonth.Count != 0)
                 {
-                    averageOnlineTime.Add((float)Math.Round(total / deviceDataByYearMonth.Count, 2));
+                    double average = Math.Round(total / deviceCount, 2);
+                    averageOnlineTime.Add(average);
+                    oee.Add(Math.Round(average / totalMinutes, 4));
                 }
                 else
                 {
                     averageOnlineTime.Add(0);
+                    oee.Add(0);
                 }
             }
             /*new*/
@@ -569,6 +641,7 @@ namespace IoTManager.Core
             result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
             result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
             result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
+            result.Add(new { name = "设备综合效率", data = oee, type = "bar", barWidth = 20 });
 
             return new
             {
@@ -583,12 +656,15 @@ namespace IoTManager.Core
         public object GetReportByType(DateTime startTime, DateTime endTime)
         {
             List<String> deviceTypes = this._stateTypeDao.GetDeviceType();
-            List<DeviceModel> allDevices = this._deviceDao.Get("all");
-            
+            //List<DeviceModel> allDevices = this._deviceDao.Get("all");
+            List<DeviceModel> allDevices = _deviceBus.ListExistDevices(startTime, endTime);
+
+
             List<String> xAxis = new List<string>();
             List<Double> averageOnlineTime = new List<Double>();
             List<object> alarmTimes = new List<object>();
             List<object> deviceAmount = new List<object>();
+            List<double> oee = new List<double>();
             
             //List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
             
@@ -651,6 +727,7 @@ namespace IoTManager.Core
                 List<DeviceDailyOnlineTimeModel> deviceDataByType = dailyOnlineTime.AsQueryable()
                     .Where(dot => relatedDevicesId.Contains(dot.HardwareDeviceId))
                     .ToList();
+                double totalMinutes = (endTime - startTime).TotalMinutes;
                 foreach (var d in deviceDataByType)
                 {
                     total += d.OnlineTime;
@@ -658,11 +735,14 @@ namespace IoTManager.Core
 
                 if (deviceDataByType.Count != 0)
                 {
-                    averageOnlineTime.Add(Math.Round(total / deviceDataByType.Count, 2));
+                    double average = Math.Round(total / relatedDevices.Count, 2);
+                    averageOnlineTime.Add(average);
+                    oee.Add(Math.Round(average / totalMinutes, 4));
                 }
                 else
                 {
                     averageOnlineTime.Add(0);
+                    oee.Add(0);
                 }
                 /*new*/
 
@@ -687,6 +767,7 @@ namespace IoTManager.Core
             }
             List<object> lineChartSeries = new List<object>();
             lineChartSeries.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
+            lineChartSeries.Add(new { name = "设备综合效率", data = oee, type = "bar", barWidth = 20 });
             List<object> pieChart1Series = new List<object>();
             if (alarmTimes.Count == 0)
             {
@@ -721,6 +802,7 @@ namespace IoTManager.Core
             List<Double> averageOnlineTime = new List<Double>();
             List<int> alarmTimes = new List<int>();
             List<int> deviceAmount = new List<int>();
+            List<double> oee = new List<double>();
             
             //List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get("all");
 
@@ -733,7 +815,8 @@ namespace IoTManager.Core
             {
                 xAxis.Add(tag);
 
-                List<DeviceModel> relatedDevices = this._deviceDao.GetDeviceByTag(tag);
+                //List<DeviceModel> relatedDevices = this._deviceDao.GetDeviceByTag(tag);
+                List<DeviceModel> relatedDevices = this._deviceDao.GetDeviceByTag(tag).AsQueryable().Where(d=>d.CreateTime<endTime).ToList();
                 deviceAmount.Add(relatedDevices.Count);
                 
                 List<String> relatedDevicesId = new List<string>();
@@ -761,6 +844,7 @@ namespace IoTManager.Core
                 List<DeviceDailyOnlineTimeModel> deviceDataByTag = dailyOnlineTime.AsQueryable()
                     .Where(dot => relatedDevicesId.Contains(dot.HardwareDeviceId))
                     .ToList();
+                double totalMinutes = (endTime - startTime).TotalMinutes;
                 foreach (var d in deviceDataByTag)
                 {
                     total += d.OnlineTime;
@@ -768,11 +852,14 @@ namespace IoTManager.Core
 
                 if (deviceDataByTag.Count != 0)
                 {
-                    averageOnlineTime.Add(Math.Round(total / deviceDataByTag.Count, 2));
+                    double average = Math.Round(total / relatedDevices.Count, 2);
+                    averageOnlineTime.Add(average);
+                    oee.Add(Math.Round(average / totalMinutes, 4));
                 }
                 else
                 {
                     averageOnlineTime.Add(0);
+                    oee.Add(0);
                 }
                 /*new*/
 
@@ -799,7 +886,8 @@ namespace IoTManager.Core
             result.Add(new {name = "平均在线时间", data = averageOnlineTime, type = "bar", barWidth = 20});
             result.Add(new {name = "告警次数", data = alarmTimes, type = "bar", barWidth = 20});
             result.Add(new {name = "设备数量", data = deviceAmount, type = "bar", barWidth = 20});
-            
+            result.Add(new { name = "设备综合效率", data = oee, type = "bar", barWidth = 20 });
+
             return new
             {
                 xAxis = xAxis,
@@ -1208,6 +1296,11 @@ namespace IoTManager.Core
                 min = min,
                 max = max
             };
+        }
+        /*创建设备数据*/
+        public string Create(DeviceDataModel deviceData)
+        {
+            return _deviceDataDao.Create(deviceData);
         }
     }
 }

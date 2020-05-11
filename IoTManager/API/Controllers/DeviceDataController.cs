@@ -231,5 +231,13 @@ namespace IoTManager.API.Controllers
                 this._deviceDataBus.GetMonthAggregateDataByDeviceNameAndField(deviceName, fieldId, request.StartTime, request.EndTime)
                 );
         }
+        [HttpPost("create")]
+        public ResponseSerializer Create([FromBody] DeviceDataModel deviceData )
+        {
+            return new ResponseSerializer(
+                200,
+                "success",
+                _deviceDataBus.Create(deviceData));
+        }
     }
 }

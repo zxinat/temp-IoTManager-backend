@@ -12,7 +12,10 @@ namespace IoTManager.IDao
         List<DeviceDataModel> GetByDeviceId(String deviceId);
         List<DeviceDataModel> GetByDeviceName(String deviceName, int count);
         List<DeviceDataModel> ListByDeviceNameASC(string deviceName, int count);
+        List<DeviceDataModel> ListByNameTimeASC(string deviceName, DateTime startTime, DateTime endTime, int count);
+        List<DeviceDataModel> ListByNameTimeDSC(string deviceName, DateTime startTime, DateTime endTime, int count);
         DeviceDataModel GetLastDataByDeviceId(string deviceId);
+        List<DeviceDataModel> ListByIdTimeDSC(string deviceId, DateTime startTime, DateTime endTime, int count);
         List<DeviceDataModel> GetByDeviceId20(String DeviceId);
         List<DeviceDataModel> GetByDeviceId100(String deviceId);
         List<DeviceDataModel> GetNotInspected();
@@ -33,5 +36,8 @@ namespace IoTManager.IDao
         List<DeviceDataModel> GetByDate(DateTime date);
         List<DeviceDataModel> ListNewData(string deviceId, int second, string monitorId = "all");
         object GetDashboardDeviceStatus();
+        string Create(DeviceDataModel deviceData);
+        List<DeviceDataModel> ListByDeviceIdAndIndexId(string deviceId, string indexId, DateTime startTime, DateTime endTime, int count=0);
+        List<DeviceDataModel> ListByDeviceIdAndValue(string deviceId, int indexValue, int count);
     }
 }

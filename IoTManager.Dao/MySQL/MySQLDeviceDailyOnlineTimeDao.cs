@@ -35,6 +35,38 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+        public string InsertData(DeviceModel device,double onlineTime,DateTime date)
+        {
+            DeviceDailyOnlineTimeModel deviceDailyOnlineTime = GetDeviceDailyOnlineTime(device.DeviceName, date);
+            if(deviceDailyOnlineTime==null)
+            {
+                using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+                {
+                    string sql = "insert into online_time_daily(device, onlineTime, date) values (@d, @ot, @dt)";
+                    int rows = connection.Execute(sql, new
+                    {
+                        d = device.Id,
+                        ot = onlineTime,
+                        dt = date.ToString()
+                    });
+                    return rows == 1 ? "success" : "error";
+                }
+            }
+            else
+            {
+                using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+                {
+                    string sql = "UPDATE  online_time_daily SET onlineTime=@olt WHERE id=@id";
+                    int rows = connection.Execute(sql, new
+                    {
+                        id= deviceDailyOnlineTime.Id,
+                        olt= onlineTime
+                    });
+                    return rows == 1 ? "success" : "error";
+                }
+            }
+            
+        }
 
         public List<DeviceDailyOnlineTimeModel> GetOnlineTimeByDevice(String deviceId)
         {
@@ -59,6 +91,20 @@ namespace IoTManager.Dao
                     stt = startTime,
                     edt = endTime
                 }).ToList();
+                return result;
+            }
+        }
+        /*通过deviceName和date获取日在线时间*/
+        public DeviceDailyOnlineTimeModel GetDeviceDailyOnlineTime(string deviceName,DateTime Date)
+        {
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                String sql = "SELECT * FROM online_time_daily WHERE device IN (SELECT id FROM device WHERE deviceName=@dn) AND date=@date";
+                var result = connection.Query<DeviceDailyOnlineTimeModel>(sql, new
+                {
+                    dn = deviceName,
+                    date = Date.ToString()
+                }).FirstOrDefault();
                 return result;
             }
         }

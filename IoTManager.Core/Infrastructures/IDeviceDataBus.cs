@@ -36,5 +36,6 @@ namespace IoTManager.Core.Infrastructures
         Object GetHourAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime);
         Object GetDayAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime);
         Object GetMonthAggregateDataByDeviceNameAndField(String deviceName, String fieldId, DateTime startTime, DateTime endTime);
+        string Create(DeviceDataModel deviceData);
     }
 }

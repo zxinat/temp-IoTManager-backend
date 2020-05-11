@@ -34,11 +34,14 @@ namespace IoTManager.API.Controllers
         [HttpGet]
         public ResponseSerializer Get(int pageMode = 0, int page = 1, String sortColumn = "id", String order = "asc")
         {
+            
             return new ResponseSerializer(
                 200,
                 "success",
                 this._cityBus.GetAllCities(pageMode, page, sortColumn, order)
                 );
+                
+            
         }
 
         // GET api/values/{id}
