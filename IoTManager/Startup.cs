@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
+using VMD.RESTApiResponseWrapper.Core.Extensions;
 
 namespace IoTManager
 {
@@ -91,6 +92,8 @@ namespace IoTManager
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             loggerFactory.AddFile("Logs/iotmanager-{Date}.txt");
+            //app.UseAPIResponseWrapperMiddleware();
+
             app.UseMvc();
         }
     }

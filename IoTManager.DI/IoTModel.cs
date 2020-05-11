@@ -3,6 +3,7 @@ using IoTManager.AzureIoTHub;
 using IoTManager.Core;
 using IoTManager.Core.Infrastructures;
 using IoTManager.Dao;
+using IoTManager.Dao.MySQL;
 using IoTManager.IDao;
 using IoTManager.IHub;
 using System;
@@ -33,6 +34,7 @@ namespace IoTManager.DI
             builder.RegisterType<SeverityBus>().As<ISeverityBus>();
             builder.RegisterType<ThemeBus>().As<IThemeBus>();
             builder.RegisterType<DeviceDailyOnlineTimeBus>().As<IDeviceDailyOnlineTimeBus>();
+            builder.RegisterType<StaffBus>().As<IStaffBus>();
             //IoTManager.Dao
             // builder.RegisterType<CityDao>().As<ICityDao>();
             // builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();
@@ -65,6 +67,7 @@ namespace IoTManager.DI
             builder.RegisterType<MySQLRoleDao>().As<IRoleDao>();
             builder.RegisterType<MySQLThemeDao>().As<IThemeDao>();
             builder.RegisterType<MySQLDeviceDailyOnlineTimeDao>().As<IDeviceDailyOnlineTimeDao>();
+            builder.RegisterType<MySQLStaffDao>().As<IStaffDao>();
             //IoTManager.AzureIoTHub
             builder.RegisterType<AzureIoTHub.AzureIoTHub>().As<IoTHub>();
             //base.Load(builder);

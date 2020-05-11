@@ -325,11 +325,15 @@ namespace IoTManager.Core
 
         /*
          * 上传设备图片
+         * 修改：
+         * 创建设备图片数据文件至本地
+         * 保存本地路径
          */
         public String UploadPicture(PictureUploadSerializer data)
         {
             try{
                 DeviceSerializer device = this.GetDeviceByDeviceId(data.deviceId);
+                _logger.LogInformation(Directory.GetCurrentDirectory());
                 device.base64Image = data.picture;
                 this.UpdateDevice(device.id, device);
                 return "图片上传成功";
@@ -568,6 +572,13 @@ namespace IoTManager.Core
             DeviceModel device = _deviceDao.GetByDeviceId(deviceId);
             device.totalAlarmInfo = count;
             return _deviceDao.Update(device.Id, device);
+        }
+        /*获取一段时间内存在的设备*/
+        public List<DeviceModel> ListExistDevices(DateTime startTime,DateTime endTime)
+        {
+            List<DeviceModel> devices = _deviceDao.Get("all");
+            List<DeviceModel> result = devices.AsQueryable().Where(d => d.CreateTime < endTime).ToList();
+            return result;
         }
     }
 }

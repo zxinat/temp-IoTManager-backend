@@ -135,6 +135,11 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._alarmInfoBus.BatchDelete(bs.str));
         }
+        [HttpGet("test")]
+        public void Test()
+        {
+            _alarmInfoBus.test();
+        }
         
     }
 }
