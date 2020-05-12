@@ -243,13 +243,14 @@ namespace IoTManager.Core
          * 输出：
          * 该设备下告警信息的数量
          */
+        /*
         public int GetDeviceAffiliateAlarmInfoNumber(String deviceId)
         {
 
             //return this._alarmInfoDao.GetDeviceAffiliateAlarmInfoNumber(deviceId);
             return _deviceBus.GetTotalAlarmInfo(deviceId);
         }
-
+        */
         /*
          * 批量删除告警信息
          *

@@ -1,4 +1,5 @@
-﻿using IoTManager.Core.Infrastructures;
+﻿
+using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility.Serializers;
@@ -163,3 +164,4 @@ namespace IoTManager.Core
         }
     }
 }
+

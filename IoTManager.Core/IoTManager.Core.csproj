@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
+    <PackageReference Include="Hangfire.MySql.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
     <PackageReference Include="Pomelo.AspNetCore.TimedJob" Version="2.0.0-rtm-10046" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />

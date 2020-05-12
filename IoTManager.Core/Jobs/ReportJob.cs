@@ -5,10 +5,11 @@ using IoTManager.IDao;
 using IoTManager.Model;
 using Microsoft.Extensions.Logging;
 using Pomelo.AspNetCore.TimedJob;
+using Hangfire;
 
 namespace IoTManager.Core.Jobs
 {
-    public class ReportJob: Job
+    public class ReportJob
     {
         private readonly IDeviceDataDao _deviceDataDao;
         private readonly IDeviceDao _deviceDao;
@@ -28,7 +29,7 @@ namespace IoTManager.Core.Jobs
         /* 定时器任务：统计每个设备每天的在线时长
          * 问题：如果设备一天只上报一条数据，则判断在线时长为0
          */
-        [Invoke(Begin = "2019-6-16 23:58", Interval = 1000*3600*24,SkipWhileExecuting = true)]
+        //[Invoke(Begin = "2019-6-16 19:02", Interval = 1000*60*20,SkipWhileExecuting = true)]
         public void Run()
         {
             _logger.LogInformation("统计所有设备每天在线时长...");
@@ -93,5 +94,6 @@ namespace IoTManager.Core.Jobs
             }
             */
         }
+
     }
 }

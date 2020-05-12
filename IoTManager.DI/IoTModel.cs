@@ -35,6 +35,7 @@ namespace IoTManager.DI
             builder.RegisterType<ThemeBus>().As<IThemeBus>();
             builder.RegisterType<DeviceDailyOnlineTimeBus>().As<IDeviceDailyOnlineTimeBus>();
             builder.RegisterType<StaffBus>().As<IStaffBus>();
+            builder.RegisterType<CustomerBus>().As<ICustomerBus>();
             //IoTManager.Dao
             // builder.RegisterType<CityDao>().As<ICityDao>();
             // builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();
@@ -68,6 +69,7 @@ namespace IoTManager.DI
             builder.RegisterType<MySQLThemeDao>().As<IThemeDao>();
             builder.RegisterType<MySQLDeviceDailyOnlineTimeDao>().As<IDeviceDailyOnlineTimeDao>();
             builder.RegisterType<MySQLStaffDao>().As<IStaffDao>();
+            builder.RegisterType<MySQLCustomerDao>().As<ICustomerDao>();
             //IoTManager.AzureIoTHub
             builder.RegisterType<AzureIoTHub.AzureIoTHub>().As<IoTHub>();
             //base.Load(builder);

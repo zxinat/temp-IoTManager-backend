@@ -223,7 +223,7 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetDeviceAffiliateData(deviceId));
         }
-
+        /*
         [HttpGet("affiliateAlarmInfo/{deviceId}")]
         public ResponseSerializer GetDeviceAffiliateAlarmInfo(String deviceId)
         {
@@ -232,7 +232,7 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._alarmInfoBus.GetDeviceAffiliateAlarmInfoNumber(deviceId));
         }
-
+        */
         [HttpGet("affiliateThreshold/{deviceId}")]
         public ResponseSerializer GetDeviceAffiliateThreshold(String deviceId)
         {

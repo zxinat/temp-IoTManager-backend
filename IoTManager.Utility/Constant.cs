@@ -22,9 +22,12 @@ namespace IoTManager.Utility
              //   "mongodb://shudev2:Etp13A3NROECpQeJ1GjTbkj7OqHfoukak17BwiMgcjw6g2ap5PPZsfraINEVJ1G34UtR2MHUJCTufvhAz2uwLQ==@shudev2.documents.azure.cn:10255/?ssl=true&replicaSet=globaldb";
             //return
             //"mongodb://localhost:27017";
-            return "mongodb://iotmanager:iotmanager-pwd@118.31.2.239:27017/?authSource=iotmanager";
+            return "mongodb://iotmanager:iotmanager-pwd@118.31.2.239:27017/iotmanager";
         }
-
+        public static string getMongoDBString()
+        {
+            return "mongodb://iotmanager:iotmanager-pwd@118.31.2.239:27017/iotmanager";
+        }
         public static String getDateFormatString()
         {
             return "yyyy-MM-dd\nHH:mm:ss";

@@ -27,7 +27,7 @@ namespace IoTManager.Utility.Serializers
             this.isOnline = null;
             this.base64Image = null;
             this.tags = null;
-            this.totalAlarmInfo = 0;
+            //this.totalAlarmInfo = 0;
             
         }
 
@@ -55,7 +55,7 @@ namespace IoTManager.Utility.Serializers
             this.isOnline = deviceModel.IsOnline;
             this.base64Image = deviceModel.Base64Image;
             this.tags = deviceModel.Tags;
-            this.totalAlarmInfo = deviceModel.totalAlarmInfo;
+            //this.totalAlarmInfo = deviceModel.totalAlarmInfo;
         }
         
         public int id { get; set; }
@@ -77,7 +77,7 @@ namespace IoTManager.Utility.Serializers
         public String isOnline { get; set; }
         public String base64Image { get; set; }
         public List<String> tags { get; set; }
-        public int totalAlarmInfo { get; set; }
+        //public int totalAlarmInfo { get; set; }
     }
 
     public class BatchNumber

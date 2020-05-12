@@ -348,7 +348,7 @@ namespace IoTManager.Dao
                             r = deviceModel.Remark,
                             pr = deviceModel.PictureRoute,
                             bi = deviceModel.Base64Image,
-                            tai=deviceModel.totalAlarmInfo,
+                            //tai=deviceModel.totalAlarmInfo,
                         });
                 return rows == 1 ? "success" : "error";
             }
