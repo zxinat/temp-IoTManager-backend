@@ -8,6 +8,7 @@ using IoTManager.Model;
 using IoTManager.Utility.Serializers;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using IoTManager.Model.RequestModel;
 
 namespace IoTManager.Core
 {
@@ -62,32 +63,18 @@ namespace IoTManager.Core
         /*通过工号获取员工信息*/
         public object GetByStaffId(string staffId)
         {
-            try
-            {
-                return _staffDao.GetStaffInfoById(staffId);
-            }
-            catch(Exception e)
-            {
-                return e.Message;
-            }
+
+            StaffModel staff= _staffDao.GetStaffInfoById(staffId);
+            return new StaffSerializer(staff);
+
         }
         /*创建员工*/
-        public string Create(StaffSerializer staffSerializer)
+        public string Create(StaffFormModel staffForm)
         {
-            StaffModel staff = new StaffModel
-            {
-                staffId = staffSerializer.staffId,
-                staffName = staffSerializer.staffName,
-                gender = staffSerializer.gender,
-                age = staffSerializer.age,
-                department = staffSerializer.department,
-                phoneNumber = staffSerializer.phoneNumber,
-                email = staffSerializer.email,
-                remark = staffSerializer.remark
-            };
+            StaffModel staff = new StaffModel(staffForm);
             try
             {
-                StaffModel eStaff = _staffDao.GetStaffInfoById(staffSerializer.staffId);
+                StaffModel eStaff = _staffDao.GetStaffInfoById(staffForm.staffId);
                 if (eStaff == null)
                 {
                     return _staffDao.Create(staff);
@@ -130,57 +117,77 @@ namespace IoTManager.Core
             }
         }
         /*修改员工信息*/
-        public string Update(string staffId,StaffSerializer staffSerializer)
+        public string Update(string staffId, StaffFormModel staffForm)
         {
-            try
+
+            StaffModel staff=_staffDao.GetStaffInfoById(staffId);
+            staff.staffName = staffForm.staffName;
+            staff.staffRole = staffForm.staffRole;
+            staff.gender = staffForm.gender;
+            staff.age = staffForm.age;
+            staff.department = staffForm.department;
+            staff.phoneNumber = staffForm.phoneNumber;
+            staff.email = staffForm.email;
+            staff.remark = staffForm.remark;
+            if(staff.lastTime<=new DateTime(1970,1,1))
             {
-                StaffModel staff=_staffDao.GetStaffInfoById(staffId);
-                staff.staffName = staffSerializer.staffName;
-                staff.gender = staffSerializer.gender;
-                staff.age = staffSerializer.age;
-                staff.department = staffSerializer.department;
-                staff.phoneNumber = staffSerializer.phoneNumber;
-                staff.email = staffSerializer.email;
-                staff.remark = staffSerializer.remark;
-                return _staffDao.Update(staffId, staff);
+                staff.lastTime = new DateTime(1970, 1, 1);
             }
-            catch(Exception e)
+            string nowStatus= staff.status==1 ? "在职" : "离职";
+            if(nowStatus == "在职" & staffForm.status == "离职")
             {
-                return e.Message;
+                staff.status = 0;
+                staff.lastTime = DateTime.Now;
             }
+            else if(nowStatus == "离职" & staffForm.status == "在职")
+            {
+                staff.status = 1;
+            }
+            return _staffDao.Update(staffId, staff);
+        }
+        /*员工离职*/
+        public string Logout(string staffId,string status)
+        {
+            StaffModel staff = _staffDao.GetStaffInfoById(staffId);
+            string nowStatus = staff.status == 1 ? "在职" : "离职";
+            string result;
+            if(nowStatus=="在职"&status=="离职")
+            {
+                staff.status = 0;
+                staff.lastTime = DateTime.Now;
+                result= _staffDao.Update(staffId, staff);
+            }
+            else if(nowStatus=="离职"&status=="在职")
+            {
+                staff.status = 1;
+                result= _staffDao.Update(staffId, staff);
+            }
+            else
+            {
+                result = "success";
+            }
+            return result;
         }
         /*上传照片*/
         public string UpLoadImage(string staffId,string base64Image)
         {
-            try
-            {
-                StaffModel staff = _staffDao.GetStaffInfoById(staffId);
-                staff.base64Image = base64Image;
-                return _staffDao.Update(staffId, staff);
-            }
-            catch(Exception e)
-            {
-                return e.Message;
-            }
+
+            StaffModel staff = _staffDao.GetStaffInfoById(staffId);
+            staff.base64Image = base64Image;
+            return _staffDao.Update(staffId, staff);
         }
 
         /*添加员工权限*/
         public string AddAuth(StaffAuthModel staffAuth)
         {
-            try
+
+            if(!_staffDao.Contain(staffAuth.staffId,staffAuth.deviceId))
             {
-                if(!_staffDao.Contain(staffAuth.staffId,staffAuth.deviceId))
-                {
-                    return _staffDao.AddAuth(staffAuth);
-                }
-                else
-                {
-                    return "exist";
-                }
+                return _staffDao.AddAuth(staffAuth);
             }
-            catch(Exception e)
+            else
             {
-                return e.Message;
+                return "exist";
             }
         }
         /*批量给员工添加权限*/

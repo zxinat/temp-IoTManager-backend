@@ -19,7 +19,7 @@ namespace IoTManager.Utility.Serializers
         }
         public DepartmentSerializer(DepartmentModel department)
         {
-            this.id = 0;
+            this.id = department.id;
             this.departmentName = department.departmentName;
             this.admin = department.admin;
             this.createTime = DateTime.Parse(department.createTime.ToString())

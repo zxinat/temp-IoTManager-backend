@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IoTManager.Model.RequestModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -20,5 +21,24 @@ namespace IoTManager.Model
         public DateTime updateTime { get; set; }
         public string base64Image { get; set; }
         public string pictureRoute { get; set; }
+        public byte status { get; set; }
+        public DateTime lastTime { get; set; }
+        public StaffModel()
+        {
+
+        }
+        public StaffModel(StaffFormModel staffForm)
+        {
+            staffId = staffForm.staffId;
+            staffName = staffForm.staffName;
+            staffRole = staffForm.staffRole;
+            gender = staffForm.gender;
+            age = staffForm.age;
+            department = staffForm.department;
+            phoneNumber = staffForm.phoneNumber;
+            email = staffForm.email;
+            remark = staffForm.remark;
+            status = 1;
+        }
     }
 }

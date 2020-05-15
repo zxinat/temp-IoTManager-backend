@@ -1,10 +1,10 @@
-﻿/*
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IoTManager.Core.Infrastructures;
 using IoTManager.Model;
+using IoTManager.Model.RequestModel;
 using IoTManager.Utility.Serializers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,13 +38,25 @@ namespace IoTManager.API.Controllers
         [HttpGet("{staffId}")]
         public ResponseSerializer GetByStaffId(string staffId)
         {
-            return new ResponseSerializer(
-                200,
-                "success",
-                _staffBus.GetByStaffId(staffId));
+            int code;
+            string msg;
+            object d;
+            try
+            {
+                d = _staffBus.GetByStaffId(staffId);
+                code = 200;
+                msg = "success";
+            }
+            catch(Exception e)
+            {
+                code = StatusCodes.Status404NotFound;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
         }
         [HttpPost("create")]
-        public ResponseSerializer Create([FromBody] StaffSerializer staff)
+        public ResponseSerializer Create([FromBody] StaffFormModel staff)
         {
             var result = _staffBus.Create(staff);
             int code;
@@ -81,22 +93,122 @@ namespace IoTManager.API.Controllers
                 200, "success", _staffBus.BatchDelete(staffIds));
         }
         [HttpPut("Update/{staffId}")]
-        public ResponseSerializer Update(string staffId, [FromBody] StaffSerializer staffSerializer)
+        public ResponseSerializer Update(string staffId, [FromBody] StaffFormModel staffForm)
         {
-            return new ResponseSerializer(
-                200, "success", _staffBus.Update(staffId, staffSerializer));
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d=_staffBus.Update(staffId, staffForm);
+                if(d=="success")
+                {
+                    code = 200;
+                    msg = d;
+                }
+                else
+                {
+                    code = StatusCodes.Status400BadRequest;
+                    msg = "BadRequest";
+                }
+
+            }
+            catch(Exception e)
+            {
+                code = 500;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
+        }
+        [HttpGet("{staffId}/Logout")]
+        public ResponseSerializer Logout(string staffId,string status)
+        {
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d = _staffBus.Logout(staffId,status);
+                if(d=="success")
+                {
+                    code = 200;
+                    msg = d;
+                }
+                else
+                {
+                    code = 500;
+                    msg = d;
+                }
+            }
+            catch(Exception e)
+            {
+                code = 500;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
         }
         [HttpPut("UpLoadImage/{staffId}")]
         public ResponseSerializer UpLoadImage(string staffId, string base64Image)
         {
-            return new ResponseSerializer(
-                200, "success", _staffBus.UpLoadImage(staffId, base64Image));
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d = _staffBus.UpLoadImage(staffId, base64Image);
+                if(d=="success")
+                {
+                    code = 200;
+                    msg = d;
+                }
+                else
+                {
+                    code = StatusCodes.Status400BadRequest;
+                    msg = d;
+                }
+            }
+            catch(Exception e)
+            {
+                code = 500;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
         }
         [HttpPost("Auth/{staffId}/add")]
         public ResponseSerializer AddAuth(string staffId, [FromBody] StaffAuthModel staffAuth)
         {
-            return new ResponseSerializer(
-                200, "success", _staffBus.AddAuth(staffAuth));
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d = _staffBus.AddAuth(staffAuth);
+                if(d=="success")
+                {
+                    code = 200;
+                    msg = d;
+                }
+                else if(d=="exist")
+                {
+                    code = StatusCodes.Status409Conflict;
+                    msg = d;
+                }
+                else
+                {
+                    code = 500;
+                    msg = d;
+                }
+            }
+            catch(Exception e)
+            {
+                code = 500;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
         }
         [HttpPost("Auth/{staffId}/BatchAddAuth")]
         public ResponseSerializer BatchAddAuth(string staffId, [FromBody] List<string> deviceIds)
@@ -240,4 +352,3 @@ namespace IoTManager.API.Controllers
         }
     }
 }
-*/

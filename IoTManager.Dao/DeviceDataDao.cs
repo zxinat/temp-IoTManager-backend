@@ -1121,5 +1121,14 @@ namespace IoTManager.Dao
             }
             return query;
         }
+        /*通过indexId获取最新的一条数据*/
+        public DeviceDataModel GetByIndexIdLatestOne(string indexId)
+        {
+            var query = _deviceData.AsQueryable()
+                .Where(dd => dd.IndexId == indexId)
+                .OrderByDescending(dd => dd.Timestamp)
+                .Take(1).ToList().FirstOrDefault();
+            return query;
+        }
     }
 }

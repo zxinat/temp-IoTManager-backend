@@ -39,5 +39,6 @@ namespace IoTManager.IDao
         string Create(DeviceDataModel deviceData);
         List<DeviceDataModel> ListByDeviceIdAndIndexId(string deviceId, string indexId, DateTime startTime, DateTime endTime, int count=0);
         List<DeviceDataModel> ListByDeviceIdAndValue(string deviceId, int indexValue, int count);
+        DeviceDataModel GetByIndexIdLatestOne(string indexId);
     }
 }

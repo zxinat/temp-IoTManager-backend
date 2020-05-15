@@ -1,4 +1,5 @@
 ﻿using IoTManager.Model;
+using IoTManager.Model.RequestModel;
 using IoTManager.Utility.Serializers;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,11 @@ namespace IoTManager.Core.Infrastructures
     {
         object ListStaffs(string search, int page, string sortColumn, string order, string department);
         object GetByStaffId(string staffId);
-        string Create(StaffSerializer staffSerializer);
+        string Create(StaffFormModel staffForm);
         object BatchDelete(List<string> staffIds);
         string Delete(string staffId);
-        string Update(string staffId, StaffSerializer staffSerializer);
+        string Update(string staffId, StaffFormModel staffForm);
+        string Logout(string staffId, string status);
         string UpLoadImage(string staffId, string base64Image);
         string AddAuth(StaffAuthModel staffAuth);
         object BatchAddAuth(string staffId, List<string> deviceIds);

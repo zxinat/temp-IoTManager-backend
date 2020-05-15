@@ -13,7 +13,7 @@ namespace IoTManager.Dao.MySQL
     public class MySQLStaffDao:IStaffDao
     {
         /* 
-         * 通过工号获取员工信息
+         * 通过工号获取员工信息,照片信息另外获取
          */
         public StaffModel GetStaffInfoById(string staffId)
         {
@@ -30,9 +30,9 @@ namespace IoTManager.Dao.MySQL
                     "staff.remark," +
                     "staff.createTime," +
                     "staff.updateTime," +
-                    "staff.base64Image," +
-                    "staff.pictureRoute, " +
-                    "staffrole.staffRole " +
+                    "staffrole.staffRole, " +
+                    "staff.status, "+
+                    "staff.lastTime "+
                     "FROM staff " +
                     "LEFT JOIN department ON department.id=staff.department "+
                     "LEFT JOIN staffrole ON staffrole.id=staff.staffRole "+
@@ -60,7 +60,8 @@ namespace IoTManager.Dao.MySQL
                 "staff.updateTime," +
                 "staff.base64Image," +
                 "staffrole.staffRole AS staffRole, " +
-                "staff.pictureRoute " +
+                "staff.status, "+
+                "staff.lastTime "+
                 "FROM staff " +
                 "LEFT JOIN staffrole ON staffrole.id=staff.staffRole "+
                 "LEFT JOIN department ON department.id=staff.department "+
@@ -102,7 +103,8 @@ namespace IoTManager.Dao.MySQL
                 "staff.createTime," +
                 "staff.updateTime," +
                 "staff.base64Image," +
-                "staff.pictureRoute " +
+                "staff.status, " +
+                "staff.lastTime "+
                 "FROM staff " +
                 "LEFT JOIN staffrole ON staffrole.id=staff.staffRole "+
                 "LEFT JOIN department ON department.id=staff.department "+
@@ -124,8 +126,8 @@ namespace IoTManager.Dao.MySQL
                 DepartmentModel department = connection.Query<DepartmentModel>(
                     "SELECT * FROM department WHERE department.departmentName=@dn", new { dn = staff.department }).FirstOrDefault();
                 int staffrole = connection.Query<int>("SELECT id FROM staffrole WHERE staffRole=@sr", new { sr = staff.staffRole }).FirstOrDefault();
-                int rows = connection.Execute("INSERT INTO staff(staffId,staffName,staffRole,gender,age,department,phoneNumber,email,remark) VALUES " +
-                    "(@sid,@sr,@sn,@gen,@ag,@dep,@phn,@em,@re)", new
+                int rows = connection.Execute("INSERT INTO staff(staffId,staffName,staffRole,gender,age,department,phoneNumber,email,remark,status) VALUES " +
+                    "(@sid,@sn,@sr,@gen,@ag,@dep,@phn,@em,@re,@sta)", new
                     {
                         sid = staff.staffId,
                         sn = staff.staffName,
@@ -135,7 +137,8 @@ namespace IoTManager.Dao.MySQL
                         dep = department.id,
                         phn = staff.phoneNumber,
                         em = staff.email,
-                        re = staff.remark
+                        re = staff.remark,
+                        sta=staff.status
                     });
                 return rows == 1 ? "success" : "error";
             }
@@ -159,7 +162,9 @@ namespace IoTManager.Dao.MySQL
                     "remark=@re," +
                     "updateTime=CURRENT_TIMESTAMP," +
                     "base64Image=@bi," +
-                    "pictureRoute=@pr " +
+                    "pictureRoute=@pr, " +
+                    "status=@sta, "+
+                    "lastTime=@la "+
                     "WHERE staffId=@sid", new
                     {
                         sn = staff.staffName,
@@ -171,9 +176,12 @@ namespace IoTManager.Dao.MySQL
                         em = staff.email,
                         re = staff.remark,
                         bi = staff.base64Image,
-                        pr = staff.pictureRoute
+                        pr = staff.pictureRoute,
+                        sid=staffId,
+                        sta=staff.status,
+                        la=staff.lastTime
                     });
-                return rows == 1 ? "sucess" : "error";
+                return rows == 1 ? "success" : "error";
             }
         }
         /*删除员工*/
@@ -208,8 +216,8 @@ namespace IoTManager.Dao.MySQL
         /*添加员工权限*/
         public string AddAuth(StaffAuthModel authModel)
         {
-            string sql = "INSERT INTO staffauth(staff,device) VALUES " +
-                "((SELECT id FROM staff WHERE staffId=@sid),(SELECT id FROM device WHERE hardwareDeviceID=@did))";
+            string sql = "INSERT INTO staffauth(staffId,device) VALUES " +
+                "(@sid,(SELECT id FROM device WHERE hardwareDeviceID=@did))";
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute(sql, new
@@ -224,7 +232,7 @@ namespace IoTManager.Dao.MySQL
         public List<string> GetAuthDevice(string staffId)
         {
             string sql = "SELECT device.hardwareDeviceID FROM device WHERE device.id IN " +
-                "(SELECT staffauth.device FROM staffauth WHERE staffauth.staff=(SELECT staff.id FROM staff WHERE staff.staffId=@sid))";
+                "(SELECT staffauth.device FROM staffauth WHERE staffauth.staffId=@sid)";
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<string>(sql, new { sid = staffId })
@@ -234,22 +242,22 @@ namespace IoTManager.Dao.MySQL
         /*查找staffId是否被deviceId授权*/
         public bool Contain(string staffId,string deviceId)
         {
-            string sql = "SELECT * FROM staffauth WHERE staffauth.staff=(SELECT staff.id FROM staff WHERE staff.staffId=@sid) " +
+            string sql = "SELECT COUNT(*) FROM staffauth WHERE staffauth.staffId=@sid " +
                 "AND staffauth.device=(SELECT device.id FROM device WHERE device.hardwareDeviceID=@did)";
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
-                int rows = connection.Execute(sql, new
+                int rows = connection.Query<int>(sql, new
                 {
                     sid = staffId,
                     did = deviceId
-                });
-                return rows == 1 ? true : false;
+                }).FirstOrDefault();
+                return rows == 0 ? false : true;
             }
         }
         /*删除员工staffId的权限*/
         public string DeleteAuth(string staffId,string deviceId)
         {
-            string sql = "DELETE FROM staffauth WHERE staffauth.staff=(SELECT staff.id FROM staff WHERE staff.staffId=@sid) " +
+            string sql = "DELETE FROM staffauth WHERE staffauth.staffId=@sid " +
                 "AND staffauth.device=(SELECT device.id FROM device WHERE device.hardwareDeviceID=@did)";
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -261,10 +269,23 @@ namespace IoTManager.Dao.MySQL
                 return rows == 1 ? "success" : "error";
             }
         }
+        /*删除staffId的所有权限*/
+        public string DeleteAuthByStaffId(string staffId)
+        {
+            string sql = "DELETE FROM staffauth WHERE staffauth.staffId=@sid";
+            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            {
+                int rows = connection.Execute(sql, new
+                {
+                    sid = staffId
+                });
+                return rows == 1 ? "success" : "error";
+            }
+        }
         /*批量删除*/
         public int BatchDeleteAuth(string staffId,List<string> deviceIds)
         {
-            string sql = "DELETE FROM staffauth WHERE staffauth.staff=(SELECT staff.id FROM staff WHERE staff.staffId=@sid) " +
+            string sql = "DELETE FROM staffauth WHERE staffauth.staffId=@sid " +
                 "AND staffauth.device=(SELECT device.id FROM device WHERE device.hardwareDeviceID=@did)";
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
@@ -291,9 +312,8 @@ namespace IoTManager.Dao.MySQL
          */
         public List<string> ListStaffIdsByDeviceId(string deviceId)
         {
-            string sql = "SELECT staff.staffId FROM staff WHERE staff.id IN " +
-                "(SELECT staffauth.staff FROM staffauth WHERE staffauth.device IN " +
-                "(SELECT device.id FROM device WHERE device.hardwareDeviceID=@hid))";
+            string sql ="SELECT staffauth.staffId FROM staffauth WHERE staffauth.device IN " +
+                "(SELECT device.id FROM device WHERE device.hardwareDeviceID=@hid)";
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 return connection.Query<string>(sql, new { hid = deviceId })
@@ -314,14 +334,14 @@ namespace IoTManager.Dao.MySQL
                 "staff.remark," +
                 "staff.createTime," +
                 "staff.updateTime," +
-                "staff.base64Image," +
-                "staff.pictureRoute, " +
+                "staff.status, "+
+                "staff.lastTime, "+
                 "staffrole.staffRole AS staffRole "+
                 "FROM staff " +
                 "LEFT JOIN department ON department.id=staff.department "+
                 "LEFT JOIN staffrole ON staffrole.id=staff.staffRole "+
-                "WHERE staff.id IN " +
-                "(SELECT staffauth.staff FROM staffauth WHERE staffauth.device IN " +
+                "WHERE staff.staffId IN " +
+                "(SELECT staffauth.staffId FROM staffauth WHERE staffauth.device IN " +
                 "(SELECT device.id FROM device WHERE device.hardwareDeviceID=@hid))";
                 
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
@@ -352,7 +372,7 @@ namespace IoTManager.Dao.MySQL
             using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
             {
                 int rows = connection.Execute(s, new { sr = staffRole });
-                if(rows==0)
+                if(rows==-1)
                 {
                     return connection.Execute(sql, new { sr = staffRole }) == 1 ? "success" : "error";
                 }
@@ -382,6 +402,12 @@ namespace IoTManager.Dao.MySQL
                 });
                 return rows == 1 ? "success" : "error";
             }
+        }
+
+        /*获取staff中所有staffId*/
+        public List<string> ListStaffIds()
+        {
+            return null;
         }
 
     }

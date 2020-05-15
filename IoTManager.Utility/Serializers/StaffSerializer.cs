@@ -19,8 +19,6 @@ namespace IoTManager.Utility.Serializers
             this.phoneNumber = null;
             this.email = null;
             this.remark = null;
-            this.base64Image = null;
-            this.pictureRoute = null;
         }
         public StaffSerializer(StaffModel staffModel)
         {
@@ -38,8 +36,9 @@ namespace IoTManager.Utility.Serializers
                 .ToLocalTime().ToString(Constant.getDateFormatString());
             this.updateTime = DateTime.Parse(staffModel.updateTime.ToString())
                 .ToLocalTime().ToString(Constant.getDateFormatString());
-            this.base64Image = staffModel.base64Image;
-            this.pictureRoute = staffModel.pictureRoute;
+            this.status = staffModel.status == 1 ? "在职" : "离职";
+            this.lastTime = staffModel.lastTime<=new DateTime(1970,1,1)?"": DateTime.Parse(staffModel.lastTime.ToString())
+                .ToLocalTime().ToString(Constant.getDateFormatString());
 
         }
         public int id { get; set; }
@@ -54,8 +53,8 @@ namespace IoTManager.Utility.Serializers
         public string remark { get; set; }
         public string createTime { get; set; }
         public string updateTime { get; set; }
-        public string base64Image { get; set; }
-        public string pictureRoute { get; set; }
+        public string status { get; set; }
+        public string lastTime { get; set; }
 
     }
 }
