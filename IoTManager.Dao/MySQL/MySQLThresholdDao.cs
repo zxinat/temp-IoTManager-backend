@@ -6,16 +6,23 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Common;
 
 namespace IoTManager.Dao
 {
+    
     public sealed class MySQLThresholdDao : IThresholdDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLThresholdDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<ThresholdModel> GetByDeviceId(String deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 List<ThresholdModel> thresholdModels = connection.Query<ThresholdModel>(
                     "select threshold.id, indexId, deviceId, operator, thresholdValue, threshold.createTime, threshold.updateTime, ruleName, description, severity.severityName severity from threshold inner join severity on threshold.severity=severity.id where deviceId=@did", new
@@ -31,7 +38,7 @@ namespace IoTManager.Dao
 
         public String Create(ThresholdModel thresholdModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 SeverityModel severity = connection
                         .Query<SeverityModel>("select * from severity where severityName=@sn",
@@ -53,7 +60,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, ThresholdModel thresholdModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 SeverityModel severity = connection
                     .Query<SeverityModel>("select * from severity where severityName=@sn",
@@ -77,7 +84,7 @@ namespace IoTManager.Dao
 
         public long GetThresholdNumber(String searchType, String deviceName = "all")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = "select count(*) number from threshold ";
                 if (searchType == "search")
@@ -116,7 +123,7 @@ namespace IoTManager.Dao
                 String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
                 s += limitSubsentence;
             }
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<ThresholdModel>(s, new {dn=deviceName}).ToList();
             }
@@ -124,7 +131,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("delete from threshold where id=@i", new {i = id});
                 return rows == 1 ? "success" : "error";
@@ -133,7 +140,7 @@ namespace IoTManager.Dao
 
         public int BatchDelete(int[] ids)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = 0;
                 foreach (int i in ids)
@@ -151,7 +158,7 @@ namespace IoTManager.Dao
 
         public int GetDeviceAffiliateThresholdNumber(String deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(id) number from threshold where deviceId=@did", new
                 {

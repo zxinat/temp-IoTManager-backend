@@ -7,15 +7,21 @@ using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
 using IoTManager.Utility.Serializers;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLFactoryDao : IFactoryDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLFactoryDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<FactoryModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = "SELECT factory.id, " +
                            "factoryName, " +
@@ -48,7 +54,7 @@ namespace IoTManager.Dao
 
         public FactoryModel GetById(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection
                     .Query<FactoryModel>("SELECT factory.id, " +
@@ -70,7 +76,7 @@ namespace IoTManager.Dao
 
         public String Create(FactoryModel factoryModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel city = connection
                     .Query<CityModel>("SELECT * FROM city WHERE cityName=@cn", new
@@ -92,7 +98,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, FactoryModel factoryModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel city = connection
                     .Query<CityModel>("SELECT * FROM city WHERE cityName=@cn", new
@@ -116,7 +122,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("DELETE FROM factory WHERE id=@factoryId", new
                 {
@@ -127,7 +133,7 @@ namespace IoTManager.Dao
         }
         public List<FactoryModel> GetAffiliateFactory(String cName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 /*
                 CityModel city = connection.Query<CityModel>("select * from city where cityName=@cName", new { cName = cName })
@@ -146,7 +152,7 @@ namespace IoTManager.Dao
         
         public List<FactoryModel> GetByFactoryName(String factoryName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 List<FactoryModel> factoryModels = connection
                     .Query<FactoryModel>("SELECT factory.id, " +
@@ -167,7 +173,7 @@ namespace IoTManager.Dao
 
         public int GetFactoryAffiliateWorkshop(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from workshop where factory=@fid", new
                 {
@@ -179,7 +185,7 @@ namespace IoTManager.Dao
 
         public int GetFactoryAffiliateDevice(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from device where factory=@fid", new
                 {
@@ -191,7 +197,7 @@ namespace IoTManager.Dao
 
         public int GetFactoryAffiliateGateway(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from gateway where factory=@fid", new
                 {
@@ -203,7 +209,7 @@ namespace IoTManager.Dao
 
         public long GetFactoryNumber()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<long>("select count(*) from factory").FirstOrDefault();
             }

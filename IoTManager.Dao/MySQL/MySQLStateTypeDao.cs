@@ -7,15 +7,21 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLStateTypeDao : IStateTypeDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLStateTypeDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<String> GetDeviceType()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='deviceType'")
@@ -25,7 +31,7 @@ namespace IoTManager.Dao
 
         public List<String> GetDeviceState()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='deviceState'")
@@ -35,7 +41,7 @@ namespace IoTManager.Dao
 
         public List<String> GetGatewayType()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='gatewayType'")
@@ -45,7 +51,7 @@ namespace IoTManager.Dao
 
         public List<String> GetGatewayState()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection
                     .Query<String>("SELECT configValue FROM config WHERE configTag='gatewayState'")
@@ -55,7 +61,7 @@ namespace IoTManager.Dao
 
         public List<DeviceTypeModel> GetDetailedDeviceType(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = "select config.id, configValue deviceTypeName, offlineTime from config where configTag=@ct ";
                 if (pageMode == 1)
@@ -81,7 +87,7 @@ namespace IoTManager.Dao
 
         public String AddDeviceType(DeviceTypeModel deviceTypeModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var result = connection.Execute(
                     "insert into config(configTag, configValue, offlineTime) values(\'deviceType\', @cv, @ot)", new
@@ -95,7 +101,7 @@ namespace IoTManager.Dao
 
         public String UpdateDeviceType(int id, DeviceTypeModel deviceTypeModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var result = connection.Execute("update config set configValue=@dtn, offlineTime=@ot where id=@i", new
                 {
@@ -109,7 +115,7 @@ namespace IoTManager.Dao
 
         public String DeleteDeviceType(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var result = connection.Execute("delete from config where id=@i", new {i = id});
                 return result == 1 ? "success" : "error";
@@ -118,7 +124,7 @@ namespace IoTManager.Dao
 
         public int GetDeviceTypeAffiliateDevice(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 System.Console.WriteLine(id);
                 var result = connection.Query<int>("select count(*) num from (select * from device where deviceType=@dt) tmp", new {dt = id}).FirstOrDefault();
@@ -128,7 +134,7 @@ namespace IoTManager.Dao
 
         public long GetDetailedDeviceTypeNumber()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<long>("select count(*) from config where configTag=@cn", new
                 {
@@ -139,7 +145,7 @@ namespace IoTManager.Dao
 
         public DeviceTypeModel GetDeviceTypeByName(String name)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceTypeModel>(
                     "select config.id id, configValue deviceTypeName, offlineTime from config where configValue=@cv",
@@ -152,10 +158,12 @@ namespace IoTManager.Dao
         /*zxin-添加*/
         public List<DeviceTypeModel> ListAllDeviceType()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
-                return connection.Query<DeviceTypeModel>("select id Id ,configValue DeviceTypeName,offlineTime OfflineTime from config where configTag=@ct", new { ct = "deviceType" }).ToList();
+                return connection.Query<DeviceTypeModel>("select id Id ,configValue DeviceTypeName,offlineTime OfflineTime ,typeId typeId from config where configTag=@ct", new { ct = "deviceType" }).ToList();
             }
         }
+        /* 通过typeId获取类型
+         */
     }
 }

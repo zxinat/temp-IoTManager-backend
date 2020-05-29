@@ -12,6 +12,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="API\Controllers\CustomerController.cs" />
+      <Compile Remove="API\Controllers\DepartmentController.cs" />
+      <Compile Remove="API\Controllers\StaffController.cs" />
+      <Compile Remove="API\Formalizers\CustomerFormalizer.cs" />
+      <Compile Remove="API\Formalizers\DepartmentFormalizer.cs" />
+      <Compile Remove="API\Formalizers\DeviceFormalizer.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Folder Include="wwwroot\" />
     </ItemGroup>
 
@@ -24,6 +33,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
         <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.15" />
+        <PackageReference Include="NLog" Version="4.7.1" />
         <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
         <PackageReference Include="VMD.RESTApiResponseWrapper.Core" Version="1.0.4" />
@@ -33,6 +43,7 @@
       <ProjectReference Include="..\IoTManager.Core\IoTManager.Core.csproj" />
       <ProjectReference Include="..\IoTManager.DI\IoTManager.DI.csproj" />
       <ProjectReference Include="..\IoTManager.Model\IoTManager.Model.csproj" />
+      <ProjectReference Include="..\StaffManager\StaffManager.csproj" />
     </ItemGroup>
 
 </Project>

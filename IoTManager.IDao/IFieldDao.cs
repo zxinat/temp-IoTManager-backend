@@ -8,6 +8,7 @@ namespace IoTManager.IDao
     {
         List<FieldModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc");
         String Create(FieldModel field);
+        bool IsExist(FieldModel field);
         String Update(int id, FieldModel field);
         String Delete(int id);
         long GetFieldNumber();

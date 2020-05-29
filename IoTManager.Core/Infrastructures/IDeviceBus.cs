@@ -26,6 +26,8 @@ namespace IoTManager.Core.Infrastructures
         List<object> GetFieldOptions();
         String UploadPicture(PictureUploadSerializer pic);
         String GetPicture(String deviceId);
+        string LoadImage(string deviceName);
+        string UploadImage(string deviceName, string base64Image);
         List<DeviceSerializer> GetDeviceByCity(String cityName, String factoryName, String workshopName);
         List<DeviceSerializer> GetDeviceByTag(String tag);
         List<String> GetAllTag();
@@ -40,5 +42,7 @@ namespace IoTManager.Core.Infrastructures
         //int GetTotalAlarmInfo(string deviceId);
         //string UpdateTotalAlarmInfo(string deviceId, int count);
         List<DeviceModel> ListExistDevices(DateTime startTime, DateTime endTime);
+        List<DeviceSerializer> ListByDeviceTypeName(string typeName);
+        List<DeviceSerializer> ListByTypeConfig();
     }
 }

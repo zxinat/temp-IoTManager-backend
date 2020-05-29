@@ -10,14 +10,20 @@ using IoTManager.Model;
 using IoTManager.Utility;
 using MySql.Data.MySqlClient;
 using Constant = IoTManager.Utility.Constant;
+using Microsoft.Extensions.Options;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLCityDao : ICityDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLCityDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public String Create(CityModel cityModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("INSERT INTO city(cityName, remark, longitude, latitude) VALUES (@cn, @r, @lo, @la)", new
                 {
@@ -32,7 +38,7 @@ namespace IoTManager.Dao
         //获取城市信息List
         public List<CityModel> Get(int pageMode = 0, int offset = 0, int limit = 6, String sortColumn = "id", String order = "asc")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = "select * from city ";
                 if (pageMode == 1)
@@ -57,7 +63,7 @@ namespace IoTManager.Dao
 
         public CityModel GetById(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection
                     .Query<CityModel>("SELECT * FROM city WHERE id = @cityId",
@@ -70,7 +76,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, CityModel cityModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("UPDATE city SET cityName=@cn, remark=@r, updateTime=CURRENT_TIMESTAMP WHERE id=@cityId", new
                 {
@@ -84,7 +90,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("DELETE FROM city WHERE id=@cityId", new
                 {
@@ -96,7 +102,7 @@ namespace IoTManager.Dao
 
         public List<CityModel> GetByCityName(String cityName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<CityModel>("select * from city where cityName like '%" + cityName + "%'")
                     .ToList();
@@ -105,7 +111,7 @@ namespace IoTManager.Dao
 
         public CityModel GetOneCityByName(String cityName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<CityModel>("select * from city where cityName=@cn", new {cn = cityName})
                     .FirstOrDefault();
@@ -114,7 +120,7 @@ namespace IoTManager.Dao
 
         public object GetThreeLevelMenu()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var query = connection.Query<RegionModel>("select * from region").ToList();
                 Dictionary<String, String> result = new Dictionary<string, string>();
@@ -129,7 +135,7 @@ namespace IoTManager.Dao
 
         public int GetCityAffiliateFactory(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from factory where city=@cid", new
                 {
@@ -141,7 +147,7 @@ namespace IoTManager.Dao
 
         public int GetCityAffiliateDevice(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from device where city=@cid", new
                 {
@@ -153,7 +159,7 @@ namespace IoTManager.Dao
 
         public int GetCityAffiliateGateway(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from gateway where city=@cid", new
                 {
@@ -165,7 +171,7 @@ namespace IoTManager.Dao
 
         public long GetCityNumber()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<long>("select count(*) from city").FirstOrDefault();
             }
@@ -173,7 +179,7 @@ namespace IoTManager.Dao
         /*获取城市名称列表*/
         public List<string> ListCityName()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<string>("select city.cityName from city").ToList();
             }

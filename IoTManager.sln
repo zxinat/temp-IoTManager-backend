@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.202
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTManager", "IoTManager\IoTManager.csproj", "{48E11E54-90EE-453A-8731-1ACBCCADF30B}"
 EndProject
@@ -42,6 +42,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6-Test", "6-Test", "{1DCB3F39-3970-4FDF-A4A0-BA0BDA8E6DD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Repository", "5-Repository", "{0413E063-BCD6-4A40-8E6A-2FCF1EA06357}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{51013AE8-8161-4011-A6D9-CBE8728A8305}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StaffManager", "StaffManager\StaffManager.csproj", "{A88EA191-BB72-4748-92F8-2D5F64689EC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +105,10 @@ Global
 		{2C4BE4A7-FB62-46FD-9774-77C259799971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C4BE4A7-FB62-46FD-9774-77C259799971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C4BE4A7-FB62-46FD-9774-77C259799971}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A88EA191-BB72-4748-92F8-2D5F64689EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A88EA191-BB72-4748-92F8-2D5F64689EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A88EA191-BB72-4748-92F8-2D5F64689EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A88EA191-BB72-4748-92F8-2D5F64689EC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +127,8 @@ Global
 		{AC963447-7E68-4F37-9F40-9D1A05BF662B} = {4507029C-F8F5-4B14-B14F-B5A34535B859}
 		{836C9C7F-A563-4C17-83E9-4E1C6316D1DF} = {5FED9778-A1FC-4591-863F-A4EA4A41FF33}
 		{2C4BE4A7-FB62-46FD-9774-77C259799971} = {1DCB3F39-3970-4FDF-A4A0-BA0BDA8E6DD1}
+		{51013AE8-8161-4011-A6D9-CBE8728A8305} = {4507029C-F8F5-4B14-B14F-B5A34535B859}
+		{A88EA191-BB72-4748-92F8-2D5F64689EC7} = {51013AE8-8161-4011-A6D9-CBE8728A8305}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {16BE4745-FDEB-48D0-91B5-2FF0A9659139}

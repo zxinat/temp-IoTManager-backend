@@ -8,11 +8,17 @@ using Dapper;
 using IoTManager.Model;
 using IoTManager.Utility;
 using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Options;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLGatewayDao : IGatewayDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLGatewayDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<GatewayModel> Get(String searchType, int offset, int limit, String sortColumn, String order, String city, String factory, String workshop)
         {
             string s = "select gateway.id, " +
@@ -55,7 +61,7 @@ namespace IoTManager.Dao
                 String limitSubsentence = " limit " + offset.ToString() + "," + limit.ToString();
                 s += limitSubsentence;
             }
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<GatewayModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
@@ -64,7 +70,7 @@ namespace IoTManager.Dao
 
         public GatewayModel GetById(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<GatewayModel>("select gateway.id, " +
                                                       "hardwareGatewayID," +
@@ -91,7 +97,7 @@ namespace IoTManager.Dao
 
         public String Create(GatewayModel gatewayModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -128,7 +134,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, GatewayModel gatewayModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -166,7 +172,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("DELETE FROM gateway WHERE id=@gatewayId", new
                 {
@@ -178,7 +184,7 @@ namespace IoTManager.Dao
 
         public List<GatewayModel> GetByWorkshop(String workshop)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<GatewayModel>("select gateway.id, " +
                                                       "hardwareGatewayID," +
@@ -205,7 +211,7 @@ namespace IoTManager.Dao
         }
         public List<GatewayModel> GetByWorkshop(String city, String factory, String workshop)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<GatewayModel>("select gateway.id, " +
                                                       "hardwareGatewayID," +
@@ -236,7 +242,7 @@ namespace IoTManager.Dao
         }
         public int BatchDelete(int[] ids)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = 0;
                 foreach (int i in ids)
@@ -250,7 +256,7 @@ namespace IoTManager.Dao
         }
         public String CreateGatewayType(String gatewayType)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("insert into config(configTag, configValue)  values ('gatewayType', @gt)",
                     new
@@ -263,7 +269,7 @@ namespace IoTManager.Dao
 
         public long GetGatewayNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = "select count(*) number from gateway";
                 if (searchType == "search")
@@ -288,7 +294,7 @@ namespace IoTManager.Dao
 
         public int GetAffiliateDeviceNumber(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from device where gatewayId=@did", new
                 {
@@ -300,7 +306,7 @@ namespace IoTManager.Dao
 
         public int FindGatewayIdExist(String gatewayId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>(
                     "select count(*) num from (select * from gateway where hardwareGatewayID=@gid) tmp", new

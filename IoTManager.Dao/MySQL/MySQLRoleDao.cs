@@ -7,14 +7,20 @@ using System.Text;
 using Dapper;
 using IoTManager.Utility;
 using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Options;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLRoleDao:IRoleDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLRoleDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public String DeleteAllAuth(String roleId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var role = connection.Query(String.Format("select id from role where roleName=\"{0}\"",roleId)).ToList()[0];
                 int count = connection.Query<int>("select count(*) FROM roleauth WHERE role=@rId", new
@@ -31,7 +37,7 @@ namespace IoTManager.Dao
 
         public String InsertAllAuth(String roleId, List<String> authId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var role = connection.Query(String.Format("select id from role where roleName=\"{0}\"",roleId)).ToList()[0];
                 String condition = "";
@@ -67,7 +73,7 @@ namespace IoTManager.Dao
 
         public String UpdateUserAuth(int userId, Dictionary<String, int> dic)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var user = connection.Query("select identify from account where id=@uId", new
                 {
@@ -122,7 +128,7 @@ namespace IoTManager.Dao
 
         public String GetRoleByUserId(int userId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var user = connection.Query("select role.roleName from account join role on account.role=role.id where account.id=@uId", new
                 {

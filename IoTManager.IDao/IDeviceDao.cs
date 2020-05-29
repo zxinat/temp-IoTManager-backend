@@ -35,5 +35,7 @@ namespace IoTManager.IDao
         int FindTagAffiliate(String tagName);
         int FindDeviceIdExist(String deviceId);
         int UpdateLastConnectionTimeByDeviceId(String deviceId);
+        string UploadImage(string deviceId, string base64Image);
+        string LoadImage(string deviceId);
     }
 }

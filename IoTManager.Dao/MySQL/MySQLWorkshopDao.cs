@@ -7,15 +7,21 @@ using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Model.DataReceiver;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLWorkshopDao : IWorkshopDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLWorkshopDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<WorkshopModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 /*
                 String s = "SELECT workshop.id, " +
@@ -64,7 +70,7 @@ namespace IoTManager.Dao
 
         public WorkshopModel GetById(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 WorkshopModel workshopModel = connection
                     .Query<WorkshopModel>("SELECT workshop.id, " +
@@ -87,7 +93,7 @@ namespace IoTManager.Dao
 
         public String Create(WorkshopModel workshopModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 /*
                 FactoryModel factory = connection
@@ -118,7 +124,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, WorkshopModel workshopModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 FactoryModel factory = connection
                     .Query<FactoryModel>("SELECT * FROM factory WHERE factoryName=@fn", new
@@ -143,7 +149,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("DELETE FROM workshop WHERE id=@workshopId", new
                 {
@@ -154,7 +160,7 @@ namespace IoTManager.Dao
         }
         public List<WorkshopModel> GetAffiliateWorkshop(String cName,String fName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 /*
                 FactoryModel factory = connection
@@ -174,7 +180,7 @@ namespace IoTManager.Dao
         /*zxin-获取实验室名称列表：输入：城市、实验楼，输出实验室名称列表*/
         public List<WorkshopTreeModel> ListWorkshopLoaction()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 List<WorkshopTreeModel> workshopLocation = connection
                     .Query<WorkshopTreeModel>("SELECT w.workshopName,f.factoryName,c.cityName " +
@@ -184,7 +190,7 @@ namespace IoTManager.Dao
         }
         public List<string> ListWorkshopNames(string cName,string fName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 List<string> workshopNameList = connection
                     .Query<string>("SELECT workshopName FROM workshop,factory,city " +
@@ -196,7 +202,7 @@ namespace IoTManager.Dao
         }
         public List<WorkshopModel> GetByWorkshopName(String workshopName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 List<WorkshopModel> workshopModels = connection
                     .Query<WorkshopModel>("SELECT workshop.id, " +
@@ -217,7 +223,7 @@ namespace IoTManager.Dao
 
         public int GetWorkshopAffiliateDevice(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from device where workshop=@wid", new
                 {
@@ -229,7 +235,7 @@ namespace IoTManager.Dao
 
         public int GetWorkshopAffiliateGateway(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>("select count(*) number from gateway where workshop=@wid", new
                 {
@@ -241,7 +247,7 @@ namespace IoTManager.Dao
         /*获取实验室所属地列表：返回：城市名、实验楼名、实验室名 列表，[{"上海","1号楼","天平实验室"}]*/
         public long GetWorkshopNumber()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<long>("select count(*) from workshop").FirstOrDefault();
             }

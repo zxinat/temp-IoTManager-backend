@@ -12,5 +12,7 @@ namespace IoTManager.IDao
         List<DeviceDailyOnlineTimeModel> GetOnlineTimeByDevice(String deviceId);
         List<DeviceDailyOnlineTimeModel> GetDeviceOnlineTimeByTime(DateTime startTime, DateTime endTime);
         DeviceDailyOnlineTimeModel GetDeviceDailyOnlineTime(string deviceName, DateTime Date);
+        double GetTotalMinutesOnline(string deviceId, DateTime startTime, DateTime endTime);
+        double GetTotalMinutesOnline(string deviceId);
     }
 }

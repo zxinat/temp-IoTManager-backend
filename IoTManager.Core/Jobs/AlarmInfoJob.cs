@@ -5,14 +5,17 @@ using System.Threading.Tasks;
 using IoTManager.Core.Infrastructures;
 using IoTManager.IDao;
 using IoTManager.Model;
+using IoTManager.Utility;
 using IoTManager.Utility.Serializers;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Pomelo.AspNetCore.TimedJob;
 
 namespace IoTManager.Core.Jobs
 {
     public class AlarmInfoJob: Job
     {
+        private readonly TypeConfig _typeConfig;
         private readonly IDeviceDataDao _deviceDataDao;
         private readonly IAlarmInfoDao _alarmInfoDao;
         private readonly IThresholdDao _thresholdDao;
@@ -35,7 +38,8 @@ namespace IoTManager.Core.Jobs
             IFieldBus fieldBus,
             IFieldDao fieldDao,
             IDeviceDailyOnlineTimeDao deviceDailyOnlineTimeDao,
-            ILogger<AlarmInfoJob> logger)
+            ILogger<AlarmInfoJob> logger,
+            IOptions< TypeConfig> typeConfig)
         {
             this._deviceDataDao = deviceDataDao;
             this._alarmInfoDao = alarmInfoDao;
@@ -48,9 +52,10 @@ namespace IoTManager.Core.Jobs
             this._fieldDao = fieldDao;
             this._logger = logger;
             this._deviceDailyOnlineTimeDao = deviceDailyOnlineTimeDao;
+            _typeConfig = typeConfig.Value;
         }
         /*定时器任务：（1）判断设备属性值是否超出阈值；（2）判断设备是否离线*/
-        [Invoke(Begin = "2020-4-26 11:48", Interval = 1000 * 60, SkipWhileExecuting = true)]
+        //[Invoke(Begin = "2020-4-26 11:48", Interval = 1000 * 60, SkipWhileExecuting = true)]
         public void Run()
         {
             
@@ -260,21 +265,26 @@ namespace IoTManager.Core.Jobs
                  * 2、获取MongoDB中最新数据中的属性
                  * 3、比对并创建新属性
                  */
-                List<string> existedFieldIds = this._fieldDao.ListFieldIdsByDeviceId(device.HardwareDeviceId);
-                List<DeviceDataModel> deviceDatas= this._deviceDataDao.ListNewData(device.HardwareDeviceId, 60);
-                foreach(var dd in deviceDatas)
+                /*新增设备类型排除*/
+                if(device.DeviceType!=_typeConfig.DeviceType)
                 {
-                    if(!existedFieldIds.Contains(dd.IndexId))
+                    List<string> existedFieldIds = this._fieldDao.ListFieldIdsByDeviceId(device.HardwareDeviceId);
+                    List<DeviceDataModel> deviceDatas = this._deviceDataDao.ListNewData(device.HardwareDeviceId, 60);
+                    foreach (var dd in deviceDatas)
                     {
-                        FieldModel field = new FieldModel
+                        if (!existedFieldIds.Contains(dd.IndexId))
                         {
-                            FieldId = dd.IndexId,
-                            FieldName = dd.IndexName,
-                            Device = dd.DeviceName
-                        };
-                        this._fieldDao.Create(field);
+                            FieldModel field = new FieldModel
+                            {
+                                FieldId = dd.IndexId,
+                                FieldName = dd.IndexName,
+                                Device = dd.DeviceName
+                            };
+                            this._fieldDao.Create(field);
+                        }
                     }
                 }
+                
                 /*更新设备的总告警次数*/
                 //获取设备当前总的告警次数
                 //int totalInfo = _alarmInfoDao.GetDeviceAffiliateAlarmInfoNumber(device.HardwareDeviceId);

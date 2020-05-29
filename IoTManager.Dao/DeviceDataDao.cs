@@ -13,6 +13,7 @@ using MySql.Data.MySqlClient;
 using System.Linq.Dynamic;
 using IoTManager.Model.DataReceiver;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace IoTManager.Dao
 {
@@ -23,10 +24,11 @@ namespace IoTManager.Dao
         private readonly IThresholdDao _thresholdDao;
         private readonly IFieldDao _fieldDao;
         private readonly ICityDao _cityDao;
-
-        public DeviceDataDao(IThresholdDao thresholdDao, IFieldDao fieldDao, ICityDao cityDao)
+        private readonly DatabaseConStr _databaseConStr;
+        public DeviceDataDao(IThresholdDao thresholdDao, IFieldDao fieldDao, ICityDao cityDao, IOptions<DatabaseConStr> databaseConStr)
         {
-            var client = new MongoClient(Constant.getMongoDBConnectionString());
+            _databaseConStr = databaseConStr.Value;
+            var client = new MongoClient(_databaseConStr.MongoDB);
             var database = client.GetDatabase("iotmanager");
             _deviceData = database.GetCollection<DeviceDataModel>("monitordata");
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");

@@ -21,7 +21,9 @@ using DotNetty.Common.Utilities;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using IoTManager.Utility;
 
 namespace IoTManager.Core
 {
@@ -32,7 +34,7 @@ namespace IoTManager.Core
         private readonly ICityDao _cityDao;
         private readonly IoTHub _iotHub;
         private readonly ILogger _logger;
-        
+        private readonly TypeConfig _typeConfig;
         /*
          * 构造函数
          * 需要注入DeviceDao, FieldDao, Logger
@@ -41,13 +43,15 @@ namespace IoTManager.Core
             IFieldDao fieldDao, 
             ICityDao cityDao,
             IoTHub iotHub,
-            ILogger<DeviceBus> logger)
+            ILogger<DeviceBus> logger,
+            IOptions<TypeConfig> typeConfig)
         {
             this._deviceDao = deviceDao;
             this._fieldDao = fieldDao;
             this._cityDao = cityDao;
             this._iotHub = iotHub;
             this._logger = logger;
+            _typeConfig = typeConfig.Value;
         }
 
         /*
@@ -323,6 +327,8 @@ namespace IoTManager.Core
             return result;
         }
 
+
+
         /*
          * 上传设备图片
          * 修改：
@@ -365,6 +371,16 @@ namespace IoTManager.Core
                 throw;
             }
         }
+        public string LoadImage(string deviceName)
+        {
+            string base64Image = _deviceDao.LoadImage(deviceName);
+            return base64Image;
+        }
+        public string UploadImage(string deviceName,string base64Image)
+        {
+            return _deviceDao.UploadImage(deviceName, base64Image);
+        }
+
 
         /*
          * 根据城市、工厂、车间搜索设备
@@ -581,6 +597,29 @@ namespace IoTManager.Core
         {
             List<DeviceModel> devices = _deviceDao.Get("all");
             List<DeviceModel> result = devices.AsQueryable().Where(d => d.CreateTime < endTime).ToList();
+            return result;
+        }
+        /*通过设备类型获取设备列表*/
+        public List<DeviceSerializer> ListByDeviceTypeName(string typeName)
+        {
+            List<DeviceModel> devices = _deviceDao.GetByDeviceType(typeName);
+            List<DeviceSerializer> result = new List<DeviceSerializer>();
+            foreach(var d in devices)
+            {
+                result.Add(new DeviceSerializer(d));
+            }
+            return result;
+        }
+
+        /*获取自定义配置的设备类型下的所有设备*/
+        public List<DeviceSerializer> ListByTypeConfig()
+        {
+            List<DeviceModel> devices = _deviceDao.GetByDeviceType(_typeConfig.DeviceType);
+            List<DeviceSerializer> result = new List<DeviceSerializer>();
+            foreach (var d in devices)
+            {
+                result.Add(new DeviceSerializer(d));
+            }
             return result;
         }
     }

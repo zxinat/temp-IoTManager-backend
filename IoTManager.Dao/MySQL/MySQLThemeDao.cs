@@ -6,15 +6,21 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLThemeDao : IThemeDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLThemeDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<ThemeModel> Get()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<ThemeModel>("select * from theme").ToList();
             }
@@ -22,7 +28,7 @@ namespace IoTManager.Dao
 
         public ThemeModel GetById(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<ThemeModel>("select * from theme where id=@i", new
                 {
@@ -33,7 +39,7 @@ namespace IoTManager.Dao
 
         public String Create(ThemeModel themeModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("insert into theme(name, first, second, third) values (@n, @f, @s, @t)",
                     new
@@ -49,7 +55,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, ThemeModel themeModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection
                     .Execute(
@@ -67,7 +73,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("delete from theme where id=@i", new
                 {
@@ -79,7 +85,7 @@ namespace IoTManager.Dao
 
         public ThemeModel GetByUserId(int userId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<ThemeModel>(
                     "select theme.id, theme.name, theme.first, theme.second, theme.third from theme join account on account.theme = theme.id where account.id=@userId",

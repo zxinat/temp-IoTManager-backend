@@ -7,6 +7,7 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MySql.Data.MySqlClient;
 
@@ -14,9 +15,14 @@ namespace IoTManager.Dao
 {
     public sealed class MySQLAuthDao : IAuthDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLAuthDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<String> GetAuthByUserId(int userId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var account = connection.Query(
                         "select roleauth.role, roleauth.auth, auth.id, auth.authId, auth.description from account " +
@@ -67,7 +73,7 @@ namespace IoTManager.Dao
 
         public List<String> GetAuthByRoleId(int roleId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = String.Format(
                     "select roleauth.role, roleauth.auth, auth.id, auth.authId, auth.description from role " +
@@ -88,7 +94,7 @@ namespace IoTManager.Dao
 
         public List<String> GetAllAuth()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var auth = connection.Query("select authId from auth").ToList();
                 List<String> authList = new List<string>();

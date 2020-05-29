@@ -8,11 +8,17 @@ using Dapper;
 using IoTManager.Model;
 using IoTManager.Utility;
 using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Options;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLDeviceDao : IDeviceDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLDeviceDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<DeviceModel> Get(String searchType, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc", String city = "all", String factory = "all", String workshop = "all")
         {
             string s = "select device.id, " +
@@ -30,9 +36,7 @@ namespace IoTManager.Dao
                        "device.lastConnectionTime, " +
                        "device.createTime, " +
                        "device.updateTime, " +
-                       "device.pictureRoute, " +
-                       "isOnline, " + 
-                       "base64Image " +
+                       "isOnline " + 
                        "from device " +
                        "join city on city.id=device.city " +
                        "join factory on factory.id=device.factory " +
@@ -64,7 +68,7 @@ namespace IoTManager.Dao
                 s += limitSubsentence;
             }
 
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>(s, new {cn=city, fn=factory, wn=workshop})
                     .ToList();
@@ -74,7 +78,7 @@ namespace IoTManager.Dao
 
         public DeviceModel GetById(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -107,7 +111,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByDeviceName(String deviceName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -138,7 +142,7 @@ namespace IoTManager.Dao
 
         public DeviceModel GetByDeviceNamePrecise(String deviceName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -155,9 +159,7 @@ namespace IoTManager.Dao
                                                      "lastConnectionTime, " +
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
-                                                     "device.pictureRoute, " +
-                                                     "isOnline, " + 
-                                                     "base64Image " +
+                                                     "isOnline " + 
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -173,7 +175,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByFuzzyDeviceId(String deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -205,7 +207,7 @@ namespace IoTManager.Dao
 
         public DeviceModel GetByDeviceId(String deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -240,7 +242,7 @@ namespace IoTManager.Dao
         }
         public String Create(DeviceModel deviceModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -288,7 +290,7 @@ namespace IoTManager.Dao
 
         public String Update(int id, DeviceModel deviceModel)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel city = connection.Query<CityModel>(
                     "SELECT * FROM city WHERE city.cityName=@cn", new
@@ -328,9 +330,6 @@ namespace IoTManager.Dao
                         "deviceType=@dt, " +
                         "remark=@r, " +
                         "updateTime=CURRENT_TIMESTAMP, " +
-                        "pictureRoute=@pr, " +
-                        "base64Image=@bi, " +
-                        "totalAlarmInfo=@tai "+
                         "WHERE device.id=@deviceId",
                         new
                         {
@@ -345,9 +344,7 @@ namespace IoTManager.Dao
                             gid = gateway.Id,
                             m = deviceModel.Mac,
                             dt = deviceType,
-                            r = deviceModel.Remark,
-                            pr = deviceModel.PictureRoute,
-                            bi = deviceModel.Base64Image,
+                            r = deviceModel.Remark
                             //tai=deviceModel.totalAlarmInfo,
                         });
                 return rows == 1 ? "success" : "error";
@@ -356,7 +353,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("DELETE FROM device WHERE device.id=@deviceId", new
                 {
@@ -368,7 +365,7 @@ namespace IoTManager.Dao
 
         public int BatchDelete(int[] ids)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = 0;
                 foreach (int i in ids)
@@ -385,7 +382,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByWorkshop(String city, String factory, String workshop)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -422,7 +419,7 @@ namespace IoTManager.Dao
         }
         public List<DeviceModel> ListByCity(String city)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<DeviceModel>("select device.id, " +
                                                      "hardwareDeviceID, " +
@@ -452,7 +449,7 @@ namespace IoTManager.Dao
         }
         public int GetDeviceAmount()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<int>("select count(*) from device").FirstOrDefault();
             }
@@ -460,7 +457,7 @@ namespace IoTManager.Dao
 
         public List<object> GetDeviceTree(String city, String factory)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 CityModel c = connection.Query<CityModel>("select * from city where cityName=@cn", new { cn = city })
                     .FirstOrDefault();
@@ -489,7 +486,7 @@ namespace IoTManager.Dao
         }
         public String CreateDeviceType(String deviceType)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("insert into config(configTag, configValue) values ('deviceType', @dt)",
                     new
@@ -502,7 +499,7 @@ namespace IoTManager.Dao
 
         public long GetDeviceNumber(String searchType, String city="all", String factory="all", String workshop="all")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s = "select count(*) number from device";
                 if (searchType == "search")
@@ -528,7 +525,7 @@ namespace IoTManager.Dao
         
         public List<DeviceModel> GetDeviceByTag(String tag)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String tg = String.Format("\"{0}\"", tag);
                 return connection.Query<DeviceModel>("select device.id, " +
@@ -561,7 +558,7 @@ namespace IoTManager.Dao
 
         public List<String> GetAllTag()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<String>("select tagName from tag").ToList();
             }
@@ -569,7 +566,7 @@ namespace IoTManager.Dao
 
         public Object SetDeviceTag(int deviceId, List<String> tagId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 connection.Execute("delete from devicetag where deviceId=@did", new {did = deviceId});
                 foreach (String i in tagId)
@@ -587,7 +584,7 @@ namespace IoTManager.Dao
 
         public List<DeviceModel> GetByDeviceType(String deviceType)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int typeNum = connection.Query<int>("select id from config where configValue=@cv", new
                 {
@@ -609,8 +606,7 @@ namespace IoTManager.Dao
                                                      "device.createTime, " +
                                                      "device.updateTime, " +
                                                      "device.pictureRoute, " +
-                                                     "isOnline, " +
-                                                     "base64Image " +
+                                                     "isOnline " +
                                                      "from device " +
                                                      "join city on city.id=device.city " +
                                                      "join factory on factory.id=device.factory " +
@@ -626,7 +622,7 @@ namespace IoTManager.Dao
 
         public String SetDeviceOnlineStatus(String id, String status)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int rows = connection.Execute("update device set isOnline=@s where device.hardwareDeviceID=@did", new
                 {
@@ -639,7 +635,7 @@ namespace IoTManager.Dao
 
         public List<String> GetDeviceTag(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var result = connection
                     .Query<String>("select tagName from devicetag inner join tag on tagId=tag.id where deviceId=@did", new {did=id})
@@ -650,7 +646,7 @@ namespace IoTManager.Dao
 
         public String AddTag(String tagName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var result = connection.Execute("insert into tag(tagName) values(@tn)", new {tn = tagName});
                 return result == 1 ? "success" : "error";
@@ -659,7 +655,7 @@ namespace IoTManager.Dao
 
         public String DeleteTag(String tagName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 var result = connection.Execute("delete from tag where tagName=@tn", new {tn = tagName});
                 return result == 1 ? "success" : "error";
@@ -667,7 +663,7 @@ namespace IoTManager.Dao
         }
         public int FindTagAffiliate(String tagName)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int tagId = connection.Query<int>("select id from tag where tagName=@tn", new {tn = tagName})
                     .FirstOrDefault();
@@ -679,7 +675,7 @@ namespace IoTManager.Dao
 
         public int FindDeviceIdExist(String deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Query<int>(
                     "select count(*) num from (select * from device where hardwareDeviceID=@did) tmp", new
@@ -692,7 +688,7 @@ namespace IoTManager.Dao
 
         public int UpdateLastConnectionTimeByDeviceId(String deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Execute(
                     "update device set lastConnectionTime=current_timestamp where hardwareDeviceID=@did", new
@@ -700,6 +696,31 @@ namespace IoTManager.Dao
                         did = deviceId
                     });
                 return result;
+            }
+        }
+        public string UploadImage(string deviceName,string base64Image)
+        {
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
+            {
+                int result = connection.Execute(
+                    "update device set base64Image=@bi where deviceName=@dn", new
+                    {
+                        bi = base64Image,
+                        dn=deviceName
+                    });
+                return result == 1 ? "success" : "error";
+            }
+        }
+        public string LoadImage(string deviceName)
+        {
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
+            {
+                string sql = "SELECT base64Image FROM device WHERE deviceName=@dn";
+                var query = connection.Query<string>(sql, new
+                {
+                    dn = deviceName,
+                }).FirstOrDefault();
+                return query;
             }
         }
         

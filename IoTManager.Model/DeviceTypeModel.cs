@@ -7,5 +7,6 @@ namespace IoTManager.Model
         public int Id { get; set; }
         public String DeviceTypeName { get; set; }
         public Double OfflineTime { get; set; }
+        public string typeId { get; set; }
     }
 }

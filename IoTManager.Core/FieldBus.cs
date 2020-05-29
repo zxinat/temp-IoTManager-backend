@@ -43,7 +43,11 @@ namespace IoTManager.Core
             fieldModel.FieldName = fieldSerializer.fieldName;
             fieldModel.FieldId = fieldSerializer.fieldId;
             fieldModel.Device = fieldSerializer.device;
-            return this._fieldDao.Create(fieldModel);
+            if(!_fieldDao.IsExist(fieldModel))
+            {
+                return this._fieldDao.Create(fieldModel);
+            }
+            return "exist";
         }
 
         public List<FieldSerializer> GetAffiliateFields(String deviceId)

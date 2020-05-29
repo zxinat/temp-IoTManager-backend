@@ -196,7 +196,54 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetPicture(deviceId));
         }
-
+        [HttpGet("LoadImage/{deviceName}")]
+        public ResponseSerializer LoadImage(string deviceName)
+        {
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d = _deviceBus.LoadImage(deviceName);
+                msg = "success";
+                code = 200;
+            }
+            catch(Exception e)
+            {
+                d = null;
+                msg = e.Message;
+                code = 500;
+            }
+            return new ResponseSerializer(code, msg, d);
+        }
+        [HttpPost("UploadImage/{deviceName}")]
+        public ResponseSerializer Upload(string deviceName,string base64Image)
+        {
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d = _deviceBus.UploadImage(deviceName, base64Image);
+                if(d=="success")
+                {
+                    code = 200;
+                    msg = d;
+                }
+                else
+                {
+                    code = 500;
+                    msg = d;
+                }
+            }
+            catch(Exception e)
+            {
+                code = 500;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
+        }
         [HttpGet("getByCity")]
         public ResponseSerializer GetDeviceByCity(String cityName, String factoryName, String workshopName)
         {
@@ -205,7 +252,46 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceBus.GetDeviceByCity(cityName, factoryName, workshopName));
         }
-
+        [HttpGet("getByDeviceTypeName/{typeName}")]
+        public ResponseSerializer GetByDeviceTypeName(string typeName)
+        {
+            int code;
+            string msg;
+            object d;
+            try
+            {
+                d = _deviceBus.ListByDeviceTypeName(typeName);
+                msg = "success";
+                code = 200;
+            }
+            catch(Exception e)
+            {
+                d = null;
+                msg = e.Message;
+                code = 500;
+            }
+            return new ResponseSerializer(code, msg, d);
+        }
+        [HttpGet("ListByTypeConfig")]
+        public ResponseSerializer ListByTypeConfig()
+        {
+            int code;
+            string msg;
+            object d;
+            try
+            {
+                d = _deviceBus.ListByTypeConfig();
+                msg = "success";
+                code = 200;
+            }
+            catch(Exception e)
+            {
+                d = null;
+                msg = e.Message;
+                code = 500;
+            }
+            return new ResponseSerializer(code, msg, d);
+        }
         [HttpGet("dashboardStatus")]
         public ResponseSerializer GetDashboardDeviceStatus()
         {
@@ -223,7 +309,7 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._deviceDataBus.GetDeviceAffiliateData(deviceId));
         }
-        /*
+        
         [HttpGet("affiliateAlarmInfo/{deviceId}")]
         public ResponseSerializer GetDeviceAffiliateAlarmInfo(String deviceId)
         {
@@ -232,7 +318,7 @@ namespace IoTManager.API.Controllers
                 "success",
                 this._alarmInfoBus.GetDeviceAffiliateAlarmInfoNumber(deviceId));
         }
-        */
+        
         [HttpGet("affiliateThreshold/{deviceId}")]
         public ResponseSerializer GetDeviceAffiliateThreshold(String deviceId)
         {

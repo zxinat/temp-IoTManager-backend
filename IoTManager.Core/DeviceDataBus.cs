@@ -974,7 +974,8 @@ namespace IoTManager.Core
                 //启动时间
                 startTime = earliestData.Timestamp;
                 //运行时间
-                runningTime = latestData.Timestamp - startTime;
+                //runningTime = latestData.Timestamp - startTime;
+                runningTime = TimeSpan.FromMinutes(_deviceDailyOnlineTimeDao.GetTotalMinutesOnline(device.HardwareDeviceId));
             }
 
             /*

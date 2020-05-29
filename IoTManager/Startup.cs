@@ -23,6 +23,9 @@ using Hangfire.MySql.Core;
 using Hangfire.Mongo;
 using IoTManager.Utility;
 using IoTManager.Core.Jobs;
+using System.Reflection;
+using StaffManager.Core.Jobs;
+using StaffManager.Core.Jobs.Infrastructures;
 
 namespace IoTManager
 {
@@ -61,9 +64,9 @@ namespace IoTManager
             //var connectionStr = Constant.getMongoDBConnectionString();
             services.AddHangfire(config =>
             {
-                config.UseMongoStorage(Constant.getMongoDBConnectionString(), new MongoStorageOptions
+                config.UseMongoStorage(Configuration.GetSection("DatabaseConStr")["MongoDB"], new MongoStorageOptions
                 {
-                    Prefix = "Hangfire",
+                    Prefix = Configuration.GetSection("HangfireCollection")["Name"],  //本地测试环境与虚机测试环境的存储地最好分开，生产环境Hangfire，本地环境Local
                     MigrationOptions = new MongoMigrationOptions
                     {
                         Strategy = MongoMigrationStrategy.Migrate,
@@ -84,7 +87,7 @@ namespace IoTManager
                 options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
             });
             
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             //add swagger 
             services.AddSwaggerGen(gen => {
                 gen.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
@@ -93,6 +96,12 @@ namespace IoTManager
             services.AddLogging();
             services.AddTimedJob();
             services.Configure<IoTHubAppSetting>(this.Configuration.GetSection("IoTHubAppSetting"));
+            services.Configure<DatabaseConStr>(Configuration.GetSection("DatabaseConStr"));
+            services.Configure<TypeConfig>(Configuration.GetSection("TypeConfig"));
+            services.Configure<HangfireCollection>(Configuration.GetSection("HangfireCollection"));
+            //添加staffManager模块
+            var staffManager = Assembly.Load(new AssemblyName("StaffManager"));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddApplicationPart(staffManager);
             //add dependency injection
             IocContainer autofac = new AutofacContainer(services);
             return autofac.Build().FetchServiceProvider();
@@ -135,6 +144,9 @@ namespace IoTManager
             //app.UseAPIResponseWrapperMiddleware();
             //添加每日在线时长统计Job，执行时间每日23:59,本地时间
             RecurringJob.AddOrUpdate<ReportJob>(x => x.Run(), Cron.Daily(23, 59), TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<IAttendenceRecordJob>(x => x.Run(), Cron.Daily(18, 00), TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<AlarmInfoJob>(x => x.Run(), Cron.Minutely);
+            //RecurringJob.AddOrUpdate<DataCleanJob>(x => x.DataCleanRun(), Cron.Daily(18, 00), TimeZoneInfo.Local);
             app.UseMvc();
         }
     }

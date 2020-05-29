@@ -16,6 +16,7 @@
     <ProjectReference Include="..\IoTManager.Dao\IoTManager.Dao.csproj" />
     <ProjectReference Include="..\IoTManager.IDao\IoTManager.IDao.csproj" />
     <ProjectReference Include="..\IoTManager.IHub\IoTManager.IHub.csproj" />
+    <ProjectReference Include="..\StaffManager\StaffManager.csproj" />
   </ItemGroup>
 
 </Project>

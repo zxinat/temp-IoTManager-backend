@@ -33,10 +33,35 @@ namespace IoTManager.API.Controllers
         [HttpPost]
         public ResponseSerializer CreateNewField([FromBody] FieldSerializer fieldSerializer)
         {
-            return new ResponseSerializer(
-                200,
-                "success",
-                this._fieldBus.CreateNewField(fieldSerializer));
+            int code;
+            string msg;
+            string d;
+            try
+            {
+                d = _fieldBus.CreateNewField(fieldSerializer);
+                if(d=="success")
+                {
+                    code = 200;
+                    msg = d;
+                }
+                else if(d=="exist")
+                {
+                    code = 409;
+                    msg = "conflict";
+                }
+                else
+                {
+                    code = 500;
+                    msg = d;
+                }
+            }
+            catch(Exception e)
+            {
+                code = 500;
+                msg = e.Message;
+                d = null;
+            }
+            return new ResponseSerializer(code, msg, d);
         }
 
         [HttpGet("affiliate/{deviceId}")]

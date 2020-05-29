@@ -6,15 +6,21 @@ using Dapper;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 
 namespace IoTManager.Dao
 {
     public sealed class MySQLFieldDao : IFieldDao
     {
+        private readonly DatabaseConStr _databaseConStr;
+        public MySQLFieldDao(IOptions<DatabaseConStr> databaseConStr)
+        {
+            _databaseConStr = databaseConStr.Value;
+        }
         public List<FieldModel> Get(int pageMode = 0, int offset = 0, int limit = 12, String sortColumn = "id", String order = "asc")
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 String s =
                     "select field.id, fieldName, fieldId, deviceName device, field.updateTime, field.createTime from field join device on field.device=device.id ";
@@ -37,7 +43,7 @@ namespace IoTManager.Dao
         }
         public String Create(FieldModel field)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 DeviceModel device = connection.Query<DeviceModel>("select device.id, " +
                                                                    "hardwareDeviceID, " +
@@ -70,10 +76,27 @@ namespace IoTManager.Dao
                 return rows == 1 ? "success" : "error";
             }
         }
+        /*查重*/
+        public bool IsExist(FieldModel field)
+        {
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
+            {
+                string sql = "SELECT field.id,field.fieldId,field.fieldName,device.deviceName AS device " +
+                    ",field.createTime,field.updateTime FROM `field`,device " +
+                    "WHERE field.fieldId=@fid AND field.fieldName=@fna AND device.id=field.device AND deviceName=@dn ";
+                var result = connection.Query<FieldModel>(sql, new
+                {
+                    fid = field.FieldId,
+                    fna = field.FieldName,
+                    dn = field.Device
+                }).FirstOrDefault();
+                return result == null ? false : true;
+            }
+        }
 
         public String Update(int id, FieldModel field)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 DeviceModel device = connection.Query<DeviceModel>("select device.id, " +
                                                                    "hardwareDeviceID, " +
@@ -110,7 +133,7 @@ namespace IoTManager.Dao
 
         public String Delete(int id)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 int result = connection.Execute("delete from field where id=@i", new {i = id});
                 return result == 1 ? "success" : "error";
@@ -119,7 +142,7 @@ namespace IoTManager.Dao
 
         public long GetFieldNumber()
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 return connection.Query<long>("select count(*) from field join device on field.device=device.id").FirstOrDefault();
             }
@@ -127,7 +150,7 @@ namespace IoTManager.Dao
         /*zxin-添加  通过deviceId获取所有属性*/
         public List<FieldModel> ListFieldsByDeviceId(string deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 string s = "SELECT * FROM field WHERE field.device IN (SELECT id FROM device WHERE device.hardwareDeviceID=@hid)";
                 return connection.Query<FieldModel>(s, new { hid = deviceId }).ToList();
@@ -135,7 +158,7 @@ namespace IoTManager.Dao
         }
         public List<string> ListFieldIdsByDeviceId(string deviceId)
         {
-            using (var connection = new MySqlConnection(Constant.getDatabaseConnectionString()))
+            using (var connection = new MySqlConnection(_databaseConStr.MySQL))
             {
                 string s = "SELECT fieldId FROM field WHERE field.device IN (SELECT id FROM device WHERE device.hardwareDeviceID=@hid)";
                 return connection.Query<string>(s, new { hid = deviceId }).ToList();

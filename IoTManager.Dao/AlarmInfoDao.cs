@@ -4,6 +4,7 @@ using System.Linq;
 using IoTManager.IDao;
 using IoTManager.Model;
 using IoTManager.Utility;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -13,10 +14,11 @@ namespace IoTManager.Dao
     public sealed class AlarmInfoDao: IAlarmInfoDao
     {
         private readonly IMongoCollection<AlarmInfoModel> _alarmInfo;
-
-        public AlarmInfoDao()
+        private readonly DatabaseConStr _databaseConStr;
+        public AlarmInfoDao(IOptions<DatabaseConStr> databaseConStr)
         {
-            var client = new MongoClient(Constant.getMongoDBConnectionString());
+            _databaseConStr = databaseConStr.Value;
+            var client = new MongoClient(_databaseConStr.MongoDB);
             var database = client.GetDatabase("iotmanager");
 
             _alarmInfo = database.GetCollection<AlarmInfoModel>("alarminfo");
@@ -24,6 +26,19 @@ namespace IoTManager.Dao
 
         public List<AlarmInfoModel> Get(String searchType, String deviceId = "all", int offset = 0, int limit = 12, String sortColumn = "Id", String order = "asc")
         {
+            var filter = deviceId == "all" ?
+                Builders<AlarmInfoModel>.Filter.Empty
+                : Builders<AlarmInfoModel>.Filter.Eq("DeviceId", deviceId);
+            SortDefinition<AlarmInfoModel> sort = order == "asc"
+                ? Builders<AlarmInfoModel>.Sort.Ascending(sortColumn)
+                : Builders<AlarmInfoModel>.Sort.Descending(sortColumn);
+            var query = searchType == "all" ?
+                _alarmInfo.AsQueryable()
+                .Where(dd => true)
+                .ToList() :
+                _alarmInfo.Find(filter).Sort(sort).Limit(limit).Skip(offset).ToList();
+            return query;
+            /*
             if (searchType == "all")
             {
                 return this._alarmInfo.AsQueryable()
@@ -45,6 +60,7 @@ namespace IoTManager.Dao
                     .Take(limit)
                     .ToList();
             }
+            */
         }
 
         public AlarmInfoModel GetById(String Id)

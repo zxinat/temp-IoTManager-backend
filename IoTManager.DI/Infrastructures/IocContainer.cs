@@ -1,9 +1,4 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Autofac.Extensions.DependencyInjection;
 
 namespace IoTManager.DI.Infrastructures
 {

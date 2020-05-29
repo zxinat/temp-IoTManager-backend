@@ -5,9 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CustomerBus.cs" />
+    <Compile Remove="DepartmentBus.cs" />
+    <Compile Remove="Infrastructures\ICustomerBus.cs" />
+    <Compile Remove="Infrastructures\IDepartmentBus.cs" />
+    <Compile Remove="Infrastructures\IStaffBus.cs" />
+    <Compile Remove="StaffBus.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
     <PackageReference Include="Hangfire.MySql.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
     <PackageReference Include="Pomelo.AspNetCore.TimedJob" Version="2.0.0-rtm-10046" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>

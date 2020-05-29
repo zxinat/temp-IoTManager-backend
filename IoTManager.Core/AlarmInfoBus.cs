@@ -60,8 +60,11 @@ namespace IoTManager.Core
          */
         public List<AlarmInfoSerializer> GetAllAlarmInfo(String searchType, String deviceId = "all", int page = 1, String sortColumn = "Id", String order = "asc")
         {
-            int offset = (page - 1) * 12;
+            long total = _alarmInfoDao.GetAlarmInfoNumber("all");
             int limit = 12;
+            int totalPage = (int)Math.Ceiling((decimal)total / limit);
+            if (page > totalPage) page = totalPage;
+            int offset = (page - 1) * 12;
             List<AlarmInfoModel> alarmInfos = this._alarmInfoDao.Get(searchType, deviceId, offset, limit, sortColumn, order);
             List<AlarmInfoSerializer> result = new List<AlarmInfoSerializer>();
             foreach (AlarmInfoModel alarmInfo in alarmInfos)
@@ -243,14 +246,14 @@ namespace IoTManager.Core
          * 输出：
          * 该设备下告警信息的数量
          */
-        /*
+        
         public int GetDeviceAffiliateAlarmInfoNumber(String deviceId)
         {
 
-            //return this._alarmInfoDao.GetDeviceAffiliateAlarmInfoNumber(deviceId);
-            return _deviceBus.GetTotalAlarmInfo(deviceId);
+            return (int)_alarmInfoDao.GetAlarmInfoNumber("search",deviceId);
+            //return _deviceBus.GetTotalAlarmInfo(deviceId);
         }
-        */
+        
         /*
          * 批量删除告警信息
          *

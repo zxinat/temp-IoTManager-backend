@@ -3,9 +3,15 @@ using IoTManager.AzureIoTHub;
 using IoTManager.Core;
 using IoTManager.Core.Infrastructures;
 using IoTManager.Dao;
-using IoTManager.Dao.MySQL;
 using IoTManager.IDao;
 using IoTManager.IHub;
+using StaffManager;
+using StaffManager.Core;
+using StaffManager.Core.Infrastructures;
+using StaffManager.Core.Jobs;
+using StaffManager.Core.Jobs.Infrastructures;
+using StaffManager.Dao;
+using StaffManager.Dao.Infrastructures;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,6 +42,9 @@ namespace IoTManager.DI
             builder.RegisterType<DeviceDailyOnlineTimeBus>().As<IDeviceDailyOnlineTimeBus>();
             builder.RegisterType<StaffBus>().As<IStaffBus>();
             builder.RegisterType<CustomerBus>().As<ICustomerBus>();
+            builder.RegisterType<RFIDTagBus>().As<IRFIDTagBus>();
+            builder.RegisterType<StaffAuthBus>().As<IStaffAuthBus>();
+            builder.RegisterType<StatisticBus>().As<IStatisticBus>();
             //IoTManager.Dao
             // builder.RegisterType<CityDao>().As<ICityDao>();
             // builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();
@@ -52,7 +61,7 @@ namespace IoTManager.DI
             // builder.RegisterType<SeverityDao>().As<ISeverityDao>();
             //IoTManager.Dao-MySQL
             builder.RegisterType<MySQLCityDao>().As<ICityDao>();
-            builder.RegisterType<MySQLDepartmentDao>().As<IDepartmentDao>();
+            builder.RegisterType<DepartmentDao>().As<IDepartmentDao>();
             builder.RegisterType<MySQLDeviceDao>().As<IDeviceDao>();
             builder.RegisterType<MySQLGatewayDao>().As<IGatewayDao>();
             builder.RegisterType<MySQLUserDao>().As<IUserDao>();
@@ -68,10 +77,18 @@ namespace IoTManager.DI
             builder.RegisterType<MySQLRoleDao>().As<IRoleDao>();
             builder.RegisterType<MySQLThemeDao>().As<IThemeDao>();
             builder.RegisterType<MySQLDeviceDailyOnlineTimeDao>().As<IDeviceDailyOnlineTimeDao>();
-            builder.RegisterType<MySQLStaffDao>().As<IStaffDao>();
-            builder.RegisterType<MySQLCustomerDao>().As<ICustomerDao>();
+            builder.RegisterType<StaffDao>().As<IStaffDao>();
+            builder.RegisterType<CustomerDao>().As<ICustomerDao>();
+            builder.RegisterType<StaffDataDao>().As<IStaffDataDao>();
+            builder.RegisterType<RFIDTagDao>().As<IRFIDTagDao>();
+            builder.RegisterType<StaffAuthDao>().As<IStaffAuthDao>();
+            builder.RegisterType<AttendenceDataDao>().As<IAttendenceDataDao>();
+
             //IoTManager.AzureIoTHub
             builder.RegisterType<AzureIoTHub.AzureIoTHub>().As<IoTHub>();
+
+            //Job
+            builder.RegisterType<AttendenceRecordJob>().As<IAttendenceRecordJob>();
             //base.Load(builder);
         }
     }
